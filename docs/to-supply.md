@@ -40,7 +40,7 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] Facebook: https://www.facebook.com/embracemovementclinic/ (7 Nov 2026)
 - [x] New content: added through 7 Nov 2026; anything further can be added on /admin
 - [x] Services, fees and funding: from Nookal, confirmed with Nicole (7 Nov 2026)
-- [x] **Opening hours**: entered on /admin (Mon 6am–1pm, Tue 8am–8pm, Wed 6am–8pm, Thu 8am–4pm, Fri closed, Sat by appointment only, Sun closed)
+- [x] **Opening hours**: entered on /admin (Mon 6am – 1pm; Tue 7am – 11am, 1pm – 8pm; Wed 6am – 7.30am, 4.30pm – 8pm; Thu 8am – 4pm; Fri closed; Sat closed (occasional appointments on request); Sun closed)
 - [x] **ABN**: 57 627 072 057, entered on /admin
 - [x] **Parking**: entered on /admin (driveway, or free street parking on Brynner or Bassey Street)
 - [x] **Reopening date**: Monday 4 January 2027 (Nicole, 7 Nov 2026). The banner and closure notes hide after 3 January. Previously: so the closure banner can hide itself automatically (on /admin: Clinic settings → Clinic details → Notice banner → Hide automatically after)
@@ -64,8 +64,8 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 ## Access (confirm who has it; don't store it here)
 
 - [ ] Before cancelling Squarespace: export a copy of the old site's content as a backup
-- [ ] Domain registrar / DNS: login for Web Address Registration (the registrar), or whoever manages the domain's DNS, for go-live
-- [ ] Is Google Workspace (the clinic's email) billed through Squarespace? Check before cancelling Squarespace
+- [x] Domain registrar / DNS: Crazy Domains (Web Address Registration), Premium DNS. Nicole's account; clean-up notes in `docs/domain-and-email-cleanup.md`
+- [x] Google Workspace (the clinic's email) is billed directly by Google, not through Squarespace (checked 7 Nov 2026), so cancelling Squarespace doesn't affect email
 - [ ] Free GitHub accounts for anyone who'll use the admin page (e.g. Nicole)
 - [ ] For the admin demo: a GitHub fine-grained access token (Adrian makes it; never stored in the project). See `docs/editing.md`
 - [ ] At launch: a GitHub OAuth app and the free Cloudflare login helper for "Sign in with GitHub" (Adrian, with Claude's help)
