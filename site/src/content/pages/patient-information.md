@@ -38,15 +38,15 @@ fees:
   - group: Exercise physiology
     item: Initial consultation (45 minutes)
     price: $145
-    note: With Nicole, an Accredited Exercise Physiologist. Includes GST.
+    note: With Nicole, an Accredited Exercise Physiologist.
   - group: Exercise physiology
     item: Review (30 minutes)
     price: $95
-    note: With Nicole. Includes GST.
+    note: With Nicole.
   - group: Exercise physiology
     item: Review (45 minutes)
     price: $125
-    note: With Nicole. Includes GST.
+    note: With Nicole.
   - group: Exercise therapy
     item: One-on-one session (30 minutes)
     price: $95

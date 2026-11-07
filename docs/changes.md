@@ -222,3 +222,5 @@ From a first pass of the exported text. Re-check after the build.
 - **No privacy policy page found.** One is needed.
 - Clinic Updates mentions using AI tools to reduce admin, reviewed by the practitioner. Make sure the privacy policy (and patient consent processes) cover this.
 - The pelvic health page describes possible internal examinations. Keep the consent wording as is, and have a clinician approve any edits.
+
+**GST not shown on the fees list (owner, 7 Nov 2026).** The "Includes GST" notes on the exercise physiology fees and the "Prices include GST where it applies" line are removed: prices are shown as the patient pays them (the same as Nookal), and GST is for the clinic's own records.
