@@ -16,7 +16,7 @@ export default defineConfig({
   build: { format: 'file' },
   integrations: [
     sitemap({
-      filter: (page) => !/\/(styleguide|palette|404)/.test(page),
+      filter: (page) => !/\/(styleguide|palette|404|news)/.test(page),
     }),
   ],
   fonts: [

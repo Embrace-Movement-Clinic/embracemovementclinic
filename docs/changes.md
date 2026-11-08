@@ -224,3 +224,8 @@ From a first pass of the exported text. Re-check after the build.
 - The pelvic health page describes possible internal examinations. Keep the consent wording as is, and have a clinician approve any edits.
 
 **GST not shown on the fees list (owner, 7 Nov 2026).** The "Includes GST" notes on the exercise physiology fees and the "Prices include GST where it applies" line are removed: prices are shown as the patient pays them (the same as Nookal), and GST is for the clinic's own records.
+
+**Exercise physiology and exercise therapy wording (owner, 8 Nov 2026).** The referral and rebate note now leads with exercise physiology: "If your referral or rebate is specifically for exercise physiology (for example a GP care plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and is claimable as physiotherapy." Same order in Who you'll see on Exercise Therapy and in the fee notes on Patient information. Exercise therapy fees now read "With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation." (Nicole holds both provider numbers, so she can provide either.)
+
+**Clinic news is link-only (owner, 8 Nov 2026).** News isn't in the menu, footer or sitemap, and news pages are hidden from search engines (noindex). Posts are shared by direct link; the notice banner's "Read the latest update" link stays. Posts no longer link back to the news list, and the old Squarespace update addresses (/clinic-updates, /xmas-2024, /baby-news, /blog-posts/…) now redirect to the home page instead of /news.
+

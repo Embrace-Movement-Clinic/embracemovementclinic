@@ -36,6 +36,7 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
 ---
 
 <BaseLayout
+  noindex
   title={d.title}
   description={d.summary}
   image={d.images[0]?.src}
@@ -46,7 +47,7 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
 >
   <article class="section" aria-labelledby="page-title">
     <div class="wrap-narrow article">
-      <Breadcrumbs items={[{ label: 'News', href: '/news' }, { label: d.title }]} />
+      <Breadcrumbs items={[{ label: d.title }]} />
       <header class="article__head">
         <time datetime={d.date.toISOString().slice(0, 10)}>{month}</time>
         <h1 id="page-title">{d.title}</h1>
@@ -113,7 +114,6 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
           </div>
         )
       }
-      <p class="back"><a href="/news"><Icon name="arrow-right" size={16} class="back__icon" /> All news</a></p>
     </div>
   </article>
   <BookingBand />
@@ -192,15 +192,4 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
     font-size: var(--step-2);
   }
 
-  .back a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    font-family: var(--font-display);
-    font-weight: 650;
-  }
-
-  :global(.back__icon) {
-    transform: rotate(180deg);
-  }
 </style>

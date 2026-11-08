@@ -50,11 +50,11 @@ fees:
   - group: Exercise therapy
     item: One-on-one session (30 minutes)
     price: $95
-    note: With Laura, from March 2027, after an initial physiotherapy consultation.
+    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Exercise therapy
     item: One-on-one session (45 minutes)
     price: $125
-    note: With Laura, from March 2027, after an initial physiotherapy consultation.
+    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Classes
     item: Pre-class assessment (45 minutes)
     price: $125
@@ -73,7 +73,7 @@ fees:
     note: Buy in the clinic.
 feeNotes:
   - Exercise sessions may be claimable with private health, depending on your level of cover.
-  - Exercise therapy with Laura is claimable as physiotherapy. If your referral or rebate is specifically for exercise physiology (for example a GP care plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist.
+  - If your referral or rebate is specifically for exercise physiology (for example a GP care plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and is claimable as physiotherapy.
   - You can still claim on your health fund if you buy a class pack.
 funding:
   - Private health, Medicare, DVA, NDIS and WorkCover are all welcome.

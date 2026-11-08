@@ -4,14 +4,12 @@ import Icon from './Icon.astro';
 import Button from './Button.astro';
 import Todo from './Todo.astro';
 import { footerLinks } from '../data/navigation';
-import { getCollection } from 'astro:content';
 import { site } from '../data/site';
 import { booking } from '../data/policies';
 
 const year = new Date().getFullYear();
-// "Clinic news" shows only while there are posts.
-const hasNews = (await getCollection('news')).length > 0;
-const links = footerLinks.filter((l) => l.href !== '/news' || hasNews);
+// Clinic news isn't linked anywhere on the site: posts are shared by direct link (owner, 8 Nov 2026).
+const links = footerLinks;
 const { socials, hours, abn, address } = site;
 const hasSocials = Boolean(socials.instagram || socials.facebook);
 ---

@@ -61,6 +61,8 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] **Privacy policy**: reviewed and approved by Nicole (7 Nov 2026). AI note-taking line added; OAIC paragraph removed at her request. All information is stored within Australia (owner, 7 Nov 2026)
 - [x] Wording changes approved by Nicole (7 Nov 2026)
 
+- [ ] **Nookal: exercise therapy with Nicole.** The site now says exercise therapy (claimable as physiotherapy) is available with Nicole as well as Laura, but Nicole's online booking only lists exercise physiology sessions (checked 8 Nov 2026). Add 30- and 45-minute exercise therapy sessions to Nicole in Nookal (GST-free, like Laura's), or tell Claude if her prices differ from $95 and $125
+
 ## Access (confirm who has it; don't store it here)
 
 - [ ] Before cancelling Squarespace: export a copy of the old site's content as a backup

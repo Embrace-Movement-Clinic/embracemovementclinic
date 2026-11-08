@@ -49,7 +49,7 @@ Home
 ├── Patient information                      /patient-information  (booking, cancellations, fees and rebates, what to wear, clinic dog)
 ├── Contact & visit                          /contact   (location, parking, hours, phone, text, email)
 ├── Book now                                 Nookal booking page (/book-now redirects there)
-├── News                                     /news      (footer only)
+├── News                                     /news      (link-only: not in menus, footer or search)
 └── Privacy policy                           /privacy   (footer only)
 ```
 

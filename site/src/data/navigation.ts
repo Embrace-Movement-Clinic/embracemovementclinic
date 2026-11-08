@@ -17,6 +17,5 @@ export const footerLinks: NavLink[] = [
   { label: 'Pilates & classes', href: '/pilates' },
   { label: 'Our team', href: '/team' },
   { label: 'Patient information', href: '/patient-information' },
-  { label: 'Clinic news', href: '/news' },
   { label: 'Contact', href: '/contact' },
 ];
