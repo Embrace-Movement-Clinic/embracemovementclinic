@@ -42,7 +42,8 @@ The editor is currently connected to the **preview** branch (`claude/tender-maye
 
 1. **Make a token** (Adrian, once): on GitHub, go to *Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token*.
    - Name: `Embrace website editor demo`. Expiration: 30 days.
-   - Repository access: *Only select repositories* → `AdrianPow/embracemovementclinic`.
+   - Resource owner: **Embrace-Movement-Clinic** (the clinic's GitHub organisation, where the code has lived since 8 Nov 2026). If the organisation isn't offered, allow fine-grained tokens first: organisation *Settings → Personal access tokens*.
+   - Repository access: *Only select repositories* → `Embrace-Movement-Clinic/embracemovementclinic`.
    - Permissions: *Repository permissions → Contents → Read and write*.
    - Generate it and copy it. Treat it like a password: don't email it, and don't save it in the project.
 2. **Open the editor:** the preview site's address followed by `/admin/` (with the slash at the end). The preview address for this branch is listed in Cloudflare under the project's deployments.

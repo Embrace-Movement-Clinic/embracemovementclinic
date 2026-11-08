@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: AdrianPow/embracemovementclinic
+  repo: Embrace-Movement-Clinic/embracemovementclinic
   # Demo: the preview branch. Change to `main` at launch.
   branch: claude/tender-mayer-vvk5i5
   # "Sign in with GitHub" needs a small login helper (a Cloudflare Worker). Until it's set up,
