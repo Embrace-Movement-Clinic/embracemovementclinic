@@ -74,4 +74,5 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] Nookal online booking URL (supplied 19 Oct 2026; test a booking from the preview site before launch)
 - [ ] Google Business Profile (to update the website link and check the details match)
 - [ ] Analytics / Search Console
-- [ ] New hosting account
+- [x] Clinic-owned Cloudflare account created (8 Nov 2026). Still to do in it: the Pages project, Web Analytics, Adrian as a member, and the login helper for /admin
+- [x] Clinic-owned GitHub organisation `Embrace-Movement-Clinic`; repository transferred there (8 Nov 2026)
