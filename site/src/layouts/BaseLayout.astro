@@ -8,6 +8,9 @@ import NoticeBanner from '../components/NoticeBanner.astro';
 import { site } from '../data/site';
 import PreviewBar from '../components/PreviewBar.astro';
 import { themeCss, previewIds } from '../data/palette';
+import { designTools } from '../data/build';
+import jsFlagScript from '../scripts/inline/js-flag.js?raw';
+import palettePreviewScript from '../scripts/inline/palette-preview.js?raw';
 
 interface Props {
   /** Page name; " | Embrace Movement Clinic" is appended unless it already contains the clinic name. */
@@ -81,31 +84,10 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
     <Font cssVariable="--font-red-hat-display" preload />
     <slot name="head" />
 
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
-    <style is:global set:html={themeCss()}></style>
-    <!-- Palette preview, for trying other colours from /palette: ?palette=navy-teal, or ?palette=off -->
-    <script is:inline define:vars={{ ids: previewIds }}>
-      (function () {
-        var d = document.documentElement;
-        var q = new URLSearchParams(location.search).get('palette');
-        var v = null;
-        try {
-          if (q === 'off') localStorage.removeItem('palette-preview');
-          else if (q && ids.indexOf(q) > -1) localStorage.setItem('palette-preview', q);
-          v = localStorage.getItem('palette-preview');
-        } catch (e) {
-          v = q;
-        }
-        if (v && ids.indexOf(v) > -1) {
-          var p = v.split('-');
-          d.dataset.dark = p[0];
-          d.dataset.accent = p[1];
-          d.dataset.preview = v;
-        }
-      })();
-    </script>
+    {/* Inline scripts come from src/scripts/inline, which is what the content security policy approves. */}
+    <script is:inline set:html={jsFlagScript} />
+    <style is:global set:html={themeCss(designTools)}></style>
+    {designTools && <script is:inline data-ids={previewIds.join(',')} set:html={palettePreviewScript} />}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
@@ -116,23 +98,23 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
       <slot />
     </main>
     <Footer />
-    <PreviewBar />
-    <script is:inline>
+    {designTools && <PreviewBar />}
+    <script>
       // Closure notes repeat the notice banner; like the banner, they go once its end date has passed
       // (Brisbane time), even before the site is next rebuilt.
       // Nookal links typed into posts or bios, and every page link inside a news post (e.g. the
       // timetable), open in a new tab, so readers keep their place. Phone, text and email links don't.
-      document.querySelectorAll('a[href*=".nookal.com/"]:not([target]), .post-body a[href^="/"]:not([target])').forEach(function (a) {
+      document.querySelectorAll<HTMLAnchorElement>('a[href*=".nookal.com/"]:not([target]), .post-body a[href^="/"]:not([target])').forEach((a) => {
         a.target = '_blank';
         a.rel = 'noopener';
-        var s = document.createElement('span');
-        s.className = 'visually-hidden';
-        s.textContent = ' (opens in a new tab)';
-        a.appendChild(s);
+        const note = document.createElement('span');
+        note.className = 'visually-hidden';
+        note.textContent = ' (opens in a new tab)';
+        a.appendChild(note);
       });
-      document.querySelectorAll('[data-hide-after]').forEach(function (el) {
-        var d = el.getAttribute('data-hide-after');
-        if (d && new Date() > new Date(d + 'T23:59:59+10:00')) el.remove();
+      document.querySelectorAll('[data-hide-after]').forEach((el) => {
+        const date = el.getAttribute('data-hide-after');
+        if (date && new Date() > new Date(`${date}T23:59:59+10:00`)) el.remove();
       });
     </script>
   </body>

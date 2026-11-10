@@ -268,7 +268,13 @@ const accentIds = Object.keys(accents) as (keyof typeof accents)[];
   </section>
 </BaseLayout>
 
-<script define:vars={{ darks, accents, base: logoBase, sitePalette }}>
+<!-- The palette data for the script below (a data block, so the script itself can be bundled and
+     approved by the content security policy like every other script). -->
+<script type="application/json" id="palette-data" set:html={JSON.stringify({ darks, accents, base: logoBase, sitePalette })} />
+
+<script>
+  // @ts-nocheck
+  const { darks, accents, base, sitePalette } = JSON.parse(document.getElementById('palette-data').textContent);
   const d = document.documentElement;
   const form = document.querySelector('[data-builder]');
   const go = document.querySelector('[data-go]');

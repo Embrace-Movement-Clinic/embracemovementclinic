@@ -1,7 +1,8 @@
 ---
-// Shows while a palette preview from /palette is active.
+// Design tools only (see src/data/build.ts): shows while a palette preview from /palette is active.
 // Hidden unless <html data-preview> is set by the preview script in BaseLayout.
 import { darks, accents } from '../data/palette';
+import previewBarScript from '../scripts/inline/preview-bar.js?raw';
 
 const names = Object.fromEntries([
   ...Object.entries(darks).map(([k, v]) => [k, v.label]),
@@ -9,22 +10,13 @@ const names = Object.fromEntries([
 ]);
 ---
 
-<div class="preview-bar" role="region" aria-label="Palette preview" data-preview-bar hidden>
+<div class="preview-bar" role="region" aria-label="Palette preview" data-preview-bar data-names={JSON.stringify(names)} hidden>
   <span>Previewing palette: <strong data-preview-name></strong></span>
   <a href="/palette">Change</a>
   <a href="?palette=off" data-preview-exit>Exit preview</a>
 </div>
 
-<script is:inline define:vars={{ names }}>
-  (function () {
-    var v = document.documentElement.dataset.preview;
-    var bar = document.querySelector('[data-preview-bar]');
-    if (!v || !bar) return;
-    var p = v.split('-');
-    bar.querySelector('[data-preview-name]').textContent = names[p[0]] + ' + ' + names[p[1]];
-    bar.hidden = false;
-  })();
-</script>
+<script is:inline set:html={previewBarScript} />
 
 <style>
   .preview-bar {

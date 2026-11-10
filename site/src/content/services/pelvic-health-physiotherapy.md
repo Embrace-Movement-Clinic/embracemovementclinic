@@ -43,6 +43,6 @@ related:
   - pilates
   - exercise-therapy
 seoTitle: Pelvic Health Physiotherapy in McDowall
-seoDescription: Pelvic health physiotherapy in McDowall for incontinence, prolapse, pelvic pain, diastasis recti, pre- and postnatal care, sexual dysfunction and menopause care.
+seoDescription: Pelvic health physiotherapy in McDowall for incontinence, prolapse, pelvic pain, diastasis recti, pre- and postnatal care, sexual dysfunction and menopause.
 oldUrl: /womens-health-physio
 ---

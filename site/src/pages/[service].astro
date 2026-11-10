@@ -17,6 +17,7 @@ import PractitionerList from '../components/PractitionerList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import BookingBand from '../components/BookingBand.astro';
 import { site } from '../data/site';
+import { serviceNode } from '../data/schema';
 
 export async function getStaticPaths() {
   const services = await getCollection('services', (s) => s.data.kind === 'appointment');
@@ -45,6 +46,12 @@ const conditions = [...d.forYou.items.filter((i) => i.detail), ...d.forYou.items
 // Columns on wide screens chosen so the last row isn't left with a single tile (6 → 3 + 3, 7 → 4 + 3, 8 → 4 + 4).
 const colsFor = (n: number) => (n <= 4 ? Math.max(n, 2) : n % 4 === 0 || n % 4 === 3 ? 4 : 3);
 const hasExpect = Boolean(d.expect.text || d.expect.steps?.length);
+const jsonLd = serviceNode({
+  name: d.title,
+  description: d.seoDescription,
+  path: `/${service.id}`,
+  image: d.image ? new URL(`/og/services/${service.id}.jpg`, site.url).href : undefined,
+});
 const sections = [
   { id: 'for-you', label: d.forYou.heading === 'Is this for you?' ? 'Is this for you?' : 'Conditions' },
   ...(hasExpect ? [{ id: 'expect', label: 'What to expect' }] : []),
@@ -53,7 +60,7 @@ const sections = [
 ];
 ---
 
-<BaseLayout title={d.seoTitle} description={d.seoDescription} shareImage={d.image ? `/og/services/${service.id}.jpg` : undefined} imageAlt={d.imageAlt}>
+<BaseLayout title={d.seoTitle} description={d.seoDescription} shareImage={d.image ? `/og/services/${service.id}.jpg` : undefined} imageAlt={d.imageAlt} jsonLd={jsonLd}>
   <PageHero crumbs={[{ label: 'Services', href: '/services' }, { label: d.title }]} eyebrow="One-on-one appointments" title={d.title} lede={d.lede}>
     <p class="see">
       <Icon name="user" size={18} /> You’ll see {seeLine}
@@ -180,7 +187,7 @@ const sections = [
         <li>
           <a class="hover-tile" href="/contact">
             <IconBadge name="map-pin" />
-            <span><strong>Getting here</strong> 33 Brynner Street, McDowall</span>
+            <span><strong>Getting here</strong> {site.address.street}, {site.address.suburb}</span>
           </a>
         </li>
       </ul>

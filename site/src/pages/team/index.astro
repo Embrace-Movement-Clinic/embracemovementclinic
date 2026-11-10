@@ -6,6 +6,7 @@ import TeamCard from '../../components/TeamCard.astro';
 import BookingBand from '../../components/BookingBand.astro';
 import Photo from '../../components/Photo.astro';
 import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
 
 const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
 // Intro and the Jeff section, edited on /admin ("Pages → Team page").
@@ -15,7 +16,7 @@ const { intro, jeff } = pageEntry.data;
 ---
 
 <BaseLayout
-  title="Meet the team"
+  title={`Our physiotherapists in ${site.address.suburb}`}
   description="Meet the physiotherapists, exercise physiologist and clinical pilates instructors at Embrace Movement Clinic in McDowall."
 >
   <PageHero

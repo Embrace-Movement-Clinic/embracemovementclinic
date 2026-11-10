@@ -207,68 +207,72 @@ const otherClasses = days.some((d) => d.classes.some((c) => c.class?.trim() && c
     font-weight: var(--weight-semibold);
   }
 
-  /* Wider screens: a column per day, and a shared row per class time (subgrid), so classes at
-     the same time line up across the week. */
-  @media (min-width: 56em) {
-    .board {
-      grid-template-columns: repeat(var(--days, 5), minmax(0, 1fr));
-      grid-template-rows: var(--rows, auto);
-      gap: var(--space-xs) var(--space-s);
-      padding: var(--space-m);
+  /* The weekly board needs subgrid (all current browsers). Older ones keep the phone layout:
+     a block per day with its times in rows. */
+  @supports (grid-template-rows: subgrid) {
+    /* Wider screens: a column per day, and a shared row per class time (subgrid), so classes at
+       the same time line up across the week. */
+    @media (min-width: 56em) {
+      .board {
+        grid-template-columns: repeat(var(--days, 5), minmax(0, 1fr));
+        grid-template-rows: var(--rows, auto);
+        gap: var(--space-xs) var(--space-s);
+        padding: var(--space-m);
+      }
+
+      .day {
+        grid-row: 1 / -1;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: subgrid;
+        gap: inherit;
+      }
+
+      .day__name {
+        justify-self: stretch;
+        min-width: 0;
+        margin-bottom: var(--space-2xs);
+        padding: 0.45em 0.6em;
+      }
+
+      .slots {
+        display: grid;
+        grid-row: 2 / -1;
+        grid-template-rows: subgrid;
+      }
+
+      .slot {
+        grid-row: var(--row);
+      }
+
+      .slots__break {
+        display: none;
+      }
+
+      .slot {
+        min-width: 0;
+        padding: 0.6em 0.75em;
+        border-radius: var(--radius-l);
+      }
+
+      .slot__time {
+        font-size: var(--step-1);
+      }
     }
 
-    .day {
-      grid-row: 1 / -1;
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: subgrid;
-      gap: inherit;
-    }
+    /* Many days on a narrow board: short day names. */
+    @media (min-width: 56em) and (max-width: 61.99em) {
+      .day__long {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
 
-    .day__name {
-      justify-self: stretch;
-      min-width: 0;
-      margin-bottom: var(--space-2xs);
-      padding: 0.45em 0.6em;
-    }
-
-    .slots {
-      display: grid;
-      grid-row: 2 / -1;
-      grid-template-rows: subgrid;
-    }
-
-    .slot {
-      grid-row: var(--row);
-    }
-
-    .slots__break {
-      display: none;
-    }
-
-    .slot {
-      min-width: 0;
-      padding: 0.6em 0.75em;
-      border-radius: var(--radius-l);
-    }
-
-    .slot__time {
-      font-size: var(--step-1);
-    }
-  }
-
-  /* Many days on a narrow board: short day names. */
-  @media (min-width: 56em) and (max-width: 61.99em) {
-    .day__long {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    .day__short {
-      display: inline;
+      .day__short {
+        display: inline;
+      }
     }
   }
 </style>

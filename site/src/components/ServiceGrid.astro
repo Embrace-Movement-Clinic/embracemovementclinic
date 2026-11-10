@@ -13,15 +13,29 @@ interface Props {
 
 const { services } = Astro.props;
 const groups = [
-  { kind: 'classes', label: 'Classes', list: services.filter((s) => s.data.kind === 'class') },
-  { kind: 'appointments', label: 'One-on-one appointments', list: services.filter((s) => s.data.kind === 'appointment') },
+  // `sizes`: how wide each card's photo is drawn, so browsers fetch a file to match. On phones
+  // it's a 6.5rem thumbnail; on tablets the classes card runs the full width.
+  {
+    kind: 'classes',
+    label: 'Classes',
+    list: services.filter((s) => s.data.kind === 'class'),
+    sizes: '(min-width: 62em) 35vw, (min-width: 40em) 100vw, 6.5rem',
+    widths: [240, 400, 640, 960, 1280],
+  },
+  {
+    kind: 'appointments',
+    label: 'One-on-one appointments',
+    list: services.filter((s) => s.data.kind === 'appointment'),
+    sizes: '(min-width: 62em) 30vw, (min-width: 40em) 50vw, 6.5rem',
+    widths: [240, 400, 640, 960],
+  },
 ];
 ---
 
 <div class="service-groups">
   {
     groups.map(
-      ({ kind, label, list }) =>
+      ({ kind, label, list, sizes, widths }) =>
         list.length > 0 && (
           <>
           <h3 class:list={['eyebrow', 'group-label', `group-label--${kind}`]}>
@@ -37,7 +51,7 @@ const groups = [
             {list.map((s) => (
               // Card titles sit under their group's small heading ("One-on-one appointments", "Classes").
               <li class="card">
-                <ServiceCard service={s} as="h4" compact widths={[400, 640, 960]} sizes="(min-width: 62em) 30vw, (min-width: 40em) 50vw, 100vw" />
+                <ServiceCard service={s} as="h4" compact widths={widths} sizes={sizes} />
               </li>
             ))}
           </ul>

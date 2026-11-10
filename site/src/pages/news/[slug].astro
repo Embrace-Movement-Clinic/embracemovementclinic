@@ -6,6 +6,7 @@ import Photo from '../../components/Photo.astro';
 import Icon from '../../components/Icon.astro';
 import BookingBand from '../../components/BookingBand.astro';
 import { site } from '../../data/site';
+import { clinicRef } from '../../data/schema';
 
 export async function getStaticPaths() {
   const posts = await getCollection('news');
@@ -30,7 +31,7 @@ const jsonLd = {
   description: d.summary,
   datePublished: d.date.toISOString().slice(0, 10),
   url: new URL(`/news/${post.id}`, site.url).href,
-  publisher: { '@type': 'MedicalBusiness', '@id': `${site.url}/#clinic`, name: site.name, url: site.url },
+  publisher: clinicRef,
 };
 const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric', timeZone: 'Australia/Brisbane' });
 ---

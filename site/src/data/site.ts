@@ -42,6 +42,8 @@ export const site = {
     // Non-breaking spaces keep the number on one line.
     display: clinic.phone.trim().replace(/\s+/g, '\u00a0'),
     href: telHref(clinic.phone),
+    /** "+61434686261", for structured data. */
+    international: telHref(clinic.phone).replace('tel:', ''),
     /** For "Text us" links. */
     smsHref: telHref(clinic.phone).replace('tel:', 'sms:'),
   },

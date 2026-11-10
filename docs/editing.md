@@ -60,7 +60,7 @@ Each demo save is a real change on the preview branch. Ask Claude to undo demo e
    - Create a GitHub OAuth app (*GitHub → Settings → Developer settings → OAuth Apps*).
    - Deploy Sveltia's login helper (`sveltia-cms-auth`) as a free Cloudflare Worker, following its instructions. The OAuth app's client ID and secret are stored as secrets in Cloudflare, never in the project.
    - Put the Worker's address in `base_url` in `site/public/admin/config.yml`.
-3. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`.
+3. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`. The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor still saves to another branch, so this step can't be missed.
 4. **Optional approval step:** set `publish_mode` to `preview` or `editorial_workflow`, so each change waits as a draft with a preview link until Adrian approves it.
 5. Delete the demo token on GitHub.
 

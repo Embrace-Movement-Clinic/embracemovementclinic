@@ -160,11 +160,13 @@ const rule = (selector: string, tokens: Record<string, string>) =>
   `${selector}{${Object.entries(tokens).map(([k, v]) => `${k}:${v}`).join(';')}}`;
 
 /**
- * The palette as CSS, inlined in every page by BaseLayout: the site palette on :root, plus
- * overrides for previewing other combinations with <html data-dark="…" data-accent="…">.
+ * The palette as CSS, inlined in every page by BaseLayout: the site palette on :root. With
+ * `previews` (design tools only), also the overrides for trying other combinations with
+ * <html data-dark="…" data-accent="…">.
  */
-export function themeCss(): string {
+export function themeCss(previews = false): string {
   let css = rule(':root', { ...baseTokens, ...darkTokens(darks[sitePalette.dark]), ...accentTokens(accents[sitePalette.accent]) });
+  if (!previews) return css;
   for (const [id, d] of Object.entries(darks)) css += rule(`html[data-dark='${id}']`, darkTokens(d));
   for (const [id, a] of Object.entries(accents)) css += rule(`html[data-accent='${id}']`, accentTokens(a));
   return css;

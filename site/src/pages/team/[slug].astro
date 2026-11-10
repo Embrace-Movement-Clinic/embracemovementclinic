@@ -9,7 +9,9 @@ import Icon from '../../components/Icon.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import BookingBand from '../../components/BookingBand.astro';
+import { getImage } from 'astro:assets';
 import { site } from '../../data/site';
+import { clinicRef } from '../../data/schema';
 
 export async function getStaticPaths() {
   const team = await getCollection('team');
@@ -27,13 +29,16 @@ const services = (await getCollection('services', (s) => s.data.practitioners.so
   (a, b) => a.data.order - b.data.order,
 );
 
+const portrait = d.photo ? await getImage({ src: d.photo, format: 'jpg', width: 800 }) : null;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': `${new URL(`/team/${member.id}`, site.url).href}#person`,
   name: d.name,
   jobTitle: d.titles,
-  worksFor: { '@type': 'MedicalBusiness', name: site.name, url: site.url },
+  worksFor: clinicRef,
   url: new URL(`/team/${member.id}`, site.url).href,
+  ...(portrait && { image: new URL(portrait.src, site.url).href }),
 };
 ---
 

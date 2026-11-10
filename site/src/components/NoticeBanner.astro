@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { site } from '../data/site';
+import noticeScript from '../scripts/inline/notice.js?raw';
 
 const { notice } = site;
 const show = notice.active;
@@ -29,32 +30,7 @@ const key = hash.toString(36);
   )
 }
 
-{
-  show && (
-    <script is:inline>
-      (function () {
-        var n = document.getElementById('site-notice');
-        if (!n) return;
-        var storageKey = 'notice-dismissed:' + n.dataset.key;
-        var until = n.dataset.until;
-        try {
-          if (localStorage.getItem(storageKey)) return n.remove();
-        } catch (e) {}
-        if (until && new Date() > new Date(until + 'T23:59:59+10:00')) return n.remove();
-        var btn = n.querySelector('[data-dismiss]');
-        btn.hidden = false;
-        btn.addEventListener('click', function () {
-          try {
-            localStorage.setItem(storageKey, '1');
-          } catch (e) {}
-          n.remove();
-          var logo = document.querySelector('.site-header__logo');
-          if (logo) logo.focus();
-        });
-      })();
-    </script>
-  )
-}
+{show && <script is:inline set:html={noticeScript} />}
 
 <style>
   .notice {

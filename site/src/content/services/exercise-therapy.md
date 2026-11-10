@@ -52,6 +52,6 @@ related:
   - physiotherapy
   - pelvic-health-physiotherapy
 seoTitle: Exercise Therapy in McDowall
-seoDescription: Exercise therapy and exercise physiology in McDowall for injury rehabilitation, chronic pain and disease management, osteoporosis, healthy ageing and athletic performance.
+seoDescription: Exercise therapy and exercise physiology in McDowall for injury rehabilitation, chronic pain and disease management, osteoporosis and healthy ageing.
 oldUrl: /exercise-physiology
 ---

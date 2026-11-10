@@ -18,12 +18,19 @@ import BookingBand from '../components/BookingBand.astro';
 import ClosureNote from '../components/ClosureNote.astro';
 import Timetable from '../components/Timetable.astro';
 import { site } from '../data/site';
+import { serviceNode } from '../data/schema';
 import { classFacts, classSteps, equipment, booking, timetable } from '../data/policies';
 
 const service = (await getEntry('services', 'pilates')) as CollectionEntry<'services'>;
 const d = service.data;
 const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
+const jsonLd = serviceNode({
+  name: d.title,
+  description: d.seoDescription,
+  path: `/${service.id}`,
+  image: d.image ? new URL(`/og/services/${service.id}.jpg`, site.url).href : undefined,
+});
 const sections = [
   { href: '#start', label: 'How to start' },
   { href: '#for-you', label: 'Who it’s for' },
@@ -34,7 +41,7 @@ const sections = [
 ];
 ---
 
-<BaseLayout title={d.seoTitle} description={d.seoDescription} shareImage={d.image ? `/og/services/${service.id}.jpg` : undefined} imageAlt={d.imageAlt}>
+<BaseLayout title={d.seoTitle} description={d.seoDescription} shareImage={d.image ? `/og/services/${service.id}.jpg` : undefined} imageAlt={d.imageAlt} jsonLd={jsonLd}>
   <PageHero
     tone="brand"
     curve={false}

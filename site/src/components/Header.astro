@@ -92,7 +92,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   </div>
 
   <!-- Mobile navigation (same links, kept after the menu button in reading order) -->
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Main">
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu">
     <ul class="wrap mobile-nav__list" role="list">
       <li>
         <a href="/services" aria-current={current('/services')}>Services</a>
@@ -308,10 +308,17 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     display: block;
   }
 
-  /* Without JS the menu button can't work, so show the mobile nav as a plain list. */
+  /* Without JS the menu button can't work, so show the mobile nav as a plain list, and let the
+     header scroll away with the page (it would fill a phone screen if it stayed stuck). */
   :global(html:not(.js)) .site-header__menu,
   :global(html:not(.js)) .desk-nav__toggle {
     display: none;
+  }
+
+  @media (max-width: 61.99em) {
+    :global(html:not(.js)) .site-header {
+      position: static;
+    }
   }
 
   /* Mobile nav */

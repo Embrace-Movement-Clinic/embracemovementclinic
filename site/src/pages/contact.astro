@@ -8,7 +8,8 @@ import ClosureNote from '../components/ClosureNote.astro';
 import Icon from '../components/Icon.astro';
 import Link from '../components/Link.astro';
 import EmailAddress from '../components/EmailAddress.astro';
-import { site } from '../data/site';
+import { site, fullAddress } from '../data/site';
+import { clinicNode } from '../data/schema';
 
 const pageEntry = await getEntry('contactPage', 'contact');
 if (!pageEntry) throw new Error('Missing src/content/pages/contact.md');
@@ -24,27 +25,15 @@ const ways = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
-  about: {
-    '@type': ['MedicalBusiness', 'Physiotherapy'],
-    name: site.name,
-    url: site.url,
-    telephone: '+61 434 686 261',
-    email: site.email.address,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: site.address.street,
-      addressLocality: site.address.suburb,
-      addressRegion: site.address.state,
-      postalCode: site.address.postcode,
-      addressCountry: site.address.country,
-    },
-  },
+  url: new URL('/contact', site.url).href,
+  name: `Contact ${site.name}`,
+  mainEntity: clinicNode(),
 };
 ---
 
 <BaseLayout
-  title="Contact & visit"
-  description="Call, text or email Embrace Movement Clinic, or find us at 33 Brynner Street, McDowall QLD 4053. Directions, parking and hours."
+  title={`Contact us in ${site.address.suburb}`}
+  description={`Call, text or email ${site.name}, or find us at ${fullAddress}. Directions, parking and hours.`}
   jsonLd={jsonLd}
 >
   <PageHero

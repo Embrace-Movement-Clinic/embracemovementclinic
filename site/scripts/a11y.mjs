@@ -12,7 +12,8 @@ if (!baseUrl || paths.length === 0) {
 const browser = await chromium.launch();
 let failures = 0;
 for (const width of [1280, 390]) {
-  const context = await browser.newContext({ viewport: { width, height: 900 } });
+  // bypassCSP: the site's content security policy would otherwise stop the checker's own script.
+  const context = await browser.newContext({ viewport: { width, height: 900 }, bypassCSP: true });
   const page = await context.newPage();
   for (const p of paths) {
     await page.goto(new URL(p, baseUrl).href, { waitUntil: 'networkidle' });
