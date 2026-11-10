@@ -1,0 +1,38 @@
+---
+// A pale teal note with an icon: tips, things to know, the closure note.
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+  icon?: IconName;
+  /** The element to render: a paragraph by default; "li" inside a list; "aside" for a side note. */
+  as?: 'p' | 'li' | 'aside' | 'div';
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { icon = 'info', as: Tag = 'p', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['note', className]} {...rest}>
+  <Icon name={icon} size={20} />
+  <span><slot /></span>
+</Tag>
+
+<style>
+  .note {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-xs);
+    align-items: start;
+    padding: var(--space-s) var(--space-m);
+    border-radius: var(--radius-l);
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+    list-style: none;
+  }
+
+  .note > :global(svg) {
+    margin-top: 0.15em;
+    color: var(--color-icon);
+  }
+</style>

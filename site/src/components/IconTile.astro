@@ -1,0 +1,23 @@
+---
+// A one-line link tile with an icon badge, e.g. the "What can we help with?" tiles on Home and the
+// jump grid on Patient information. Styles: components.css (.icon-tile).
+import Icon, { type IconName } from './Icon.astro';
+import IconBadge from './IconBadge.astro';
+
+interface Props {
+  href: string;
+  icon: IconName;
+  /** Show a small arrow on the right (hidden on phones). */
+  arrow?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { href, icon, arrow = false, class: className, ...rest } = Astro.props;
+---
+
+<a class:list={['icon-tile', 'hover-tile', className]} href={href} {...rest}>
+  <IconBadge name={icon} />
+  <span class="icon-tile__label"><slot /></span>
+  {arrow && <Icon name="arrow-right" size={16} class="icon-tile__arrow" />}
+</a>

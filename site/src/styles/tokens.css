@@ -7,7 +7,6 @@
   color-scheme: light;
 
   /* Fixed colours */
-  --color-white: #ffffff;
   --color-todo-bg: #fff4d6;
   --color-todo-ink: #5c3d00;
   --color-todo-line: #a86b00;
@@ -23,6 +22,12 @@
   --step-3: clamp(1.7rem, 1.4rem + 1.5vw, 2.5rem);
   --step-4: clamp(2.05rem, 1.6rem + 2.3vw, 3.3rem);
   --step-5: clamp(2.5rem, 1.6rem + 4.2vw, 4.75rem);
+
+  /* Font weights (both fonts are variable, so these are the only four weights in use). */
+  --weight-medium: 550;
+  --weight-semibold: 650;
+  --weight-bold: 700;
+  --weight-heavy: 750;
 
   /* Space */
   --space-3xs: 0.25rem;
@@ -49,11 +54,24 @@
   --curve: clamp(1.25rem, 0.25rem + 3.5vw, 3.75rem);
   --shadow-s: 0 1px 2px rgb(0 0 0 / 0.05), 0 2px 8px rgb(0 0 0 / 0.05);
   --shadow-m: 0 2px 6px rgb(0 0 0 / 0.05), 0 16px 40px rgb(0 0 0 / 0.1);
+  /* Hover on filled buttons and pills: how much of the fill colour is kept (the rest is black). */
+  --hover-keep: 84%;
 
   /* Height of the sticky header (its bar plus bottom border), at every screen width. */
   --header-h: 4.5rem;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+/*
+  Breakpoints. CSS variables can't be used in media queries, so these are written out where
+  they're used. Keep to this set:
+    22em  (352px)   very narrow phones and 400% zoom: `max-width: 21.99em` only
+    40em  (640px)   large phones to tablets: cards go two across
+    56em  (896px)   two-column page layouts (text beside a photo, a sidebar)
+    62em  (992px)   desktop navigation, three- and four-column grids
+    75em  (1200px)  wide desktop
+  "Up to" queries use the value just below (39.99em, 55.99em, 61.99em, 74.99em).
+*/
 
 /*
   Palette tokens. The values come from src/data/palette.ts (sitePalette, currently Petrol +

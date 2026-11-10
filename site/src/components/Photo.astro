@@ -2,6 +2,8 @@
 // Responsive photo from src/assets/photos: AVIF with a WebP fallback, both with srcset. Without `src`, it shows
 // a placeholder with a visible TODO naming the intended photo. Check each `alt` against the
 // photo whenever one is swapped.
+// To change a photo's shape from outside (e.g. at one screen size), set --photo-ratio-override on
+// it or on an element around it: `.hero :global(.photo) { --photo-ratio-override: 4 / 3; }`.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Todo from './Todo.astro';
@@ -49,10 +51,10 @@ const {
       loading={loading}
       fetchpriority={loading === 'eager' ? 'high' : 'auto'}
       class:list={['photo', className]}
-      style={`aspect-ratio: ${ratio}${position ? `; object-position: ${position}` : ''}`}
+      style={`--photo-ratio: ${ratio}${position ? `; --photo-position: ${position}` : ''}`}
     />
   ) : (
-    <div class:list={['photo', 'photo--placeholder', `photo--${tone}`, className]} style={`aspect-ratio: ${ratio}`} data-alt={alt}>
+    <div class:list={['photo', 'photo--placeholder', `photo--${tone}`, className]} style={`--photo-ratio: ${ratio}`} data-alt={alt}>
       <Todo>photo{note ? `: ${note}` : ''}</Todo>
     </div>
   )
@@ -63,7 +65,9 @@ const {
     display: block;
     width: 100%;
     height: auto;
+    aspect-ratio: var(--photo-ratio-override, var(--photo-ratio));
     object-fit: cover;
+    object-position: var(--photo-position, 50% 50%);
   }
 
   .photo--placeholder {

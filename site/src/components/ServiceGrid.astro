@@ -4,7 +4,7 @@
 // Wide screens: a tall classes card beside the one-on-one services in a 2×2 grid.
 // Phones: compact rows (photo beside text).
 import type { CollectionEntry } from 'astro:content';
-import Photo from './Photo.astro';
+import ServiceCard from './ServiceCard.astro';
 
 interface Props {
   /** Services in display order. */
@@ -34,28 +34,12 @@ const groups = [
             )}
           </h3>
           <ul class:list={['cards', `cards--${kind}`]} role="list">
-            {list.map((s) => {
+            {list.map((s) => (
               // Card titles sit under their group's small heading ("One-on-one appointments", "Classes").
-              return (
-                <li class="card">
-                  <a class="hover-card" href={`/${s.id}`}>
-                    <Photo
-                      src={s.data.image}
-                      alt=""
-                      note={s.data.imageNote}
-                      position={s.data.imagePosition}
-                      ratio="3 / 2"
-                      widths={[400, 640, 960]}
-                      sizes="(min-width: 62em) 30vw, (min-width: 40em) 50vw, 100vw"
-                    />
-                    <div class="card__body">
-                      <h4 class="card__title">{s.data.title}</h4>
-                      <p class="card__blurb">{s.data.blurb ?? s.data.summary}</p>
-                    </div>
-                  </a>
-                </li>
-              );
-            })}
+              <li class="card">
+                <ServiceCard service={s} as="h4" compact widths={[400, 640, 960]} sizes="(min-width: 62em) 30vw, (min-width: 40em) 50vw, 100vw" />
+              </li>
+            ))}
           </ul>
           </>
         ),
@@ -85,8 +69,8 @@ const groups = [
   }
 
   @media (min-width: 40em) and (max-width: 61.99em) {
-    .cards--classes :global(.photo) {
-      aspect-ratio: 2 / 1 !important;
+    .cards--classes {
+      --photo-ratio-override: 2 / 1;
     }
   }
 
@@ -132,7 +116,8 @@ const groups = [
       grid-template-rows: 1fr;
     }
 
-    .cards--classes .card a {
+    /* The tall classes card: its photo fills whatever height is left above the text. */
+    .cards--classes .card :global(.photo-card) {
       grid-template-rows: 1fr auto;
     }
 
@@ -143,31 +128,20 @@ const groups = [
     }
 
     .cards--classes :global(.photo) {
+      --photo-ratio-override: auto;
       position: absolute;
       inset: 0;
       height: 100%;
-      aspect-ratio: auto !important;
     }
   }
 
-  .card a {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100%;
-    overflow: hidden;
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
-    background: var(--color-bg);
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-
+  /* Phones: compact rows, with a small photo beside the text. */
   @media (max-width: 39.99em) {
     .cards {
       gap: var(--space-s);
     }
 
-    .card a {
+    .card :global(.photo-card) {
       grid-template-columns: 6.5rem 1fr;
       grid-template-rows: none;
     }
@@ -178,45 +152,14 @@ const groups = [
     }
 
     .card :global(.photo) {
+      --photo-ratio-override: auto;
       position: absolute;
       inset: 0;
       height: 100%;
-      aspect-ratio: auto !important;
     }
 
-    .card__body {
-      padding: var(--space-s);
-    }
-
-    .card__title {
-      font-size: var(--step-0);
-    }
-
-    .card__blurb {
+    .card :global(.service-card__text) {
       font-size: var(--step--1);
     }
   }
-
-  .card__body {
-    display: grid;
-    align-content: start;
-    gap: var(--space-2xs);
-    padding: var(--space-m);
-  }
-
-  .card__title {
-    font-size: var(--step-1);
-  }
-
-  @media (hover: hover) {
-    .card a:hover .card__title {
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
-    }
-  }
-
-  .card__blurb {
-    color: var(--color-ink-muted);
-  }
-
 </style>

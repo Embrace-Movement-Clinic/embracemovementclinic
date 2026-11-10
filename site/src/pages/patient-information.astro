@@ -4,44 +4,29 @@
 // this page's own text in src/content/pages/patient-information.md (edited on /admin).
 // Layout: an icon grid to jump to each topic, then one band per topic (alternating white and
 // mist), each headed by its icon, so the page scans as a set of short, visual sections.
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Button from '../components/Button.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
+import IconBadge from '../components/IconBadge.astro';
+import IconTile from '../components/IconTile.astro';
+import SectionHead from '../components/SectionHead.astro';
+import BookingTip from '../components/BookingTip.astro';
+import EmailAddress from '../components/EmailAddress.astro';
+import FeeGroups from '../components/FeeGroups.astro';
 import Photo from '../components/Photo.astro';
 import Todo from '../components/Todo.astro';
 import ClosureNote from '../components/ClosureNote.astro';
 import CancellationCallout from '../components/CancellationCallout.astro';
 import BookingBand from '../components/BookingBand.astro';
-import { site, fullAddress, newTabAttrs } from '../data/site';
-import { classFacts, studioEtiquette, booking, bookingTip } from '../data/policies';
+import { site, fullAddress } from '../data/site';
+import { classFacts, studioEtiquette, booking } from '../data/policies';
 
 const pageEntry = await getEntry('patientInfo', 'patient-information');
 const teamEntry = await getEntry('teamPage', 'team');
 if (!pageEntry || !teamEntry) throw new Error('Missing a file in src/content/pages');
 const p = pageEntry.data;
-// Fees listed together under their service, in the order they were entered.
-// Each fee group heading links to its service page: matched on the service's title, short name or
-// address ("Physiotherapy" → /physiotherapy), and any "class" group → the classes page.
-const services = await getCollection('services');
-const norm = (t: string) => t.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, ' ').trim();
-const serviceFor = (group?: string) => {
-  if (!group) return undefined;
-  const g = norm(group);
-  return (
-    services.find((s) =>
-      [s.data.title, s.data.shortTitle ?? '', s.id.replace(/-/g, ' '), (s.data.oldUrl ?? '').replace(/[/-]/g, ' ')].some((n) => norm(n) === g),
-    ) ??
-    (/\bclass/.test(g) ? services.find((s) => s.data.kind === 'class') : undefined)
-  );
-};
-const feeGroups = p.fees.reduce<{ name?: string; fees: typeof p.fees }[]>((groups, f) => {
-  const last = groups.at(-1);
-  if (last && last.name === f.group) last.fees.push(f);
-  else groups.push({ name: f.group, fees: [f] });
-  return groups;
-}, []);
 const jeff = teamEntry.data.jeff;
 
 const sections: { id: string; label: string; icon: IconName }[] = [
@@ -82,12 +67,9 @@ const factIcon = (label: string): IconName =>
           {
             sections.map((s) => (
               <li>
-                <a class="hover-tile" href={`#${s.id}`}>
-                  <span class="badge">
-                    <Icon name={s.icon} size={22} />
-                  </span>
-                  <span>{s.label}</span>
-                </a>
+                <IconTile href={`#${s.id}`} icon={s.icon}>
+                  {s.label}
+                </IconTile>
               </li>
             ))
           }
@@ -98,10 +80,7 @@ const factIcon = (label: string): IconName =>
 
   <section id="booking" aria-labelledby="booking-h" class="band">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec.booking.icon} size={26} /></span>
-        <h2 id="booking-h">Booking</h2>
-      </div>
+      <SectionHead id="booking-h" icon={sec.booking.icon} title="Booking" size="s" />
       <div class="ways">
         <div class="way way--main on-brand">
           <span class="way__mark" aria-hidden="true"><Icon name="calendar" size={150} /></span>
@@ -122,25 +101,22 @@ const factIcon = (label: string): IconName =>
           <h3 class="h4">Call or text</h3>
           <p>
             Call <a href={site.phone.href}>{site.phone.display}</a>. {booking.waitlistText}{' '}
-            <a href={site.phone.href.replace('tel:', 'sms:')}>{site.phone.display}</a>.
+            <a href={site.phone.smsHref}>{site.phone.display}</a>.
           </p>
         </div>
         <div class="way">
           <Icon name="mail" size={26} />
           <h3 class="h4">Email</h3>
-          <p><a href={site.email.href} class="email">{site.email.address.split('@')[0]}@<wbr />{site.email.address.split('@')[1]}</a></p>
+          <p><a href={site.email.href} class="email"><EmailAddress address={site.email.address} /></a></p>
         </div>
       </div>
-      <p class="tip"><Icon name="info" size={20} /><span>{bookingTip.before}{bookingTip.link && <a href={bookingTip.link.href} {...newTabAttrs(bookingTip.link.href)}>{bookingTip.link.text}<span class="visually-hidden"> (opens in a new tab)</span></a>}{bookingTip.after}</span></p>
+      <BookingTip class="booking__tip" />
     </div>
   </section>
 
   <section id="first-visit" aria-labelledby="first-h" class="band band--alt">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec['first-visit'].icon} size={26} /></span>
-        <h2 id="first-h">Your first visit</h2>
-      </div>
+      <SectionHead id="first-h" icon={sec['first-visit'].icon} title="Your first visit" size="s" />
       <div class="split">
         <div class="prose">
           {p.firstVisit[0] && <p class="lede-s">{p.firstVisit[0]}</p>}
@@ -154,7 +130,7 @@ const factIcon = (label: string): IconName =>
           <h3 class="h4">What to bring</h3>
           {
             p.whatToBring.length > 0 ? (
-              <ul class="ticks" role="list">
+              <ul class="icon-list" role="list">
                 {p.whatToBring.map((item) => (
                   <li>
                     <Icon name="check" size={18} />
@@ -173,56 +149,17 @@ const factIcon = (label: string): IconName =>
 
   <section id="cancellations" aria-labelledby="cancel-h" class="band">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec.cancellations.icon} size={26} /></span>
-        <h2 id="cancel-h">Cancellations</h2>
-      </div>
+      <SectionHead id="cancel-h" icon={sec.cancellations.icon} title="Cancellations" size="s" />
       <CancellationCallout />
     </div>
   </section>
 
   <section id="fees" aria-labelledby="fees-h" class="band band--alt">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec.fees.icon} size={26} /></span>
-        <h2 id="fees-h">Fees and rebates</h2>
-      </div>
+      <SectionHead id="fees-h" icon={sec.fees.icon} title="Fees and rebates" size="s" />
       {
         p.fees.length > 0 ? (
-          <div class="fee-groups">
-            {feeGroups.map((g) => (
-              <div class="panel fee-group">
-                {g.name && (
-                  <h3 class="h4 fee-group__title">
-                    {serviceFor(g.name) ? (
-                      <a class="fee-pill" href={`/${serviceFor(g.name)!.id}`}>
-                        {g.name}
-                        <Icon name="arrow-right" size={18} />
-                      </a>
-                    ) : (
-                      <span class="fee-pill">{g.name}</span>
-                    )}
-                  </h3>
-                )}
-                <dl class="fees">
-                  {g.fees.map((f) => (
-                    <div>
-                      <dt>
-                        {f.item}
-                        {f.note && (
-                          <>
-                            {' '}
-                            <span class="fee-note">{f.note}</span>
-                          </>
-                        )}
-                      </dt>
-                      <dd>{f.price}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            ))}
-          </div>
+          <FeeGroups fees={p.fees} />
         ) : (
           <Todo as="div">fees for initial and follow-up appointments, pre-class assessments and classes</Todo>
         )
@@ -233,7 +170,7 @@ const factIcon = (label: string): IconName =>
         {
           p.feeNotes.length > 0 && (
             <div class="panel">
-              <ul class="ticks" role="list">
+              <ul class="icon-list" role="list">
                 {p.feeNotes.map((note) => (
                   <li>
                     <Icon name="card" size={18} />
@@ -247,7 +184,7 @@ const factIcon = (label: string): IconName =>
         <div class="panel">
           {
             p.funding.length > 0 ? (
-              <ul class="ticks" role="list">
+              <ul class="icon-list" role="list">
                 {p.funding.map((item) => (
                   <li>
                     <Icon name="shield" size={18} />
@@ -266,14 +203,11 @@ const factIcon = (label: string): IconName =>
 
   <section id="classes" aria-labelledby="classes-h" class="band">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec.classes.icon} size={26} /></span>
-        <h2 id="classes-h">Classes</h2>
-      </div>
+      <SectionHead id="classes-h" icon={sec.classes.icon} title="Classes" size="s" />
       <dl class="stats">
         {
           classFacts.map((f) => (
-            <div class:list={['stat', { 'stat--long': f.value.length > 40 }]}>
+            <div class:list={['stat', 'panel', 'panel--soft', { 'stat--long': f.value.length > 40 }]}>
               <Icon name={factIcon(f.label)} size={24} />
               <dt>{f.label}</dt>
               <dd>{keepTogether(f.value)}</dd>
@@ -290,7 +224,7 @@ const factIcon = (label: string): IconName =>
         </div>
         <div class="panel panel--mist">
           <h3 class="h4">What to wear</h3>
-          <ul class="ticks" role="list">
+          <ul class="icon-list" role="list">
             {
               studioEtiquette.map((e) => (
                 <li>
@@ -309,10 +243,7 @@ const factIcon = (label: string): IconName =>
 
   <section id="at-the-clinic" aria-labelledby="clinic-h" class="band band--alt">
     <div class="wrap">
-      <div class="head">
-        <span class="badge badge--l"><Icon name={sec['at-the-clinic'].icon} size={26} /></span>
-        <h2 id="clinic-h">At the clinic</h2>
-      </div>
+      <SectionHead id="clinic-h" icon={sec['at-the-clinic'].icon} title="At the clinic" size="s" />
       <div class="split split--even">
         <div class="stack">
           <div class="panel place">
@@ -355,7 +286,7 @@ const factIcon = (label: string): IconName =>
   <section id="privacy" aria-labelledby="privacy-h" class="band">
     <div class="wrap">
       <div class="privacy">
-        <span class="badge badge--l"><Icon name={sec.privacy.icon} size={26} /></span>
+        <IconBadge name={sec.privacy.icon} size="l" />
         <div>
           <h2 id="privacy-h" class="h3">Your privacy</h2>
           <p>{p.privacy}</p>
@@ -383,10 +314,6 @@ const factIcon = (label: string): IconName =>
     background: var(--color-bg-alt);
   }
 
-  .band--alt .panel {
-    background: var(--color-bg);
-  }
-
   .jump-wrap {
     display: grid;
     gap: var(--space-m);
@@ -399,52 +326,35 @@ const factIcon = (label: string): IconName =>
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* An odd last tile spans the row on phones, so there's no gap. */
-  @media (max-width: 39.99em) {
+  /* An odd last tile spans the row while there are two columns, so there's no gap. */
+  @media (max-width: 55.99em) {
     .jump li:last-child:nth-child(odd) {
       grid-column: 1 / -1;
     }
   }
 
-  @media (min-width: 40em) {
+  /* Four across only once each tile is wide enough for the longest label ("Cancellations"). */
+  @media (min-width: 56em) {
     .jump {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
-  @media (min-width: 70em) {
+  @media (min-width: 75em) {
     .jump {
       grid-template-columns: repeat(7, minmax(0, 1fr));
     }
 
-    .jump a {
+    .jump :global(.icon-tile) {
       flex-direction: column;
       justify-content: center;
-      text-align: center;
       min-height: 7.5rem;
+      padding: var(--space-xs);
+      text-align: center;
     }
-  }
 
-  .jump a {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    height: 100%;
-    min-height: 3.5rem;
-    padding: var(--space-xs);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius);
-    background: var(--color-bg);
-    color: var(--color-ink);
-    font-family: var(--font-display);
-    font-weight: 650;
-    line-height: 1.2;
-    text-decoration: none;
-  }
-
-  @media (max-width: 39.99em) {
-    .jump a {
-      font-size: var(--step--1);
+    .jump :global(.icon-tile__label) {
+      flex: none;
     }
   }
 
@@ -454,47 +364,6 @@ const factIcon = (label: string): IconName =>
     .jump {
       grid-template-columns: minmax(0, 1fr);
     }
-  }
-
-  .badge {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background: var(--color-accent-soft);
-    color: var(--color-icon);
-  }
-
-  .badge--l {
-    width: 3.25rem;
-    height: 3.25rem;
-    background: var(--color-brand);
-    color: var(--color-accent-on-brand);
-  }
-
-  .head {
-    display: flex;
-    align-items: center;
-    gap: var(--space-s);
-    margin-bottom: var(--space-m);
-  }
-
-  .head h2 {
-    font-size: var(--step-3);
-  }
-
-  .panel {
-    padding: var(--space-m);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
-    background: var(--color-bg);
-  }
-
-  .panel--mist {
-    border-color: transparent;
-    background: var(--color-bg-alt);
   }
 
   .panel > h3 {
@@ -536,31 +405,13 @@ const factIcon = (label: string): IconName =>
     align-content: start;
   }
 
-  /* Lists with an icon per item (check, card, shield). */
-  .ticks {
-    display: grid;
-    gap: var(--space-xs);
-  }
-
-  .ticks li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.65rem;
-    align-items: start;
-  }
-
-  .ticks :global(svg) {
-    margin-top: 0.2em;
-    color: var(--color-icon);
-  }
-
   /* Booking: three ways to book, online first and in petrol. */
   .ways {
     display: grid;
     gap: var(--space-s);
   }
 
-  @media (min-width: 48em) {
+  @media (min-width: 40em) {
     .ways {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -570,7 +421,7 @@ const factIcon = (label: string): IconName =>
     }
   }
 
-  @media (min-width: 70em) {
+  @media (min-width: 75em) {
     .ways {
       grid-template-columns: 1.3fr 1fr 1fr;
     }
@@ -637,88 +488,8 @@ const factIcon = (label: string): IconName =>
     overflow-wrap: anywhere;
   }
 
-  .tip {
-    display: flex;
-    gap: var(--space-xs);
-    align-items: flex-start;
+  :global(.booking__tip) {
     margin-top: var(--space-s);
-    padding: var(--space-s) var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
-  }
-
-  .tip :global(svg) {
-    margin-top: 0.15em;
-    flex-shrink: 0;
-    color: var(--color-icon);
-  }
-
-  /* Fees: a card per service, prices right-aligned. */
-  .fee-groups {
-    display: grid;
-    gap: var(--space-s);
-  }
-
-  @media (min-width: 48em) {
-    .fee-groups {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 76em) {
-    .fee-groups {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  .fee-group__title {
-    margin-bottom: var(--space-2xs);
-  }
-
-  /* Service name as a petrol pill linking to its page. */
-  .fee-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    padding: 0.3em 0.9em;
-    border-radius: 999px;
-    background: var(--color-brand);
-    color: var(--color-on-brand);
-    text-decoration: none;
-    transition: background-color 0.2s var(--ease);
-  }
-
-  /* Like a button: a little darker on hover. */
-  a.fee-pill:hover {
-    background: color-mix(in srgb, var(--color-brand) 84%, #000);
-    color: var(--color-on-brand);
-  }
-
-  .fees div {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-s);
-    padding-block: var(--space-xs);
-    border-top: 1px solid var(--color-line);
-  }
-
-  .fees div:first-child {
-    border-top: 0;
-  }
-
-  .fees dd {
-    font-family: var(--font-display);
-    font-size: var(--step-1);
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  .fee-note {
-    display: block;
-    color: var(--color-ink-muted);
-    font-size: var(--step--1);
   }
 
   .sub-h {
@@ -730,7 +501,7 @@ const factIcon = (label: string): IconName =>
     gap: var(--space-s);
   }
 
-  @media (min-width: 48em) {
+  @media (min-width: 56em) {
     .pair {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -755,9 +526,6 @@ const factIcon = (label: string): IconName =>
     grid-template-rows: auto auto 1fr;
     gap: var(--space-3xs);
     align-content: start;
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
   }
 
   .stat > :global(svg) {
@@ -774,7 +542,7 @@ const factIcon = (label: string): IconName =>
     margin: 0;
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 650;
+    font-weight: var(--weight-semibold);
     line-height: 1.25;
   }
 
@@ -848,7 +616,7 @@ const factIcon = (label: string): IconName =>
     border-radius: var(--radius-l);
   }
 
-  @media (min-width: 48em) {
+  @media (min-width: 40em) {
     .privacy {
       grid-template-columns: auto 1fr auto;
       gap: var(--space-m);

@@ -1,0 +1,20 @@
+---
+// An icon in a circle. Small and pale teal by default (tiles, cards); large and petrol beside
+// section headings. Decorative: the text next to it says what it's for. Styles: components.css.
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+  name: IconName;
+  /** "s" (2.5rem) for tiles and cards, "l" (3.25rem) beside headings. */
+  size?: 's' | 'l';
+  /** soft = pale teal; brand = petrol (the default for "l"); plain = white, for use on pale teal. */
+  tone?: 'soft' | 'brand' | 'plain';
+  class?: string;
+}
+
+const { name, size = 's', tone = size === 'l' ? 'brand' : 'soft', class: className } = Astro.props;
+---
+
+<span class:list={['icon-badge', `icon-badge--${size}`, `icon-badge--${tone}`, className]} aria-hidden="true">
+  <Icon name={name} size={size === 'l' ? 24 : 20} />
+</span>

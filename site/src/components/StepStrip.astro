@@ -31,7 +31,7 @@ const { title, steps, link, as: Heading = 'h3', id, class: className } = Astro.p
   </ol>
   {
     link && (
-      <a class="how__link" href={link.href}>
+      <a class="how__link arrow-link" href={link.href}>
         {link.label} <Icon name="arrow-right" size={16} />
       </a>
     )
@@ -67,7 +67,7 @@ const { title, steps, link, as: Heading = 'h3', id, class: className } = Astro.p
     gap: var(--space-s) var(--space-m);
   }
 
-  @media (min-width: 48em) {
+  @media (min-width: 56em) {
     .how__steps {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -90,17 +90,11 @@ const { title, steps, link, as: Heading = 'h3', id, class: className } = Astro.p
     background: var(--color-brand);
     color: var(--color-on-brand);
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     transform: translateY(0.35em);
   }
 
   .how__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    font-family: var(--font-display);
-    font-weight: 650;
     white-space: nowrap;
   }
-
 </style>

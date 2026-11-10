@@ -3,11 +3,11 @@ import Wordmark from './Wordmark.astro';
 import Icon from './Icon.astro';
 import Button from './Button.astro';
 import Todo from './Todo.astro';
+import EmailAddress from './EmailAddress.astro';
 import { footerLinks } from '../data/navigation';
 import { site } from '../data/site';
 import { booking } from '../data/policies';
 
-const year = new Date().getFullYear();
 // Clinic news isn't linked anywhere on the site: posts are shared by direct link (owner, 8 Nov 2026).
 const links = footerLinks;
 const { socials, hours, abn, address } = site;
@@ -69,7 +69,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
         </li>
         <li>
           <a href={site.email.href} class="site-footer__iconlink site-footer__email">
-            <Icon name="mail" size={18} /><span><span class="visually-hidden">Email </span>{site.email.address.split('@')[0]}@<wbr />{site.email.address.split('@')[1]}</span>
+            <Icon name="mail" size={18} /><span><span class="visually-hidden">Email </span><EmailAddress address={site.email.address} /></span>
           </a>
         </li>
       </ul>
@@ -133,7 +133,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
 
   <div class="wrap site-footer__base">
     <p>
-      <span>{`© ${year} ${site.name}`}</span>
+      <span>{`© ${site.name}`}</span>
       {abn ? <span>· ABN {abn}</span> : <Todo>ABN</Todo>}
     </p>
     <a href="/privacy">Privacy policy</a>
@@ -174,7 +174,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
   .site-footer__tagline {
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.01em;
     color: var(--color-accent-on-brand);
   }
@@ -198,7 +198,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
   .site-footer__heading {
     margin-bottom: var(--space-xs);
     font-size: var(--step--1);
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-accent-on-brand);

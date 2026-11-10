@@ -30,7 +30,7 @@ const { href, variant = 'primary', size = 'm', icon, class: className, ...rest }
     border: 1.5px solid transparent;
     border-radius: var(--radius-pill);
     font-family: var(--font-display);
-    font-weight: 650;
+    font-weight: var(--weight-semibold);
     line-height: 1.2;
     letter-spacing: -0.005em;
     text-decoration: none;
@@ -64,7 +64,7 @@ const { href, variant = 'primary', size = 'm', icon, class: className, ...rest }
   }
 
   .btn--primary:hover {
-    background: color-mix(in srgb, var(--btn-bg) 84%, #000);
+    background: color-mix(in srgb, var(--btn-bg) var(--hover-keep), #000);
     color: var(--btn-ink);
   }
 

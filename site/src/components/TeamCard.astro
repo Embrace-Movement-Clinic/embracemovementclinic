@@ -1,8 +1,7 @@
 ---
 // Practitioner card: photo, name, titles, status, link to the profile.
 import type { CollectionEntry } from 'astro:content';
-import Photo from './Photo.astro';
-import Icon from './Icon.astro';
+import PhotoCard from './PhotoCard.astro';
 
 interface Props {
   member: CollectionEntry<'team'>;
@@ -15,69 +14,22 @@ const { member, ratio = '1 / 1', sizes = '(min-width: 62em) 24rem, (min-width: 4
 const { name, titles, status, photo, photoPosition, photoNote } = member.data;
 ---
 
-<a class="team-card hover-card" href={`/team/${member.id}`}>
-  <Photo src={photo} alt="" note={photoNote} position={photoPosition} ratio={ratio} sizes={sizes} />
-  <div class="team-card__body">
-    <h3 class="h4">{name}</h3>
-    <p class="team-card__titles">
-      {titles.map((t, i) => (
-        <>
-          <span class="nowrap">{t}</span>
-          {i < titles.length - 1 && ' · '}
-        </>
-      ))}
-    </p>
-    {status && <p class="team-card__status">{status}</p>}
-    <span class="team-card__more" aria-hidden="true">View profile <Icon name="arrow-right" size={16} /></span>
-  </div>
-</a>
+<PhotoCard href={`/team/${member.id}`} image={photo} imageNote={photoNote} imagePosition={photoPosition} ratio={ratio} sizes={sizes} more="View profile">
+  <h3 class="h4">{name}</h3>
+  <p class="team-card__titles">
+    {titles.map((t, i) => (
+      <>
+        <span class="nowrap">{t}</span>
+        {i < titles.length - 1 && ' · '}
+      </>
+    ))}
+  </p>
+  {status && <p class="status-pill">{status}</p>}
+</PhotoCard>
 
 <style>
-  .team-card {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100%;
-    overflow: hidden;
-    background: var(--color-bg);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-
-  .team-card__body {
-    display: grid;
-    align-content: start;
-    gap: var(--space-2xs);
-    padding: var(--space-m);
-  }
-
   .team-card__titles {
     color: var(--color-ink-muted);
     font-size: var(--step--1);
-  }
-
-  .team-card__status {
-    justify-self: start;
-    padding: 0.2em 0.75em;
-    border-radius: var(--radius-pill);
-    background: var(--color-accent-soft);
-    font-size: var(--step--1);
-    font-weight: 600;
-  }
-
-  .team-card__more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    margin-top: var(--space-2xs);
-    color: var(--color-link);
-    font-family: var(--font-display);
-    font-weight: 650;
-  }
-
-  .team-card:hover .team-card__more {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
   }
 </style>

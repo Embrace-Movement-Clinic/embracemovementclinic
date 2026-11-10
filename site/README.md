@@ -28,7 +28,8 @@ Needs Node 22.12 or later.
 | Old URL redirects | `public/_redirects` |
 | Menu and footer links | `src/data/navigation.ts` |
 | Colours (Petrol + Teal) | `src/data/palette.ts`: change `sitePalette` to switch combination; preview the options on `/palette` (not indexed) |
-| Type sizes, spacing, what each colour token is for | `src/styles/tokens.css` |
+| Type sizes, font weights, spacing, breakpoints, what each colour token is for | `src/styles/tokens.css` |
+| Shared building blocks (icon badge, icon tile, icon list, panel, status pill, arrow link, hover effects) | `src/styles/components.css`, with `IconBadge`, `IconTile`, `SectionHead`, `PhotoCard`, `Note`, `OnPageNav`, `Link` and `EmailAddress` in `src/components/`. Use these rather than writing a new version in a page. |
 | Home page map | `src/assets/maps/clinic-map.png`, made once by `scripts/make-location-map.mjs` from OpenStreetMap (rerun only if the address or look changes) |
 | Online booking link | `booking.url` in `src/data/site.ts`, plus the `/book-now` line in `public/_redirects` (the link checker flags them if they differ) |
 | Photos | `src/assets/photos/`. A service sets `image`, `imageAlt` and (optionally) `imagePosition` in its Markdown file; a practitioner sets `photo`; a news post lists `images`; home page photos are set in `src/content/home/home.md` (editable on /admin). `imagePosition` / `position` picks which part of the photo is kept when it's cropped, e.g. `'50% 30%'`. The build makes the AVIF/WebP sizes. Placements and alt text are logged in `docs/changes.md`. |

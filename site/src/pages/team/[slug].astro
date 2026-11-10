@@ -6,6 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Photo from '../../components/Photo.astro';
 import Button from '../../components/Button.astro';
 import Icon from '../../components/Icon.astro';
+import SectionHead from '../../components/SectionHead.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import BookingBand from '../../components/BookingBand.astro';
 import { site } from '../../data/site';
@@ -53,7 +54,7 @@ const jsonLd = {
         <ul class="roles" role="list">
           {d.titles.map((t) => <li>{t}</li>)}
         </ul>
-        {d.status && <p class="status">{d.status}</p>}
+        {d.status && <p class="status-pill">{d.status}</p>}
         {
           d.registration && (
             <p class="ahpra">
@@ -74,12 +75,18 @@ const jsonLd = {
 
   <section class="section" aria-labelledby="about-h">
     <div class="wrap profile">
+      <div class="profile__main">
+        <SectionHead id="about-h" icon="user" title={`About ${d.firstName}`} class="profile__head" />
+        <div class="prose bio">
+          <Content />
+        </div>
+      </div>
       <aside class="profile__side" aria-label="Qualifications and experience">
         {
           d.experience.length > 0 && (
-            <div class="block">
+            <div class="block panel panel--soft">
               <h2 class="h4">{d.experienceHeading}</h2>
-              <ul role="list">
+              <ul class="icon-list" role="list">
                 {d.experience.map((e) => (
                   <li>
                     <Icon name="check" size={18} />
@@ -92,9 +99,9 @@ const jsonLd = {
         }
         {
           d.education.length > 0 && (
-            <div class="block">
+            <div class="block panel panel--soft">
               <h2 class="h4">Qualifications</h2>
-              <ul role="list">
+              <ul class="icon-list" role="list">
                 {d.education.map((e) => (
                   <li>
                     <Icon name="check" size={18} />
@@ -107,9 +114,9 @@ const jsonLd = {
         }
         {
           d.postgradTraining.length > 0 && (
-            <div class="block">
+            <div class="block panel panel--soft">
               <h2 class="h4">Postgraduate training</h2>
-              <ul role="list">
+              <ul class="icon-list" role="list">
                 {d.postgradTraining.map((e) => (
                   <li>
                     <Icon name="check" size={18} />
@@ -121,12 +128,6 @@ const jsonLd = {
           )
         }
       </aside>
-      <div class="profile__main">
-        <h2 id="about-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="user" size={24} /></span>About {d.firstName}</h2>
-        <div class="prose bio">
-          <Content />
-        </div>
-      </div>
     </div>
   </section>
 
@@ -134,9 +135,7 @@ const jsonLd = {
     services.length > 0 && (
       <section class="section section--alt" aria-labelledby="services-h">
         <div class="wrap">
-          <div class="head">
-            <h2 id="services-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="heart" size={24} /></span>See {d.firstName} for</h2>
-          </div>
+          <SectionHead id="services-h" icon="heart" title={`See ${d.firstName} for`} />
           <ul class="services" role="list" style={`--n: ${Math.min(services.length, 4)}`}>
             {services.map((s) => (
               <li>
@@ -207,7 +206,7 @@ const jsonLd = {
 
   .roles li {
     color: var(--color-ink-muted);
-    font-weight: 550;
+    font-weight: var(--weight-medium);
   }
 
   .roles li:not(:last-child)::after {
@@ -223,18 +222,9 @@ const jsonLd = {
       gap: 0;
     }
 
-    .roles li::after {
-      content: none !important;
+    .roles li:not(:last-child)::after {
+      content: none;
     }
-  }
-
-  .status {
-    padding: 0.3em 0.9em;
-    border-radius: var(--radius-pill);
-    background: var(--color-accent-soft);
-    color: var(--color-ink);
-    font-size: var(--step--1);
-    font-weight: 650;
   }
 
   .ahpra {
@@ -258,10 +248,6 @@ const jsonLd = {
     .profile {
       grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
     }
-
-    .profile__side {
-      order: 2;
-    }
   }
 
   .profile__side {
@@ -274,25 +260,6 @@ const jsonLd = {
   .block {
     display: grid;
     gap: var(--space-s);
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
-  }
-
-  .block ul {
-    display: grid;
-    gap: var(--space-xs);
-  }
-
-  .block li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-xs);
-  }
-
-  .block :global(svg) {
-    margin-top: 0.2em;
-    color: var(--color-icon);
   }
 
   .profile__main {
@@ -306,10 +273,9 @@ const jsonLd = {
     line-height: 1.65;
   }
 
-  .head {
-    display: grid;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-l);
+  /* The heading sits in the column's own spacing. */
+  .profile__main :global(.profile__head) {
+    margin-bottom: 0;
   }
 
   /* 1, then 2, then all of them (up to 4) across, so a single card never sits alone on a wide row. */

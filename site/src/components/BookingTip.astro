@@ -1,0 +1,15 @@
+---
+// The booking code tip, with the words "patient portal" linked. Text: policies.json "booking"
+// (/admin: Clinic settings → Policies and timetable).
+import Note from './Note.astro';
+import Link from './Link.astro';
+import { bookingTip } from '../data/policies';
+
+interface Props {
+  class?: string;
+}
+---
+
+<Note class={Astro.props.class}>
+  {bookingTip.before}{bookingTip.link && <Link href={bookingTip.link.href}>{bookingTip.link.text}</Link>}{bookingTip.after}
+</Note>

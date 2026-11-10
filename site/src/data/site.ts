@@ -42,6 +42,8 @@ export const site = {
     // Non-breaking spaces keep the number on one line.
     display: clinic.phone.trim().replace(/\s+/g, '\u00a0'),
     href: telHref(clinic.phone),
+    /** For "Text us" links. */
+    smsHref: telHref(clinic.phone).replace('tel:', 'sms:'),
   },
 
   email: {
@@ -70,16 +72,16 @@ export const site = {
     url: 'https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/location',
   },
 
-  // TODO until supplied: profile URLs (docs/to-supply.md)
+  // Instagram and Facebook profile addresses (blank on /admin = not shown).
   socials: {
     instagram: orNull(clinic.instagram),
     facebook: orNull(clinic.facebook),
   },
 
-  // TODO until supplied: opening hours, e.g. [{ days: 'Monday', hours: '6am – 3pm' }]
+  // Opening hours, e.g. [{ days: 'Monday', hours: '6am – 3pm' }]. Blank shows a visible TODO.
   hours: clinic.hours?.length ? clinic.hours : null,
 
-  // TODO until supplied: ABN, parking and accessibility details
+  // ABN, parking and accessibility details. Blank ones are left out or show a visible TODO.
   abn: orNull(clinic.abn),
   parking: orNull(clinic.parking),
   access: orNull(clinic.access),

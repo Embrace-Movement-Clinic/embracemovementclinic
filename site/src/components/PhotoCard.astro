@@ -1,0 +1,72 @@
+---
+// A link card with a photo on top and text underneath: the shell for service and practitioner
+// cards. The photo is decorative (the card's heading says what it is). Slot: the card's text.
+import type { ImageMetadata } from 'astro';
+import Photo from './Photo.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  image?: ImageMetadata;
+  /** Which photo is intended, until it's supplied. */
+  imageNote?: string;
+  imagePosition?: string;
+  ratio?: string;
+  sizes?: string;
+  widths?: number[];
+  /** A "Learn more"-style line at the bottom of the card. */
+  more?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { href, image, imageNote, imagePosition, ratio = '3 / 2', sizes, widths, more, class: className, ...rest } = Astro.props;
+---
+
+<a class:list={['photo-card', 'hover-card', className]} href={href} {...rest}>
+  <Photo src={image} alt="" note={imageNote} position={imagePosition} ratio={ratio} sizes={sizes} widths={widths} />
+  <div class="photo-card__body">
+    <slot />
+    {
+      more && (
+        <span class="photo-card__more arrow-link" aria-hidden="true">
+          {more} <Icon name="arrow-right" size={16} />
+        </span>
+      )
+    }
+  </div>
+</a>
+
+<style is:global>
+  .photo-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-l);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .photo-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    padding: var(--space-m);
+  }
+
+  /* Sits at the bottom of the card, so the links line up across a row of cards. */
+  .photo-card__more {
+    margin-top: auto;
+    padding-top: var(--space-2xs);
+    color: var(--color-link);
+  }
+
+  .photo-card:hover .photo-card__more {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

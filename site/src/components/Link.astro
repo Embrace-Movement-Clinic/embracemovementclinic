@@ -1,0 +1,16 @@
+---
+// A link that opens booking and patient-portal (Nookal) addresses in a new tab and says so to
+// screen readers; every other address behaves as a normal link. Use it wherever an address
+// might be a Nookal one. (Button.astro does the same for buttons.)
+import { newTabAttrs, opensNewTab } from '../data/site';
+
+interface Props {
+  href: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { href, class: className, ...rest } = Astro.props;
+---
+
+<a href={href} class={className} {...newTabAttrs(href)} {...rest}><slot />{opensNewTab(href) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>

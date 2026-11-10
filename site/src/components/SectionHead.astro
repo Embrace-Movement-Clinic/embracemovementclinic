@@ -1,28 +1,41 @@
 ---
-// Section heading block: eyebrow, heading, optional intro, optional link on the right.
-import Icon from './Icon.astro';
+// Section heading block: optional eyebrow, the heading (with an optional icon badge), an optional
+// intro, and an optional link on the right. Pass the title as `title`, or as the slot when it
+// needs markup (e.g. a non-breaking phrase).
+import Icon, { type IconName } from './Icon.astro';
+import IconBadge from './IconBadge.astro';
 
 interface Props {
   id: string;
-  title: string;
+  title?: string;
   eyebrow?: string;
   intro?: string;
   link?: { href: string; label: string };
-  as?: 'h2' | 'h3';
+  as?: 'h1' | 'h2' | 'h3';
+  /** Icon badge to the left of the heading. */
+  icon?: IconName;
+  /** "s": a smaller heading and less space under it, for pages made of many short sections. */
+  size?: 'm' | 's';
+  /** Let the intro run the full width, rather than stopping at a comfortable line length. */
+  wide?: boolean;
+  class?: string;
 }
 
-const { id, title, eyebrow, intro, link, as: Heading = 'h2' } = Astro.props;
+const { id, title, eyebrow, intro, link, as: Heading = 'h2', icon, size = 'm', wide = false, class: className } = Astro.props;
 ---
 
-<div class="section-head">
+<div class:list={['section-head', `section-head--${size}`, { 'section-head--wide': wide }, className]}>
   <div class="section-head__text">
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <Heading id={id}>{title}</Heading>
+    <Heading id={id} class:list={['section-head__title', { badged: icon }]}>
+      {icon && <IconBadge name={icon} size="l" />}
+      <span><slot>{title}</slot></span>
+    </Heading>
     {intro && <p class="section-head__intro">{intro}</p>}
   </div>
   {
     link && (
-      <a class="section-head__link" href={link.href}>
+      <a class="section-head__link arrow-link" href={link.href}>
         {link.label} <Icon name="arrow-right" size={18} />
       </a>
     )
@@ -39,24 +52,36 @@ const { id, title, eyebrow, intro, link, as: Heading = 'h2' } = Astro.props;
     margin-bottom: var(--space-l);
   }
 
+  .section-head--s {
+    margin-bottom: var(--space-m);
+  }
+
   .section-head__text {
     display: grid;
     gap: var(--space-xs);
-    max-width: 46rem;
+  }
+
+  /* h1 sections (e.g. a page that opens with this block) keep the section-heading size. */
+  h1.section-head__title {
+    font-size: var(--step-4);
+  }
+
+  .section-head--s .section-head__title {
+    font-size: var(--step-3);
   }
 
   .section-head__intro {
+    max-width: 46rem;
     color: var(--color-ink-muted);
     font-size: var(--step-1);
     line-height: 1.5;
   }
 
+  .section-head--wide .section-head__intro {
+    max-width: none;
+  }
+
   .section-head__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
     min-height: 2.75rem;
-    font-family: var(--font-display);
-    font-weight: 650;
   }
 </style>

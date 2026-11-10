@@ -1,61 +1,47 @@
 ---
+// A service as a photo card: photo, name, a sentence about it. Used in the services grid (compact)
+// and in "You might also need" and practitioner pages (with a "Learn more" line).
 import type { CollectionEntry } from 'astro:content';
-import Photo from './Photo.astro';
-import Icon from './Icon.astro';
+import PhotoCard from './PhotoCard.astro';
 
 interface Props {
   service: CollectionEntry<'services'>;
+  /** Heading level for the service name. */
+  as?: 'h3' | 'h4';
+  /** Compact: the short blurb and no "Learn more" line (the whole card is the link). */
+  compact?: boolean;
+  sizes?: string;
+  widths?: number[];
 }
 
-const { service } = Astro.props;
-const { title, summary, image, imagePosition, imageNote } = service.data;
+const { service, as: Heading = 'h3', compact = false, sizes = '(min-width: 62em) 33vw, (min-width: 40em) 50vw, 100vw', widths } = Astro.props;
+const { title, summary, blurb, image, imagePosition, imageNote } = service.data;
 ---
 
-<a class="service-card hover-card" href={`/${service.id}`}>
-  <Photo src={image} alt="" note={imageNote} position={imagePosition} ratio="3 / 2" sizes="(min-width: 62em) 33vw, (min-width: 40em) 50vw, 100vw" />
-  <div class="service-card__body">
-    <h3 class="h4">{title}</h3>
-    <p>{summary}</p>
-    <span class="service-card__more" aria-hidden="true">Learn more <Icon name="arrow-right" size={16} /></span>
-  </div>
-</a>
+<PhotoCard
+  href={`/${service.id}`}
+  image={image}
+  imageNote={imageNote}
+  imagePosition={imagePosition}
+  sizes={sizes}
+  widths={widths}
+  more={compact ? undefined : 'Learn more'}
+  class:list={['service-card', { 'service-card--compact': compact }]}
+>
+  <Heading class="h4 service-card__title">{title}</Heading>
+  <p class="service-card__text">{compact ? (blurb ?? summary) : summary}</p>
+</PhotoCard>
 
 <style>
-  .service-card {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100%;
-    overflow: hidden;
-    background: var(--color-bg);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
-    color: var(--color-ink);
-    text-decoration: none;
-  }
-
-  .service-card__body {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--space-2xs);
-    padding: var(--space-m);
-  }
-
-  .service-card__body p {
+  .service-card__text {
     color: var(--color-ink-muted);
   }
 
-  .service-card__more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    margin-top: var(--space-2xs);
-    color: var(--color-link);
-    font-family: var(--font-display);
-    font-weight: 650;
-  }
-
-  .service-card:hover .service-card__more {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+  /* No "Learn more" line: the name underlines instead. */
+  @media (hover: hover) {
+    :global(.service-card--compact:hover) .service-card__title {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
   }
 </style>

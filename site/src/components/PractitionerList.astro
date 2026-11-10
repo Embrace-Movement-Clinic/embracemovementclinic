@@ -28,7 +28,7 @@ const people = (await getEntries(Astro.props.refs)) as CollectionEntry<'team'>[]
               </>
             ))}
           </p>
-          {p.data.status && <p class="person__status">{p.data.status}</p>}
+          {p.data.status && <p class="status-pill person__status">{p.data.status}</p>}
         </div>
         <Icon name="chevron-right" size={20} class="person__chev" />
       </li>
@@ -106,20 +106,14 @@ const people = (await getEntries(Astro.props.refs)) as CollectionEntry<'team'>[]
     }
   }
 
-  @media (max-width: 24em) {
+  @media (max-width: 21.99em) {
     .person {
       grid-template-columns: 4.5rem 1fr auto;
     }
   }
 
   .person__status {
-    justify-self: start;
     margin-top: var(--space-3xs);
-    padding: 0.15em 0.7em;
-    border-radius: var(--radius-pill);
-    background: var(--color-accent-soft);
-    font-size: 0.8125rem;
-    font-weight: 600;
   }
 
   :global(.person__chev) {

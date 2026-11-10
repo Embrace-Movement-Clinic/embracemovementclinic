@@ -1,0 +1,149 @@
+---
+// Fees, one panel per service, with each service's name as a pill linking to its page.
+// Fees are listed under their group in the order they were entered on /admin
+// (Pages → Patient information → Fees).
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Fee {
+  group?: string;
+  item: string;
+  price: string;
+  note?: string;
+}
+
+interface Props {
+  fees: Fee[];
+}
+
+const { fees } = Astro.props;
+
+// Each group heading links to its service page: matched on the service's title, short name or
+// address ("Physiotherapy" → /physiotherapy), and any "class" group → the classes page.
+const services = await getCollection('services');
+const norm = (t: string) => t.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, ' ').trim();
+const serviceFor = (group?: string) => {
+  if (!group) return undefined;
+  const g = norm(group);
+  return (
+    services.find((s) =>
+      [s.data.title, s.data.shortTitle ?? '', s.id.replace(/-/g, ' '), (s.data.oldUrl ?? '').replace(/[/-]/g, ' ')].some((n) => norm(n) === g),
+    ) ?? (/\bclass/.test(g) ? services.find((s) => s.data.kind === 'class') : undefined)
+  );
+};
+
+const groups = fees
+  .reduce<{ name?: string; fees: Fee[] }[]>((all, f) => {
+    const last = all.at(-1);
+    if (last && last.name === f.group) last.fees.push(f);
+    else all.push({ name: f.group, fees: [f] });
+    return all;
+  }, [])
+  .map((g) => ({ ...g, service: serviceFor(g.name) }));
+---
+
+<div class="fee-groups">
+  {
+    groups.map((g) => (
+      <div class="panel">
+        {g.name && (
+          <h3 class="h4 fee-group__title">
+            {g.service ? (
+              <a class="fee-pill" href={`/${g.service.id}`}>
+                {g.name}
+                <Icon name="arrow-right" size={18} />
+              </a>
+            ) : (
+              <span class="fee-pill">{g.name}</span>
+            )}
+          </h3>
+        )}
+        <dl class="fees">
+          {g.fees.map((f) => (
+            <div>
+              <dt>
+                {f.item}
+                {f.note && (
+                  <>
+                    {' '}
+                    <span class="fee-note">{f.note}</span>
+                  </>
+                )}
+              </dt>
+              <dd>{f.price}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .fee-groups {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  @media (min-width: 56em) {
+    .fee-groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 75em) {
+    .fee-groups {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .fee-group__title {
+    margin-bottom: var(--space-2xs);
+  }
+
+  /* Service name as a petrol pill linking to its page. */
+  .fee-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.3em 0.9em;
+    border-radius: var(--radius-pill);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    text-decoration: none;
+    transition: background-color 0.2s var(--ease);
+  }
+
+  /* Like a button: a little darker on hover. */
+  a.fee-pill:hover {
+    background: color-mix(in srgb, var(--color-brand) var(--hover-keep), #000);
+    color: var(--color-on-brand);
+  }
+
+  .fees div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-s);
+    padding-block: var(--space-xs);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .fees div:first-child {
+    border-top: 0;
+  }
+
+  .fees dd {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: var(--weight-bold);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .fee-note {
+    display: block;
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+</style>

@@ -8,6 +8,10 @@ import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
+import IconBadge from '../components/IconBadge.astro';
+import SectionHead from '../components/SectionHead.astro';
+import OnPageNav from '../components/OnPageNav.astro';
+import Note from '../components/Note.astro';
 import Steps from '../components/Steps.astro';
 import PractitionerList from '../components/PractitionerList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
@@ -71,19 +75,7 @@ const sections = [
     <Photo slot="aside" src={d.image} alt={d.imageAlt ?? ''} note={d.imageNote} position={d.imagePosition} ratio="4 / 3" loading="eager" sizes="(min-width: 56em) 45vw, 100vw" />
   </PageHero>
 
-  <nav class="onpage" aria-label="On this page">
-    <div class="wrap">
-      <ul role="list">
-        {
-          sections.map((s) => (
-            <li>
-              <a href={`#${s.id}`}>{s.label}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </nav>
+  <OnPageNav links={sections.map((s) => ({ href: `#${s.id}`, label: s.label }))} />
 
   {
     hasBody && (
@@ -98,17 +90,12 @@ const sections = [
   <!-- Is this for you? -->
   <section class="section" id="for-you" aria-labelledby="for-you-h">
     <div class="wrap">
-      <div class="head">
-        <h2 id="for-you-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="heart" size={24} /></span>{d.forYou.heading}</h2>
-        {d.forYou.intro && <p class="head__intro">{d.forYou.intro}:</p>}
-      </div>
+      <SectionHead id="for-you-h" icon="heart" title={d.forYou.heading} intro={d.forYou.intro ? `${d.forYou.intro}:` : undefined} />
       <ul class="tiles" role="list" style={`--cols: ${colsFor(conditions.length)}`}>
         {
           conditions.map((i) => (
-            <li class="tile">
-              <span class="tile__badge">
-                <Icon name="check" size={18} />
-              </span>
+            <li class="tile panel panel--soft">
+              <IconBadge name="check" tone="plain" />
               <p class="tile__name">{i.name}</p>
               {i.detail && <p class="tile__detail">{i.detail}</p>}
             </li>
@@ -124,7 +111,7 @@ const sections = [
       <section class="section section--alt" id="expect" aria-labelledby="expect-h">
         <div class="wrap expect">
           <div class="expect__head">
-            <span class="hbadge" aria-hidden="true"><Icon name="calendar" size={24} /></span>
+            <IconBadge name="calendar" size="l" />
             <p class="eyebrow">Your first appointment</p>
             <h2 id="expect-h">What to expect</h2>
           </div>
@@ -142,12 +129,10 @@ const sections = [
     d.treatments && (
       <section class="section" id="treatment" aria-labelledby="treatment-h">
         <div class="wrap">
-          <div class="head">
-            <h2 id="treatment-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="activity" size={24} /></span>{d.treatments.heading}</h2>
-          </div>
+          <SectionHead id="treatment-h" icon="activity" title={d.treatments.heading} />
           <ul class="treatments" role="list" style={`--cols: ${Math.min(colsFor(d.treatments.items.length), 3)}`}>
             {d.treatments.items.map((t) => (
-              <li>
+              <li class="panel">
                 <h3 class="h4">{t.name}</h3>
                 {t.detail && <p>{t.detail}</p>}
               </li>
@@ -156,12 +141,9 @@ const sections = [
           {d.goodToKnow.length > 0 && (
             <ul class="good" role="list">
               {d.goodToKnow.map((g) => (
-                <li>
-                  <Icon name="info" size={20} />
-                  <p>
-                    <strong>{g.name}.</strong> {g.detail}
-                  </p>
-                </li>
+                <Note as="li">
+                  <strong>{g.name}.</strong> {g.detail}
+                </Note>
               ))}
             </ul>
           )}
@@ -172,13 +154,10 @@ const sections = [
 
   <!-- Who you'll see -->
   <section class="section section--alt" id="who" aria-labelledby="who-h">
-    <div class="wrap who">
-      <div class="head">
-        <h2 id="who-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="users" size={24} /></span>Who you’ll see</h2>
-        {d.practitionersNote && <p class="head__intro">{d.practitionersNote}</p>}
-      </div>
+    <div class="wrap">
+      <SectionHead id="who-h" icon="users" title="Who you’ll see" intro={d.practitionersNote} />
       <PractitionerList refs={d.practitioners} />
-          </div>
+    </div>
   </section>
 
   <!-- Practical links -->
@@ -188,19 +167,19 @@ const sections = [
       <ul class="practical" role="list">
         <li>
           <a class="hover-tile" href="/patient-information#fees">
-            <span class="tile__badge"><Icon name="card" size={20} /></span>
+            <IconBadge name="card" />
             <span><strong>Fees and rebates</strong> What appointments cost and what you can claim</span>
           </a>
         </li>
         <li>
           <a class="hover-tile" href="/patient-information#cancellations">
-            <span class="tile__badge"><Icon name="clock" size={20} /></span>
+            <IconBadge name="clock" />
             <span><strong>Cancellations</strong> Our cancellation policy</span>
           </a>
         </li>
         <li>
           <a class="hover-tile" href="/contact">
-            <span class="tile__badge"><Icon name="map-pin" size={20} /></span>
+            <IconBadge name="map-pin" />
             <span><strong>Getting here</strong> 33 Brynner Street, McDowall</span>
           </a>
         </li>
@@ -212,9 +191,7 @@ const sections = [
     related.length > 0 && (
       <section class="section section--alt" aria-labelledby="related-h">
         <div class="wrap">
-          <div class="head">
-            <h2 id="related-h">You might also need</h2>
-          </div>
+          <SectionHead id="related-h" title="You might also need" />
           <ul class="related" role="list" style={`--n: ${Math.min(related.length, 3)}`}>
             {related.map((r) => (
               <li>
@@ -239,63 +216,7 @@ const sections = [
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    font-weight: 600;
-  }
-
-  /* On this page */
-  .onpage {
-    position: sticky;
-    top: var(--header-h);
-    z-index: 20;
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .onpage ul {
-    display: flex;
-    gap: var(--space-2xs);
-    overflow-x: auto;
-    padding-block: var(--space-2xs);
-    scrollbar-width: none;
-  }
-
-  .onpage a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.5rem;
-    padding: 0 0.95em;
-    border-radius: var(--radius-pill);
-    color: var(--color-ink);
-    font-family: var(--font-display);
-    font-size: var(--step--1);
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .onpage a:hover {
-    background: var(--color-bg-alt);
-  }
-
-  :global(html) {
-    scroll-padding-top: calc(var(--header-h) + 4rem);
-  }
-
-  .section--tight {
-    padding-block: var(--space-xl);
-  }
-
-  .head {
-    display: grid;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-l);
-  }
-
-  .head__intro {
-    max-width: 46rem;
-    color: var(--color-ink-muted);
-    font-size: var(--step-1);
-    line-height: 1.5;
+    font-weight: var(--weight-semibold);
   }
 
   .about {
@@ -325,27 +246,16 @@ const sections = [
     display: grid;
     gap: var(--space-3xs);
     align-content: start;
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
   }
 
-  .tile__badge {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
+  .tile :global(.icon-badge) {
     margin-bottom: var(--space-2xs);
-    border-radius: 50%;
-    background: var(--color-bg);
-    color: var(--color-icon);
   }
 
   .tile__name {
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 650;
+    font-weight: var(--weight-semibold);
     line-height: 1.25;
   }
 
@@ -373,7 +283,7 @@ const sections = [
     justify-items: start;
   }
 
-  .expect__head .hbadge {
+  .expect__head :global(.icon-badge) {
     margin-bottom: var(--space-2xs);
   }
 
@@ -399,7 +309,7 @@ const sections = [
     border-radius: var(--radius);
     background: var(--color-accent-soft);
     color: var(--color-ink);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
   }
 
   .service-notice :global(svg) {
@@ -431,9 +341,6 @@ const sections = [
     display: grid;
     align-content: start;
     gap: var(--space-3xs);
-    padding: var(--space-m);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
   }
 
   .treatments li::before {
@@ -450,24 +357,10 @@ const sections = [
   }
 
   .good {
+    display: grid;
+    gap: var(--space-xs);
     margin-top: var(--space-l);
   }
-
-  .good li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-s);
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
-  }
-
-  .good :global(svg) {
-    margin-top: 0.15em;
-    color: var(--color-icon);
-  }
-
-  /* Who */
 
   /* Practical links: bordered tiles, as on Patient information. */
   .practical {
@@ -490,12 +383,7 @@ const sections = [
     text-decoration: none;
   }
 
-  .practical .tile__badge {
-    margin: 0;
-    background: var(--color-accent-soft);
-  }
-
-  .practical span:not(.tile__badge) {
+  .practical a > span {
     display: grid;
     gap: var(--space-3xs);
     color: var(--color-ink-muted);

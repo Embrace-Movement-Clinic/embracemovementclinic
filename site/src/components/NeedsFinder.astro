@@ -6,6 +6,7 @@
 // and every panel shows, one after another. Data: src/data/needs.ts.
 import { getCollection } from 'astro:content';
 import Icon from './Icon.astro';
+import IconBadge from './IconBadge.astro';
 import { needs } from '../data/needs';
 
 const services = await getCollection('services');
@@ -18,17 +19,15 @@ const byId = new Map(services.map((s) => [s.id, s]));
       needs.map((n, i) => (
         <button
           type="button"
-          class="finder__tab hover-tile"
+          class="icon-tile finder__tab hover-tile"
           role="tab"
           id={`${n.id}-tab`}
           aria-controls={n.id}
           aria-selected={i === 0 ? 'true' : 'false'}
           tabindex={i === 0 ? 0 : -1}
         >
-          <span class="finder__tab-icon">
-            <Icon name={n.icon} size={22} />
-          </span>
-          <span>{n.short || n.title}</span>
+          <IconBadge name={n.icon} />
+          <span class="icon-tile__label">{n.short || n.title}</span>
         </button>
       ))
     }
@@ -164,31 +163,8 @@ const byId = new Map(services.map((s) => [s.id, s]));
   }
 
   .finder__tab {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    min-height: 3.5rem;
-    padding: var(--space-2xs) var(--space-s) var(--space-2xs) var(--space-2xs);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius);
-    background: var(--color-bg);
-    color: var(--color-ink);
-    font: 650 var(--step-0) / 1.2 var(--font-display);
-    text-align: left;
     cursor: pointer;
   }
-
-  .finder__tab-icon {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background: var(--color-accent-soft);
-    color: var(--color-icon);
-  }
-
 
   .finder__tab[aria-selected='true'] {
     border-color: var(--color-brand);
@@ -196,15 +172,9 @@ const byId = new Map(services.map((s) => [s.id, s]));
     color: var(--color-on-brand);
   }
 
-  .finder__tab[aria-selected='true'] .finder__tab-icon {
+  .finder__tab[aria-selected='true'] :global(.icon-badge) {
     background: var(--color-accent-on-brand);
     color: var(--color-brand);
-  }
-
-  @media (max-width: 39.99em) {
-    .finder__tab {
-      font-size: var(--step--1);
-    }
   }
 
   /* Very narrow screens (320px phones, or 400% zoom): one tab per row, so the longest labels
@@ -277,7 +247,7 @@ const byId = new Map(services.map((s) => [s.id, s]));
     margin: var(--space-m) 0 var(--space-xs);
     color: var(--color-accent-on-brand);
     font-family: var(--font-display);
-    font-weight: 650;
+    font-weight: var(--weight-semibold);
   }
 
   .finder__list {
@@ -320,12 +290,12 @@ const byId = new Map(services.map((s) => [s.id, s]));
     background: var(--color-accent-on-brand);
     color: var(--color-brand);
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     text-decoration: none;
     transition: background-color 0.2s var(--ease);
   }
 
   .finder__links a:hover {
-    background: color-mix(in srgb, var(--color-accent-on-brand) 84%, #000);
+    background: color-mix(in srgb, var(--color-accent-on-brand) var(--hover-keep), #000);
   }
 </style>

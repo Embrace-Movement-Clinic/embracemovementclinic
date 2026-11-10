@@ -1,45 +1,22 @@
 ---
-// Inline callout repeating the site-wide notice, for pages where it matters most
-// (booking, contact, practitioners). Hidden automatically when the notice is off.
-import Icon from './Icon.astro';
+// Inline note repeating the site-wide notice, for pages where it matters most
+// (booking, contact, the timetable). Hidden automatically when the notice is off or has expired.
+import Note from './Note.astro';
 import { site } from '../data/site';
 
 const { notice } = site;
-const show = notice.active;
 ---
 
 {
-  show && (
-    <aside class="closure" aria-label="Clinic notice" data-hide-after={notice.until || undefined}>
-      <Icon name="info" size={22} />
-      <p>
-        <strong>{notice.message}</strong> {notice.link && <a href={notice.link.href}>{notice.link.label}</a>}
-      </p>
-    </aside>
+  notice.active && (
+    <Note as="aside" class="closure" aria-label="Clinic notice" data-hide-after={notice.until || undefined}>
+      <strong>{notice.message}</strong> {notice.link && <a href={notice.link.href}>{notice.link.label}</a>}
+    </Note>
   )
 }
 
 <style>
-  .closure {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-s);
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
-    color: var(--color-ink);
-  }
-
-  .closure :global(svg) {
-    margin-top: 0.1em;
-    color: var(--color-icon);
-  }
-
-  .closure strong {
-    font-weight: 600;
-  }
-
-  .closure a {
-    font-weight: 650;
+  :global(.closure a) {
+    font-weight: var(--weight-semibold);
   }
 </style>

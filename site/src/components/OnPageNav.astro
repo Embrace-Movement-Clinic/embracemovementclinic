@@ -1,0 +1,59 @@
+---
+// The "On this page" bar on service and class pages: links to the page's sections, sticky under
+// the header. Anchors land below both bars (see `html:has(.onpage)` in global.css).
+interface Props {
+  links: { href: string; label: string }[];
+}
+
+const { links } = Astro.props;
+---
+
+<nav class="onpage" aria-label="On this page">
+  <div class="wrap">
+    <ul role="list">
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .onpage {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 20;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .onpage ul {
+    display: flex;
+    gap: var(--space-2xs);
+    overflow-x: auto;
+    padding-block: var(--space-2xs);
+    scrollbar-width: none;
+  }
+
+  .onpage a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 0.95em;
+    border-radius: var(--radius-pill);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .onpage a:hover {
+    background: var(--color-bg-alt);
+  }
+</style>

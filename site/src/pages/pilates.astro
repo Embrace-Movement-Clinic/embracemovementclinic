@@ -6,6 +6,9 @@ import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import OnPageNav from '../components/OnPageNav.astro';
+import BookingTip from '../components/BookingTip.astro';
 import CancellationCallout from '../components/CancellationCallout.astro';
 import StepStrip from '../components/StepStrip.astro';
 import Todo from '../components/Todo.astro';
@@ -14,13 +17,21 @@ import ServiceCard from '../components/ServiceCard.astro';
 import BookingBand from '../components/BookingBand.astro';
 import ClosureNote from '../components/ClosureNote.astro';
 import Timetable from '../components/Timetable.astro';
-import { site, newTabAttrs } from '../data/site';
-import { classFacts, classSteps, equipment, booking, bookingTip, timetable } from '../data/policies';
+import { site } from '../data/site';
+import { classFacts, classSteps, equipment, booking, timetable } from '../data/policies';
 
 const service = (await getEntry('services', 'pilates')) as CollectionEntry<'services'>;
 const d = service.data;
 const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
+const sections = [
+  { href: '#start', label: 'How to start' },
+  { href: '#for-you', label: 'Who it’s for' },
+  { href: '#timetable', label: 'Timetable' },
+  { href: '#studio', label: 'The studio' },
+  { href: '#cancellations', label: 'Cancellations' },
+  { href: '#who', label: 'Instructors' },
+];
 ---
 
 <BaseLayout title={d.seoTitle} description={d.seoDescription} shareImage={d.image ? `/og/services/${service.id}.jpg` : undefined} imageAlt={d.imageAlt}>
@@ -54,34 +65,20 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
     </div>
   </section>
 
-  <nav class="onpage" aria-label="On this page">
-    <div class="wrap">
-      <ul role="list">
-        <li><a href="#start">How to start</a></li>
-        <li><a href="#for-you">Who it’s for</a></li>
-        <li><a href="#timetable">Timetable</a></li>
-        <li><a href="#studio">The studio</a></li>
-        <li><a href="#cancellations">Cancellations</a></li>
-        <li><a href="#who">Instructors</a></li>
-      </ul>
-    </div>
-  </nav>
+  <OnPageNav links={sections} />
 
-  <section class="section start" id="start" aria-labelledby="start-h">
+  <section class="section section--tight" id="start" aria-labelledby="start-h">
     <div class="wrap">
       <StepStrip as="h2" id="start-h" title="How to start classes" steps={classSteps} />
-      <p class="code-tip">
-        <Icon name="info" size={20} />
-        <span>{bookingTip.before}{bookingTip.link && <a href={bookingTip.link.href} {...newTabAttrs(bookingTip.link.href)}>{bookingTip.link.text}<span class="visually-hidden"> (opens in a new tab)</span></a>}{bookingTip.after}</span>
-      </p>
+      <BookingTip class="start__tip" />
     </div>
   </section>
 
   <section class="section section--alt" id="for-you" aria-labelledby="for-you-h">
     <div class="wrap two-col">
-      <div class="head">
-        <h2 id="for-you-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="heart" size={24} /></span>{d.forYou.heading}</h2>
-        <ul class="ticks" role="list">
+      <div>
+        <SectionHead id="for-you-h" icon="heart" title={d.forYou.heading} class="for-you__head" />
+        <ul class="icon-list ticks" role="list">
           {
             d.forYou.items.map((i) => (
               <li>
@@ -101,10 +98,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
   <section class="section" id="timetable" aria-labelledby="timetable-h">
     <div class="wrap">
-      <div class="head head--wide">
-        <h2 id="timetable-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="calendar" size={24} /></span>Timetable</h2>
-        <p class="head__intro">{booking.classes}</p>
-      </div>
+      <SectionHead id="timetable-h" icon="calendar" title="Timetable" intro={booking.classes} wide />
       <ClosureNote />
       {
         timetable ? (
@@ -115,7 +109,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
       }
       <div class="timetable__actions">
         <Button href={site.booking.url} icon="external">Check live availability</Button>
-        <Button href={site.phone.href.replace('tel:', 'sms:')} variant="secondary" icon="message">
+        <Button href={site.phone.smsHref} variant="secondary" icon="message">
           Text us to join a waitlist
         </Button>
       </div>
@@ -124,9 +118,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
   <section class="section section--alt" id="studio" aria-labelledby="studio-h">
     <div class="wrap">
-      <div class="head head--wide">
-        <h2 id="studio-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="dumbbell" size={24} /></span>Our clinic is equipped with</h2>
-      </div>
+      <SectionHead id="studio-h" icon="dumbbell" title="Our clinic is equipped with" />
       <ul class="kit">
         {equipment.map((e) => <li>{e}</li>)}
       </ul>
@@ -136,19 +128,14 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
   <section class="section" id="cancellations" aria-labelledby="cancel-h">
     <div class="wrap">
-      <div class="head head--wide">
-        <h2 id="cancel-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="clock" size={24} /></span>Cancellation policy</h2>
-      </div>
+      <SectionHead id="cancel-h" icon="clock" title="Cancellation policy" />
       <CancellationCallout />
     </div>
   </section>
 
   <section class="section section--alt" id="who" aria-labelledby="who-h">
     <div class="wrap">
-      <div class="head">
-        <h2 id="who-h" class="badged"><span class="hbadge" aria-hidden="true"><Icon name="users" size={24} /></span>Who runs the classes</h2>
-        {d.practitionersNote && <p class="head__intro">{d.practitionersNote}</p>}
-      </div>
+      <SectionHead id="who-h" icon="users" title="Who runs the classes" intro={d.practitionersNote} />
       <PractitionerList refs={d.practitioners} />
     </div>
   </section>
@@ -157,9 +144,9 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
     related.length > 0 && (
       <section class="section" aria-labelledby="related-h">
         <div class="wrap">
-          <div class="head">
-            <h2 id="related-h"><span class="nowrap">One-on-one</span> appointments</h2>
-          </div>
+          <SectionHead id="related-h">
+            <span class="nowrap">One-on-one</span> appointments
+          </SectionHead>
           <ul class="related" role="list">
             {related.map((r) => (
               <li>
@@ -191,7 +178,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
   .factbar dt {
     font-family: var(--font-display);
     font-size: var(--step--1);
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-accent-on-brand);
@@ -201,81 +188,8 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
     margin: var(--space-3xs) 0 0;
   }
 
-  .onpage {
-    position: sticky;
-    top: var(--header-h);
-    z-index: 20;
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .onpage ul {
-    display: flex;
-    gap: var(--space-2xs);
-    overflow-x: auto;
-    padding-block: var(--space-2xs);
-    scrollbar-width: none;
-  }
-
-  .onpage a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.5rem;
-    padding: 0 0.95em;
-    border-radius: var(--radius-pill);
-    color: var(--color-ink);
-    font-family: var(--font-display);
-    font-size: var(--step--1);
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .onpage a:hover {
-    background: var(--color-bg-alt);
-  }
-
-  :global(html) {
-    scroll-padding-top: calc(var(--header-h) + 4rem);
-  }
-
-  .head {
-    display: grid;
-    gap: var(--space-xs);
-    align-content: start;
-    max-width: 46rem;
-    margin-bottom: var(--space-l);
-  }
-
-  /* Timetable intro runs the full width, like the notice and table under it. */
-  .head--wide {
-    max-width: none;
-  }
-
-  .head__intro {
-    color: var(--color-ink-muted);
-    font-size: var(--step-1);
-    line-height: 1.5;
-  }
-
-  .start {
-    padding-block: var(--space-xl);
-  }
-
-  .code-tip {
-    display: flex;
-    gap: var(--space-xs);
-    align-items: flex-start;
+  :global(.start__tip) {
     margin-top: var(--space-s);
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-bg-alt);
-  }
-
-  .code-tip :global(svg) {
-    margin-top: 0.15em;
-    color: var(--color-icon);
-    flex-shrink: 0;
   }
 
   .two-col {
@@ -289,26 +203,15 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
       gap: var(--space-xl);
     }
 
-    .two-col .head {
-      margin-bottom: 0;
-    }
+  }
+
+  /* The ticks sit close under the heading. */
+  .two-col :global(.for-you__head) {
+    margin-bottom: var(--space-m);
   }
 
   .ticks {
-    display: grid;
-    gap: var(--space-xs);
-    padding-top: var(--space-xs);
-  }
-
-  .ticks li {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-weight: 550;
-  }
-
-  .ticks :global(svg) {
-    color: var(--color-icon);
+    font-weight: var(--weight-medium);
   }
 
   /* Native markers sit on the first line of each item, even when it wraps. */
@@ -329,7 +232,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
 
   .kit li {
     padding-left: 0.2em;
-    font-weight: 550;
+    font-weight: var(--weight-medium);
   }
 
   .kit li::marker {
@@ -341,7 +244,7 @@ const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
     color: var(--color-ink-muted);
   }
 
-  @media (max-width: 24em) {
+  @media (max-width: 21.99em) {
     .kit {
       grid-template-columns: 1fr;
     }

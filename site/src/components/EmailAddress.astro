@@ -1,0 +1,10 @@
+---
+// An email address that can break after the "@" on narrow screens, rather than overflowing.
+interface Props {
+  address: string;
+}
+
+const [user, domain] = Astro.props.address.split('@');
+---
+
+{user}@<wbr />{domain}

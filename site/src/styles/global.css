@@ -1,4 +1,5 @@
 @import './tokens.css';
+@import './components.css';
 
 /* Reset */
 *,
@@ -21,6 +22,11 @@ html {
   html {
     scroll-behavior: smooth;
   }
+}
+
+/* Pages with the sticky "On this page" bar (OnPageNav.astro): anchors land below it as well. */
+html:has(.onpage) {
+  scroll-padding-top: calc(var(--header-h) + 4rem);
 }
 
 /* The page behind the open mobile menu doesn't scroll (class set by Header.astro). */
@@ -93,7 +99,7 @@ h4,
 h1,
 .h1 {
   font-size: var(--step-5);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   letter-spacing: -0.03em;
   line-height: 1.02;
 }
@@ -101,14 +107,14 @@ h1,
 h2,
 .h2 {
   font-size: var(--step-4);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   letter-spacing: -0.025em;
 }
 
 h3,
 .h3 {
   font-size: var(--step-2);
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
   letter-spacing: -0.015em;
   line-height: 1.2;
 }
@@ -116,7 +122,7 @@ h3,
 h4,
 .h4 {
   font-size: var(--step-1);
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
@@ -135,7 +141,7 @@ li {
 .eyebrow {
   font-family: var(--font-display);
   font-size: var(--step--1);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-eyebrow);
@@ -152,7 +158,7 @@ a:hover {
 }
 
 strong {
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
 }
 
 /* Focus: always visible for keyboard users */
@@ -179,6 +185,11 @@ strong {
 
 .section--alt {
   background: var(--color-bg-alt);
+}
+
+/* A shorter section, for pages made of many short ones. */
+.section--tight {
+  padding-block: var(--space-xl);
 }
 
 /* Brand detail: page headers end in a gentle curve. Use it on the last header band before
@@ -255,7 +266,7 @@ strong {
   background: var(--color-brand);
   color: var(--color-on-brand);
   border-radius: var(--radius-s);
-  font-weight: 650;
+  font-weight: var(--weight-semibold);
   transform: translateY(-200%);
 }
 
@@ -271,59 +282,5 @@ strong {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* Section heading with an icon badge (service and class pages): <h2 class="badged"><span class="hbadge">icon</span>Title</h2> */
-.badged {
-  display: flex;
-  align-items: center;
-  gap: var(--space-s);
-}
-
-.hbadge {
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 50%;
-  background: var(--color-brand);
-  color: var(--color-accent-on-brand);
-}
-
-@media (max-width: 39.99em) {
-  .hbadge {
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-}
-
-/* Hover: one of two kinds across the site, only on devices with a mouse or trackpad (so nothing
-   stays "stuck" after a tap on a phone).
-   - .hover-card: link cards (service, team and news cards, practitioner rows, contact cards) lift
-     slightly, with a shadow and a teal border.
-   - .hover-tile: small icon tiles (need tiles, the patient information jump grid, Good to know)
-     get a teal border and a pale teal fill. A selected tab keeps its own colours.
-   Repeated class names so these win over a component's own border and background. */
-.hover-card,
-.hover-tile {
-  transition:
-    transform 0.2s var(--ease),
-    box-shadow 0.2s var(--ease),
-    border-color 0.2s var(--ease),
-    background-color 0.2s var(--ease);
-}
-
-@media (hover: hover) {
-  .hover-card.hover-card.hover-card:hover {
-    border-color: var(--color-icon);
-    box-shadow: var(--shadow-m);
-    transform: translateY(-2px);
-  }
-
-  .hover-tile.hover-tile.hover-tile:not([aria-selected='true']):hover {
-    border-color: var(--color-icon);
-    background: var(--color-accent-soft);
   }
 }

@@ -4,7 +4,8 @@ import Icon from './Icon.astro';
 import Button from './Button.astro';
 import { getCollection } from 'astro:content';
 import { primaryLinks } from '../data/navigation';
-import { site, newTabAttrs } from '../data/site';
+import Link from './Link.astro';
+import { site } from '../data/site';
 import { booking } from '../data/policies';
 
 // News appears in the menu only while there are posts.
@@ -118,9 +119,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       }
       {booking.portalUrl && (
         <li class="mobile-nav__portal">
-          <a href={booking.portalUrl} {...newTabAttrs(booking.portalUrl)}>
-            Patient portal<span class="visually-hidden"> (opens in a new tab)</span>
-          </a>
+          <Link href={booking.portalUrl}>Patient portal</Link>
         </li>
       )}
     </ul>
@@ -267,7 +266,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     border-radius: var(--radius-pill);
     color: inherit;
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     text-decoration: none;
   }
 
@@ -347,7 +346,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     color: inherit;
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     text-decoration: none;
     border-bottom: 1px solid var(--divider);
   }
@@ -360,7 +359,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   .mobile-nav__sub a {
     font-family: var(--font-body);
     font-size: var(--step-0);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: color-mix(in srgb, var(--header-ink) 78%, var(--header-bg));
   }
 
@@ -375,15 +374,10 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     display: none;
   }
 
-  /* Very narrow screens (320px phones, or 400% zoom): shrink the logo and gaps so
-     Call, Book now and Menu all fit without sideways scrolling (WCAG 1.4.10). */
-  @media (max-width: 24em) {
+  /* Phones: tighter gaps, so Call, Book now and Menu sit beside the logo. */
+  @media (max-width: 39.99em) {
     .site-header__bar {
       gap: var(--space-2xs);
-    }
-
-    .site-header__logo {
-      width: 6rem;
     }
 
     .site-header__actions {
@@ -395,7 +389,15 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     }
   }
 
-  @media (min-width: 30em) {
+  /* Very narrow screens (320px phones, or 400% zoom): a smaller logo too, so everything still
+     fits without sideways scrolling (WCAG 1.4.10). */
+  @media (max-width: 21.99em) {
+    .site-header__logo {
+      width: 5.75rem;
+    }
+  }
+
+  @media (min-width: 40em) {
     .site-header__logo {
       width: 8.5rem;
     }
@@ -458,7 +460,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       padding-inline: 0.75rem;
       color: inherit;
       font-family: var(--font-display);
-      font-weight: 550;
+      font-weight: var(--weight-medium);
       text-decoration: none;
       white-space: nowrap;
       border-radius: var(--radius-pill);
@@ -554,7 +556,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       padding: var(--space-2xs) var(--space-xs) var(--space-3xs);
       font-family: var(--font-display);
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: var(--weight-bold);
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--color-ink-muted);
@@ -567,7 +569,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     }
 
     .desk-nav__sub-all a {
-      font-weight: 650;
+      font-weight: var(--weight-semibold);
     }
 
     .site-header__call {
@@ -577,7 +579,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
 
   /* Small laptops: a smaller logo and less space between items, so the menu and both buttons
      fit on one line. */
-  @media (min-width: 62em) and (max-width: 69.99em) {
+  @media (min-width: 62em) and (max-width: 74.99em) {
     .site-header__bar {
       gap: var(--space-s);
     }
@@ -596,7 +598,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   }
 
   /* Show the phone number beside the icon once there's room. */
-  @media (min-width: 80em) {
+  @media (min-width: 75em) {
     .site-header__call-text {
       position: static;
       width: auto;
