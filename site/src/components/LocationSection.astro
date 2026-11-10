@@ -72,7 +72,7 @@ const { address, hours, notice } = site;
                 <Todo>opening hours</Todo>
               )
             }
-            {notice.enabled && <p class="location__note">{notice.message}</p>}
+            {notice.active && <p class="location__note" data-hide-after={notice.until || undefined}>{notice.message}</p>}
           </div>
         </li>
       </ul>

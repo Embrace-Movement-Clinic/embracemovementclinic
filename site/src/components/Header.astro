@@ -90,20 +90,6 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     </div>
   </div>
 
-  {
-    booking.portalUrl && (
-      <div class="site-header__portal-row">
-        <div class="wrap">
-          <a href={booking.portalUrl} class="site-header__portal-link" {...newTabAttrs(booking.portalUrl)}>
-            Patient portal
-            <Icon name="arrow-right" size={16} />
-            <span class="visually-hidden"> (opens in a new tab)</span>
-          </a>
-        </div>
-      </div>
-    )
-  }
-
   <!-- Mobile navigation (same links, kept after the menu button in reading order) -->
   <nav class="mobile-nav" id="mobile-nav" aria-label="Main">
     <ul class="wrap mobile-nav__list" role="list">
@@ -131,7 +117,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
         ))
       }
       {booking.portalUrl && (
-        <li>
+        <li class="mobile-nav__portal">
           <a href={booking.portalUrl} {...newTabAttrs(booking.portalUrl)}>
             Patient portal<span class="visually-hidden"> (opens in a new tab)</span>
           </a>
@@ -143,32 +129,54 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
 
 <script>
   // Disclosure buttons: services dropdown (desktop) and menu (mobile).
+  const header = document.querySelector<HTMLElement>('.site-header');
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-disclosure]');
 
   buttons.forEach((btn) => {
     const target = document.getElementById(btn.getAttribute('aria-controls') ?? '');
     if (!target) return;
-    const scope = btn.closest('[data-dropdown]') ?? btn.closest('.site-header');
+    const isMenu = target.classList.contains('mobile-nav');
+    const scope = btn.closest<HTMLElement>('[data-dropdown]') ?? header;
+    const isOpen = () => btn.getAttribute('aria-expanded') === 'true';
 
-    const set = (open: boolean) => {
-      btn.setAttribute('aria-expanded', String(open));
-      target.toggleAttribute('data-open', open);
+    // The open menu fills the screen below the header, wherever the header sits (it's lower while
+    // the notice banner shows above it), and scrolls inside if it's taller than that.
+    const fitMenu = () => target.style.setProperty('--menu-top', `${Math.round(target.getBoundingClientRect().top)}px`);
+
+    // While the menu is open the page behind it doesn't scroll and can't be tabbed into or read by
+    // screen readers, so focus stays in the header (logo, call, book, menu).
+    const lockPage = (lock: boolean) => {
+      const root = document.documentElement;
+      // Keeps the layout still if a visible scrollbar disappears.
+      root.style.paddingRight = lock ? `${window.innerWidth - root.clientWidth}px` : '';
+      root.classList.toggle('menu-open', lock);
+      for (const el of document.body.children) {
+        if (el !== header && el instanceof HTMLElement && el.tagName !== 'SCRIPT') el.inert = lock;
+      }
     };
 
-    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    const set = (open: boolean) => {
+      if (open === isOpen()) return;
+      btn.setAttribute('aria-expanded', String(open));
+      target.toggleAttribute('data-open', open);
+      if (!isMenu) return;
+      lockPage(open);
+      if (open) fitMenu();
+    };
+
+    btn.addEventListener('click', () => set(!isOpen()));
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      if (e.key === 'Escape' && isOpen()) {
         set(false);
         btn.focus();
       }
     });
 
-    const isMenu = target.classList.contains('mobile-nav');
     document.addEventListener(
       'click',
       (e) => {
-        if (!scope || scope.contains(e.target as Node) || btn.getAttribute('aria-expanded') !== 'true') return;
+        if (!scope || scope.contains(e.target as Node) || !isOpen()) return;
         // A tap on the dimmed page below the mobile menu only closes the menu, not follows a link there.
         if (isMenu) {
           e.preventDefault();
@@ -179,11 +187,23 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       true,
     );
 
-    // Close the dropdown when focus leaves it.
-    if (btn.closest('[data-dropdown]')) {
-      scope?.addEventListener('focusout', (e) => {
-        const next = (e as FocusEvent).relatedTarget as Node | null;
-        if (next && !scope.contains(next)) set(false);
+    // Close when focus leaves (the dropdown, or the header while the menu is open).
+    scope?.addEventListener('focusout', (e) => {
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (next && !scope.contains(next)) set(false);
+    });
+
+    if (isMenu) {
+      // Rotating or resizing: refit the menu, or close it if the menu button is no longer shown
+      // (desktop width), so the page is never left locked.
+      window.addEventListener('resize', () => {
+        if (!isOpen()) return;
+        if (btn.offsetParent === null) set(false);
+        else fitMenu();
+      });
+      // Coming back to this page with the browser's Back button: start with the menu closed.
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) set(false);
       });
     }
   });
@@ -208,7 +228,9 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     display: flex;
     align-items: center;
     gap: var(--space-s);
-    min-height: var(--header-h);
+    /* The bar plus the header's 1px bottom border is exactly --header-h, which sticky bars and
+       anchor offsets below the header rely on. */
+    min-height: calc(var(--header-h) - 1px);
   }
 
   .site-header__logo {
@@ -296,8 +318,10 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   /* Mobile nav */
   .mobile-nav {
     border-top: 1px solid var(--divider);
-    max-height: calc(100dvh - var(--header-h));
+    /* --menu-top is the menu's top edge on screen, set by the script when it opens. */
+    max-height: calc(100dvh - var(--menu-top, var(--header-h)));
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   :global(html.js) .mobile-nav:not([data-open]) {
@@ -377,53 +401,23 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     }
   }
 
-  /* Phones and tablets: Patient portal in a slim row under the bar (no room beside Book now). */
-  .site-header__portal-row {
-    border-top: 1px solid var(--divider);
-  }
-
-  .site-header__portal-row .wrap {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .site-header__portal-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    min-height: 2.25rem;
-    color: inherit;
-    font-family: var(--font-display);
-    font-size: var(--step--1);
-    font-weight: 650;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
-  }
-
-  @media (min-width: 62em) {
-    .site-header__portal-row {
-      display: none;
-    }
-  }
-
-  /* Small laptops: a little less space between items, so the second button fits. */
-  @media (min-width: 62em) and (max-width: 69.99em) {
-    .site-header__bar {
-      gap: var(--space-s) !important;
-    }
-  }
-
-  /* Patient portal: a second header button on wide screens; in the menu on smaller ones. */
+  /* Patient portal: a second header button from tablet width up; in the menu on phones, where
+     there's no room beside Book now. */
   .site-header__actions :global(.site-header__portal) {
     display: none;
   }
 
-  @media (min-width: 62em) {
+  @media (min-width: 40em) {
     .site-header__actions :global(.site-header__portal) {
       display: inline-flex;
     }
 
+    .mobile-nav__portal {
+      display: none;
+    }
+  }
+
+  @media (min-width: 62em) {
     .site-header__bar {
       gap: var(--space-l);
     }
@@ -466,6 +460,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       font-family: var(--font-display);
       font-weight: 550;
       text-decoration: none;
+      white-space: nowrap;
       border-radius: var(--radius-pill);
     }
 
@@ -578,7 +573,26 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     .site-header__call {
       padding-inline: 0.75rem;
     }
+  }
 
+  /* Small laptops: a smaller logo and less space between items, so the menu and both buttons
+     fit on one line. */
+  @media (min-width: 62em) and (max-width: 69.99em) {
+    .site-header__bar {
+      gap: var(--space-s);
+    }
+
+    .site-header__logo {
+      width: 8.5rem;
+    }
+
+    .desk-nav__item > a {
+      padding-left: 0.6rem;
+    }
+
+    .desk-nav__item:not(.desk-nav__item--has-sub) > a {
+      padding-right: 0.6rem;
+    }
   }
 
   /* Show the phone number beside the icon once there's room. */

@@ -358,6 +358,14 @@ const jsonLd = {
     }
   }
 
+  /* Very narrow screens (320px phones, or 400% zoom): one tile per row, so the longest labels
+     ("Strength & performance") stay inside their tiles. */
+  @media (max-width: 21.99em) {
+    .needs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   .help__cards {
     margin-top: var(--space-l);
   }

@@ -448,6 +448,14 @@ const factIcon = (label: string): IconName =>
     }
   }
 
+  /* Very narrow screens (320px phones, or 400% zoom): one tile per row, so the longest labels
+     ("Cancellations") stay inside their tiles. */
+  @media (max-width: 21.99em) {
+    .jump {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   .badge {
     display: grid;
     flex: none;

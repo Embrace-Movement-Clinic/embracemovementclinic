@@ -23,6 +23,11 @@ html {
   }
 }
 
+/* The page behind the open mobile menu doesn't scroll (class set by Header.astro). */
+html.menu-open {
+  overflow: hidden;
+}
+
 body {
   min-height: 100vh;
   background: var(--color-bg);

@@ -22,6 +22,10 @@ const clinic = clinicJson as ClinicData;
 /** Blank or missing values mean "not supplied yet". */
 const orNull = (value?: string | null) => value?.trim() || null;
 
+// The notice banner's end date. Brisbane has no daylight saving, so +10:00 is always correct.
+const noticeUntil = orNull(clinic.notice.until);
+const noticeExpired = noticeUntil ? new Date() > new Date(`${noticeUntil}T23:59:59+10:00`) : false;
+
 /** "0434 686 261" → "tel:+61434686261" (Australian numbers). */
 const telHref = (display: string) => {
   const digits = display.replace(/\D/g, '');
@@ -82,13 +86,17 @@ export const site = {
 
   // Site-wide notice banner (edited on /admin: Clinic details → Notice banner).
   // `until` (YYYY-MM-DD) hides the banner automatically after that date.
+  // Everything that repeats the notice (banner, closure notes, the lines under Hours) checks
+  // `active`, and carries data-hide-after={until} so it also goes on the day, before the next
+  // rebuild (script in BaseLayout). That way no copy outlives the others.
   notice: {
-    enabled: clinic.notice.enabled,
+    /** Switched on and not past its end date (as of this build). */
+    active: clinic.notice.enabled && !noticeExpired,
     message: clinic.notice.message,
     link: clinic.notice.linkHref?.trim()
       ? { href: clinic.notice.linkHref.trim(), label: clinic.notice.linkLabel?.trim() || 'Read more' }
       : null,
-    until: orNull(clinic.notice.until),
+    until: noticeUntil,
   },
 };
 

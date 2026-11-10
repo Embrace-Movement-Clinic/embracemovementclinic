@@ -5,8 +5,7 @@ import Icon from './Icon.astro';
 import { site } from '../data/site';
 
 const { notice } = site;
-const expired = notice.until ? new Date() > new Date(`${notice.until}T23:59:59+10:00`) : false;
-const show = notice.enabled && !expired;
+const show = notice.active;
 ---
 
 {

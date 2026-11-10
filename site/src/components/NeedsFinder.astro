@@ -207,6 +207,14 @@ const byId = new Map(services.map((s) => [s.id, s]));
     }
   }
 
+  /* Very narrow screens (320px phones, or 400% zoom): one tab per row, so the longest labels
+     stay inside their tabs. */
+  @media (max-width: 21.99em) {
+    .finder__tabs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   /* Panels: petrol, with the need's icon large and faint in the corner. */
   .finder__panels {
     display: grid;
