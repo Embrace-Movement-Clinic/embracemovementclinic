@@ -1,6 +1,7 @@
 ---
 // The "On this page" bar on service and class pages: links to the page's sections, sticky under
-// the header. Anchors land below both bars (see `html:has(.onpage)` in global.css).
+// the header. Anchors land below both bars (see `html:has(.onpage)` in global.css). As the page
+// scrolls, the link for the section being read is marked (aria-current) and kept in view.
 interface Props {
   links: { href: string; label: string }[];
 }
@@ -21,6 +22,52 @@ const { links } = Astro.props;
     </ul>
   </div>
 </nav>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.onpage');
+  const list = nav?.querySelector<HTMLElement>('ul');
+  if (nav && list) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+    const sections = links.map((a) => document.getElementById(a.hash.slice(1)));
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = -1;
+
+    const update = () => {
+      // The section being read: the last one whose top has passed just below the sticky bars
+      // (where this bar sits once it's stuck under the header, not where it starts on the page).
+      const line = parseFloat(getComputedStyle(nav).top) + nav.offsetHeight + 32;
+      let now = -1;
+      sections.forEach((s, i) => {
+        if (s && s.getBoundingClientRect().top <= line) now = i;
+      });
+      if (now === current) return;
+      current = now;
+      links.forEach((a, i) => {
+        if (i === now) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+      // Phones: the bar scrolls sideways, so bring the current link into view.
+      const a = links[now];
+      if (a && list.scrollWidth > list.clientWidth) {
+        const left = a.getBoundingClientRect().left - list.getBoundingClientRect().left + list.scrollLeft - (list.clientWidth - a.offsetWidth) / 2;
+        list.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
+      }
+    };
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+</script>
 
 <style>
   .onpage {
@@ -51,9 +98,17 @@ const { links } = Astro.props;
     font-weight: var(--weight-semibold);
     text-decoration: none;
     white-space: nowrap;
+    transition:
+      background-color 0.2s var(--ease),
+      color 0.2s var(--ease);
   }
 
   .onpage a:hover {
     background: var(--color-bg-alt);
+  }
+
+  .onpage a[aria-current] {
+    background: var(--color-brand);
+    color: var(--color-on-brand);
   }
 </style>

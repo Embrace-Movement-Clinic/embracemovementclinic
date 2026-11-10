@@ -428,7 +428,8 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
 
   @media (min-width: 62em) {
     .site-header__bar {
-      gap: var(--space-l);
+      /* Eases from 1.5rem to 2.5rem as the screen widens, so the phone number fits from 1200px. */
+      gap: clamp(var(--space-m), -3rem + 6vw, var(--space-l));
     }
 
     .site-header__logo {
@@ -491,7 +492,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     .desk-nav__toggle {
       display: inline-grid;
       place-items: center;
-      width: 2rem;
+      width: 2.75rem;
       height: 2.75rem;
       border: 0;
       border-radius: var(--radius-pill);

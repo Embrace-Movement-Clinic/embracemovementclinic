@@ -4,6 +4,7 @@ import Icon from './Icon.astro';
 import Button from './Button.astro';
 import Todo from './Todo.astro';
 import EmailAddress from './EmailAddress.astro';
+import HoursList from './HoursList.astro';
 import { footerLinks } from '../data/navigation';
 import { site } from '../data/site';
 import { booking } from '../data/policies';
@@ -87,29 +88,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
       <h2 class="site-footer__heading">Hours</h2>
       {
         hours ? (
-          <dl class="site-footer__hours">
-            {hours.map((h) => {
-              // "Closed (occasional appointments on request)": the bracketed note gets its own line.
-              const at = h.hours.indexOf(' (');
-              const main = at > -1 ? h.hours.slice(0, at) : h.hours;
-              const note = at > -1 ? h.hours.slice(at + 1) : '';
-              return (
-                <div>
-                  <dt>{h.days}</dt>
-                  <dd>
-                    {/* Split shifts ("7am – 11am, 1pm – 8pm") one per line. */}
-                    {main.split(/,\s*/).map((part, i) => (
-                      <>
-                        {i > 0 && <br />}
-                        <span class="nowrap">{part}</span>
-                      </>
-                    ))}
-                  </dd>
-                  {note && <dd class="site-footer__hours-note">{note}</dd>}
-                </div>
-              );
-            })}
-          </dl>
+          <HoursList hours={hours} />
         ) : (
           <Todo>opening hours</Todo>
         )
@@ -154,7 +133,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
 
   @media (min-width: 62em) {
     .site-footer__grid {
-      grid-template-columns: 1.1fr 1fr 1.45fr 1fr 0.9fr;
+      grid-template-columns: 1fr 0.9fr 1.45fr 1.25fr 0.8fr;
     }
   }
 
@@ -168,6 +147,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
   .site-footer__logo {
     display: block;
     width: 11rem;
+    max-width: 100%;
     color: inherit;
   }
 
@@ -240,27 +220,15 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
     margin-top: var(--space-s);
   }
 
-  .site-footer__hours div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    column-gap: var(--space-s);
-  }
-
-  .site-footer__hours dd {
-    text-align: right;
-  }
-
-  /* A note in brackets, e.g. Saturday's "(occasional appointments on request)". */
-  .site-footer__hours-note {
-    flex-basis: 100%;
-    color: var(--color-on-brand-muted);
-    font-size: 0.875em;
-  }
-
   .site-footer__note {
     margin-top: var(--space-xs);
     color: var(--color-on-brand-muted);
+  }
+
+  /* Pages that end with the "Find the clinic" section already give the notice beside its hours,
+     just above this footer: don't repeat it here. */
+  :global(main:has(.location__note)) ~ .site-footer .site-footer__note {
+    display: none;
   }
 
   .site-footer__base {

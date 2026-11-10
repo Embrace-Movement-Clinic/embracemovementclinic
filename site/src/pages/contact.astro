@@ -15,11 +15,12 @@ const pageEntry = await getEntry('contactPage', 'contact');
 if (!pageEntry) throw new Error('Missing src/content/pages/contact.md');
 const page = pageEntry.data;
 
+// Booking online comes first and is the one filled card: it's the quickest way to an appointment.
 const ways = [
-  { icon: 'phone', title: 'Call', text: site.phone.display, href: site.phone.href, note: page.callNote },
-  { icon: 'message', title: 'Text', text: site.phone.display, href: site.phone.smsHref, note: page.textNote },
-  { icon: 'mail', title: 'Email', text: site.email.address, href: site.email.href, note: page.emailNote },
-  { icon: 'calendar', title: 'Book online', text: 'Booking portal', href: site.booking.url, note: page.bookNote },
+  { icon: 'calendar', title: 'Book online', text: 'Booking portal', href: site.booking.url, note: page.bookNote, primary: true },
+  { icon: 'phone', title: 'Call', text: site.phone.display, href: site.phone.href, note: page.callNote, primary: false },
+  { icon: 'message', title: 'Text', text: site.phone.display, href: site.phone.smsHref, note: page.textNote, primary: false },
+  { icon: 'mail', title: 'Email', text: site.email.address, href: site.email.href, note: page.emailNote, primary: false },
 ] as const;
 
 const jsonLd = {
@@ -50,7 +51,7 @@ const jsonLd = {
         {
           ways.map((w) => (
             <li>
-              <Link class="way panel hover-card" href={w.href}>
+              <Link class:list={['way', 'panel', 'hover-card', { 'way--primary on-brand': w.primary }]} href={w.href}>
                 <Icon name={w.icon} size={26} />
                 <span class="way__title">{w.title}</span>
                 <span class:list={['way__text', { 'way__text--long': w.text.includes('@') }]}>
@@ -119,6 +120,17 @@ const jsonLd = {
   .way :global(svg) {
     margin-bottom: var(--space-xs);
     color: var(--color-icon);
+  }
+
+  /* The one filled card. */
+  .way--primary {
+    border-color: var(--color-brand);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+  }
+
+  .way--primary :global(svg) {
+    color: var(--color-accent-on-brand);
   }
 
   .way__title {

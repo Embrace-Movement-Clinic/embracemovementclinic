@@ -156,8 +156,14 @@
     background-color 0.2s var(--ease);
 }
 
+/* Pressed: a small nudge down, on touch screens too. */
+.hover-card.hover-card.hover-card:active,
+.hover-tile.hover-tile.hover-tile:active {
+  transform: translateY(1px);
+}
+
 @media (hover: hover) {
-  .hover-card.hover-card.hover-card:hover {
+  .hover-card.hover-card.hover-card:hover:not(:active) {
     border-color: var(--color-icon);
     box-shadow: var(--shadow-m);
     transform: translateY(-2px);

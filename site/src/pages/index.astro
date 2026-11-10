@@ -65,9 +65,8 @@ const jsonLd = [
               Patient portal
             </Button>
           )}
-          <Button href={site.phone.href} variant="secondary" size="l" icon="phone" class="phone-only">Call {site.phone.display}</Button>
         </div>
-        <a class="hero__link arrow-link" href="#help">What can we help with? <Icon name="arrow-right" size={18} /></a>
+        <a class="hero__link arrow-link wide-only" href="#help">What can we help with? <Icon name="arrow-right" size={18} /></a>
       </div>
       <Photo
         src={home.heroImage}
@@ -221,7 +220,8 @@ const jsonLd = [
     gap: var(--space-s);
   }
 
-  /* Phones: Book now and Patient portal side by side, Call underneath. */
+  /* Phones: Book now and Patient portal side by side, then the photo. (Call is one tap away in
+     the header, so it isn't repeated here.) */
   @media (max-width: 39.99em) {
     .hero__actions {
       display: grid;
@@ -232,10 +232,6 @@ const jsonLd = [
     .hero__actions > :global(.btn) {
       padding-inline: 0.6em;
       font-size: var(--step-0);
-    }
-
-    .hero__actions > :global(.phone-only) {
-      grid-column: 1 / -1;
     }
   }
 

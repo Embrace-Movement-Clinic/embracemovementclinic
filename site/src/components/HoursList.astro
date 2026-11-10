@@ -1,0 +1,72 @@
+---
+// Opening hours as a list: the day on the left, its times on the right. Split shifts
+// ("7am – 11am, 1pm – 8pm") go one per line, and a note in brackets ("Closed (occasional
+// appointments on request)") gets its own line. Used in the footer and "Find the clinic".
+interface Props {
+  hours: { days: string; hours: string }[];
+  /** A hairline between days (on light backgrounds). */
+  ruled?: boolean;
+}
+
+const { hours, ruled = false } = Astro.props;
+const rows = hours.map((h) => {
+  const at = h.hours.indexOf(' (');
+  return {
+    days: h.days,
+    shifts: (at > -1 ? h.hours.slice(0, at) : h.hours).split(/,\s*/),
+    note: at > -1 ? h.hours.slice(at + 1) : '',
+  };
+});
+---
+
+<dl class:list={['hours-list', { 'hours-list--ruled': ruled }]}>
+  {
+    rows.map((row) => (
+      <div>
+        <dt>{row.days}</dt>
+        <dd>
+          {row.shifts.map((shift, i) => (
+            <>
+              {i > 0 && <br />}
+              <span class="nowrap">{shift}</span>
+            </>
+          ))}
+        </dd>
+        {row.note && <dd class="hours-list__note">{row.note}</dd>}
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .hours-list div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    column-gap: var(--space-s);
+  }
+
+  .hours-list dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  .hours-list__note {
+    flex-basis: 100%;
+    color: var(--color-ink-muted);
+    font-size: 0.875em;
+  }
+
+  .hours-list--ruled div {
+    padding-block: 0.3rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .hours-list--ruled div:first-child {
+    border-top: 0;
+  }
+
+  .hours-list--ruled dt {
+    font-weight: var(--weight-semibold);
+  }
+</style>

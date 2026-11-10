@@ -102,7 +102,6 @@ const sections = [
         {
           conditions.map((i) => (
             <li class="tile panel panel--soft">
-              <IconBadge name="check" tone="plain" />
               <p class="tile__name">{i.name}</p>
               {i.detail && <p class="tile__detail">{i.detail}</p>}
             </li>
@@ -173,19 +172,19 @@ const sections = [
       <h2 id="practical-h" class="h3">Good to know</h2>
       <ul class="practical" role="list">
         <li>
-          <a class="hover-tile" href="/patient-information#fees">
+          <a href="/patient-information#fees">
             <IconBadge name="card" />
             <span><strong>Fees and rebates</strong> What appointments cost and what you can claim</span>
           </a>
         </li>
         <li>
-          <a class="hover-tile" href="/patient-information#cancellations">
+          <a href="/patient-information#cancellations">
             <IconBadge name="clock" />
             <span><strong>Cancellations</strong> Our cancellation policy</span>
           </a>
         </li>
         <li>
-          <a class="hover-tile" href="/contact">
+          <a href="/contact">
             <IconBadge name="map-pin" />
             <span><strong>Getting here</strong> {site.address.street}, {site.address.suburb}</span>
           </a>
@@ -230,7 +229,7 @@ const sections = [
     font-size: var(--step-1);
   }
 
-  /* Conditions: a pale teal tile each, in as many columns as suit the number of tiles. */
+  /* Conditions: a pale teal tile each (no icon: the name leads), in as many columns as suit the number of tiles. */
   .tiles {
     display: grid;
     gap: var(--space-s);
@@ -255,8 +254,24 @@ const sections = [
     align-content: start;
   }
 
-  .tile :global(.icon-badge) {
-    margin-bottom: var(--space-2xs);
+  /* Phones: one pale panel with the conditions listed inside it, rather than a tall stack of tiles. */
+  @media (max-width: 39.99em) {
+    .tiles {
+      gap: 0;
+      padding: var(--space-2xs) var(--space-m);
+      border-radius: var(--radius-l);
+      background: var(--color-accent-soft);
+    }
+
+    .tiles .tile {
+      padding: var(--space-s) 0;
+      border-radius: 0;
+      background: none;
+    }
+
+    .tiles .tile + .tile {
+      border-top: 1px solid color-mix(in srgb, var(--color-icon) 22%, transparent);
+    }
   }
 
   .tile__name {
@@ -369,10 +384,10 @@ const sections = [
     margin-top: var(--space-l);
   }
 
-  /* Practical links: bordered tiles, as on Patient information. */
+  /* Practical links: supporting detail, so no boxes; an icon, a title and a line each. */
   .practical {
     display: grid;
-    gap: var(--space-s);
+    gap: var(--space-s) var(--space-l);
     margin-top: var(--space-m);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   }
@@ -382,12 +397,13 @@ const sections = [
     grid-template-columns: auto 1fr;
     gap: var(--space-s);
     align-items: center;
-    height: 100%;
-    padding: var(--space-s) var(--space-m);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-l);
     color: var(--color-ink);
     text-decoration: none;
+  }
+
+  .practical a:hover strong {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .practical a > span {
