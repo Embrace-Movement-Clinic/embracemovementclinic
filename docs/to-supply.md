@@ -74,5 +74,5 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] Nookal online booking URL (supplied 19 Oct 2026; test a booking from the preview site before launch)
 - [ ] Google Business Profile (to update the website link and check the details match)
 - [ ] Analytics / Search Console
-- [x] Clinic-owned Cloudflare account created (8 Nov 2026). Still to do in it: the Pages project, Web Analytics, Adrian as a member, and the login helper for /admin
+- [x] Clinic-owned Cloudflare account created (8 Nov 2026). Pages project created on 11 Nov 2026, connected to the clinic's GitHub repository (production branch `main`, root directory `site`, build command `npm run build`, output directory `dist`). It must be a Pages project, not a Worker: the Worker set-up has no output directory setting. Builds of `main` fail until the site is merged into it; other branches build as previews. Still to do in the account: Web Analytics, Adrian as a member, and the login helper for /admin
 - [x] Clinic-owned GitHub organisation `Embrace-Movement-Clinic`; repository transferred there (8 Nov 2026)
