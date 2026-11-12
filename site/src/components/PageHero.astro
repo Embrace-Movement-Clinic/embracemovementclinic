@@ -112,6 +112,16 @@ const hasAside = Astro.slots.has('aside');
     border-radius: var(--radius-l);
   }
 
+  /* One column (phones and tablets): the column is as wide as the screen allows, never as wide as
+     its longest word, so with enlarged text a long word in the title breaks instead of pushing
+     the page sideways. Beside a photo on wider screens, the text column grows to fit the title. */
+  @media (max-width: 55.99em) {
+    .page-hero__grid,
+    .page-hero__text {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   @media (min-width: 56em) {
     .page-hero__grid--split {
       grid-template-columns: 1.15fr 1fr;

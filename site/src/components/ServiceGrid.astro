@@ -64,6 +64,8 @@ const groups = [
 <style>
   .service-groups {
     display: grid;
+    /* minmax(0, 1fr): the column is as wide as the space available, never as wide as its longest word. */
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-m);
   }
 
@@ -73,6 +75,7 @@ const groups = [
 
   .cards {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-m);
   }
 
@@ -156,7 +159,7 @@ const groups = [
     }
 
     .card :global(.photo-card) {
-      grid-template-columns: 6.5rem 1fr;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
       grid-template-rows: none;
     }
 

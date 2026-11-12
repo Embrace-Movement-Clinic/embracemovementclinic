@@ -84,6 +84,15 @@ h4 {
   overflow-wrap: break-word;
 }
 
+/* Headings are never wider than what holds them, so with enlarged text a long word
+   ("Musculoskeletal") breaks rather than pushing the page sideways. */
+h1,
+h2,
+h3,
+h4 {
+  max-width: 100%;
+}
+
 /* Typography */
 h1,
 h2,

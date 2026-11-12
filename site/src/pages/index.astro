@@ -232,6 +232,9 @@ const jsonLd = [
     .hero__actions > :global(.btn) {
       padding-inline: 0.6em;
       font-size: var(--step-0);
+      /* Two buttons share the row: let a label wrap rather than spill if text is enlarged. */
+      white-space: normal;
+      text-align: center;
     }
   }
 
@@ -247,6 +250,12 @@ const jsonLd = [
   @media (max-width: 55.99em) {
     :global(.hero__photo) {
       --photo-ratio-override: 4 / 3;
+    }
+
+    /* One column: as wide as the screen allows, never as wide as its longest word (enlarged text). */
+    .hero__grid,
+    .hero__text {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 

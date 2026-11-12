@@ -131,6 +131,25 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   const header = document.querySelector<HTMLElement>('.site-header');
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-disclosure]');
 
+  // Make the bar fit. With enlarged text or letter spacing its contents can outgrow it; rather than
+  // let the page scroll sideways, drop the least important items step by step (see .fit-1 to .fit-3).
+  const bar = header?.querySelector<HTMLElement>('.site-header__bar');
+  const actions = header?.querySelector<HTMLElement>('.site-header__actions');
+  if (header && bar && actions) {
+    const steps = ['fit-1', 'fit-2', 'fit-3'];
+    const overflows = () => actions.getBoundingClientRect().right > bar.getBoundingClientRect().right + 0.5;
+    const fit = () => {
+      header.classList.remove(...steps);
+      for (const step of steps) {
+        if (!overflows()) break;
+        header.classList.add(step);
+      }
+    };
+    const watcher = new ResizeObserver(fit);
+    for (const el of [bar, actions, header.querySelector('.desk-nav')]) if (el) watcher.observe(el);
+    document.fonts.ready.then(fit);
+  }
+
   buttons.forEach((btn) => {
     const target = document.getElementById(btn.getAttribute('aria-controls') ?? '');
     if (!target) return;
@@ -254,6 +273,29 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     display: flex;
     align-items: center;
     gap: var(--space-2xs);
+  }
+
+  .site-header__actions :global(.btn) {
+    white-space: nowrap;
+  }
+
+  /* When the bar's contents don't fit (a visitor has enlarged the text or its spacing), the script
+     below drops the least important items one step at a time: the phone number beside its icon,
+     then the Patient portal button, then the call icon. Each is still on the page or in the menu. */
+  .site-header.fit-1 .site-header__call-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .site-header.fit-2 .site-header__actions :global(.site-header__portal) {
+    display: none;
+  }
+
+  .site-header.fit-3 .site-header__call {
+    display: none;
   }
 
   .site-header__call {

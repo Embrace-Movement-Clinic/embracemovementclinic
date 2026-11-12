@@ -177,6 +177,18 @@ const byId = new Map(services.map((s) => [s.id, s]));
     color: var(--color-brand);
   }
 
+  /* High-contrast mode (Windows) replaces background colours, so the selected tab gets a thick
+     border in the system's highlight colour, and its panel a border so it reads as a box. */
+  @media (forced-colors: active) {
+    .finder__tab[aria-selected='true'] {
+      border: 3px solid Highlight;
+    }
+
+    .finder__panel {
+      border: 1px solid CanvasText;
+    }
+  }
+
   /* Very narrow screens (320px phones, or 400% zoom): one tab per row, so the longest labels
      stay inside their tabs. */
   @media (max-width: 21.99em) {

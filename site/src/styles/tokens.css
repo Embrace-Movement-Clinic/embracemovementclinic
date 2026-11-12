@@ -102,3 +102,10 @@
   background: var(--color-brand);
   color: var(--color-on-brand);
 }
+
+/* A dark element that takes keyboard focus itself (the filled "Book online" card, a "What can we
+   help with?" panel) has its focus ring drawn outside it, on the light page around it. The light
+   on-brand ring would be almost invisible there (1.6:1), so it gets the page's dark ring. */
+.on-brand:focus-visible {
+  outline-color: var(--color-brand);
+}

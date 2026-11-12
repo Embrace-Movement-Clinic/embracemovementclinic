@@ -111,4 +111,13 @@ const { links } = Astro.props;
     background: var(--color-brand);
     color: var(--color-on-brand);
   }
+
+  /* High-contrast mode (Windows) replaces background colours, so mark the current link with a
+     ring in the system's highlight colour instead. */
+  @media (forced-colors: active) {
+    .onpage a[aria-current] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
 </style>
