@@ -56,6 +56,8 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Light theme only: stops browsers auto-darkening the page (and the flash before the CSS loads). */}
+    <meta name="color-scheme" content="only light" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {!noindex && <link rel="canonical" href={canonical} />}

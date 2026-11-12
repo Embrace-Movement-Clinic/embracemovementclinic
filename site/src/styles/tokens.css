@@ -4,7 +4,10 @@
   Every text pairing is contrast-checked on /styleguide (WCAG 2.2 AA, 4.5:1).
 */
 :root {
-  color-scheme: light;
+  /* The site has one (light) theme. "only" also tells browsers that darken pages automatically
+     (Chrome on Android with dark mode on) to leave it alone: their guess made some buttons
+     unreadable. See also the color-scheme meta tag in BaseLayout. */
+  color-scheme: only light;
 
   /* Fixed colours */
   --color-todo-bg: #fff4d6;
