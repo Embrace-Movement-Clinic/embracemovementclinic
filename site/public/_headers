@@ -11,6 +11,14 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Keep Cloudflare's own pages.dev addresses (the live copy and every preview) out of search
+# results, so Google only lists the clinic's domain. Doesn't affect www.embracemovementclinic.com.au.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 # The website editor is for staff only: keep it out of search results.
 /admin/*
   X-Robots-Tag: noindex

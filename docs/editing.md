@@ -40,7 +40,7 @@ Empty fields like fees, what to bring or parking show a "TODO" note on the site 
 
 Open the site's address followed by `/admin/` (with the slash at the end) and click **Sign in with GitHub**. The first time, GitHub asks you to authorise "Embrace Movement Clinic CMS": click **Authorize**. Anyone with write access to the repository can sign in; nobody else can. A sign-in lasts 8 hours and renews by itself; after about 6 months without using the editor, just sign in again.
 
-Until launch, the editor is connected to the **preview** branch (`claude/inspiring-curie-ccksq0`, since 13 Nov 2026), so changes only affect the preview site, not the live Squarespace site. The preview's address is listed in Cloudflare under the Pages project's deployments. Each save is a real change on the preview branch: ask Claude to undo test edits if you don't want to keep them.
+The editor saves to `main`, the branch the live site is built from (since 13 Nov 2026). Each save is published a minute or two later: at `https://embracemovementclinic-7at.pages.dev` now, and at `www.embracemovementclinic.com.au` once the domain is switched over. Every save is kept in the project history, so ask Claude to undo anything.
 
 ## How sign-in is set up (done 13 Nov 2026)
 
@@ -59,7 +59,7 @@ No passwords or secrets are in the project. The pieces, all owned by the clinic:
 
 ## Launch steps for the editor (one-off)
 
-1. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`. The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor still saves to another branch, so this step can't be missed.
+1. **Point the editor at the live site:** `branch` in `config.yml` is `main` (done 13 Nov 2026). The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor saves to another branch.
 2. Delete the old demo access token on GitHub, if one was made (*Settings → Developer settings → Personal access tokens → Fine-grained tokens*). Done (13 Nov 2026).
 
 **No approval step (owner, 13 Nov 2026):** staff edits go live straight away. Nicole is the only staff editor. If more editors join, consider `publish_mode: editorial_workflow` in `config.yml`, so each change waits as a draft until approved.
@@ -72,6 +72,7 @@ No passwords or secrets are in the project. The pieces, all owned by the clinic:
 - **Keep the editor and the site in step:** when a field changes in `site/src/content.config.ts`, `site/src/data/clinic.json`, `site/src/data/policies.json` or `site/src/content/home/home.md`, update `config.yml` too. The editor leaves out blank optional fields (`omit_empty_optional_fields`), so site code must treat optional values as possibly missing.
 - Editable files: `site/src/content/services/*.md`, `site/src/content/team/*.md`, `site/src/content/news/*.md`, `site/src/content/home/home.md`, `site/src/content/pages/*.md` (Team, Patient information, Contact, Services page text), `site/src/data/clinic.json`, `site/src/data/policies.json`, `site/src/data/needs.json`, and photos in `site/src/assets/photos/`.
 - Moving the editor between files by typing an address (`#/collections/settings/entries/…` straight to another file in the same section) can show a blank form. Going through the list or the back arrow works.
+- **Staff edits land on `main`.** Claude works on its own branch: before merging into `main`, bring in `main` first (fetch and merge or rebase), so staff edits aren't overwritten. Merging into `main` publishes the live site, so it needs the owner's go-ahead.
 - **Build checks:** `prebuild` copies the editor and makes share images (`scripts/make-share-images.mjs` → `public/og/`, not in Git); `postbuild` runs `scripts/check-links.mjs`, so a broken internal link, anchor or redirect fails the Cloudflare deploy and the previous version stays live.
 - Markdown body fields have `editor_components: []` (no image button): Astro leaves `/src/...` image paths inside Markdown text unresolved, so a body image would 404. Photo fields are fine with either path style.
 - A new "What can we help with?" group may have a blank `id`; `src/data/needs.ts` makes one from the title.

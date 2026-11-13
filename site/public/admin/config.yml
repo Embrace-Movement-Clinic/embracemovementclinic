@@ -6,8 +6,8 @@
 backend:
   name: github
   repo: Embrace-Movement-Clinic/embracemovementclinic
-  # Demo: the preview branch. Change to `main` at launch.
-  branch: claude/inspiring-curie-ccksq0
+  # The branch the live site is built from (since 13 Nov 2026). Staff edits go live in a minute or two.
+  branch: main
   # "Sign in with GitHub": Sveltia's login helper (sveltia-cms-auth), a Cloudflare Worker in the
   # clinic's Cloudflare account, using the clinic's GitHub App "Embrace Movement Clinic CMS".
   # Set up 13 Nov 2026. See docs/editing.md.
