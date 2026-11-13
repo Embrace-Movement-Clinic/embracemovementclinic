@@ -2,7 +2,7 @@
   "classSteps": [
     "Book a once-off pre-class assessment",
     "Choose your class times online, selecting the relevant practitioner",
-    "Class full? Get in touch to join the waitlist"
+    "Class full? Get in touch to join the waitlist!"
   ],
   "timetable": [
     {
@@ -149,7 +149,7 @@
   "booking": {
     "classes": "Check availability and book classes in the online booking portal. When booking, select the relevant practitioner. If your preferred class time isn’t showing, it’s at full capacity, but please get in touch if you’d like to be added to the waitlist.",
     "bookingCode": "Want to save time and avoid creating a new profile every time you book? Ask Nicole or Laura for your unique online booking code, or for access to the patient portal.",
-    "waitlistText": "To join the cancellation waitlist, text us on",
-    "portalUrl": "https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce"
+    "portalUrl": "https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce",
+    "waitlistText": "To join the cancellation waitlist, text us on"
   }
 }
