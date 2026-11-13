@@ -38,6 +38,10 @@ Don't delete any of these mailboxes in cPanel. Letting the product lapse keeps t
 - [x] Checked the Business Hosting cPanel: empty, safe to cancel
 - [x] Found the 5 old mailboxes and which domains they belong to
 
+- [x] Test admin@embracemovementclinic.com.au: arrives in Google (13 Nov 2026)
+- [x] hello@embracemovementclinic.com.au bounced ("address not found"); not used on the old or new site. Follow-up recorded in the launch checklist (item 24)
+- [x] **Squarespace login moved off the old domain (13 Nov 2026).** The Squarespace account's login email was admin@embracemc.com.au; it's now admin@embracemovementclinic.com.au, and Nicole is the site owner under that address. Other accounts may still use the embracemc.com.au addresses: check the mailboxes (step 3) before letting that domain's email go
+
 ## Next (pick up here)
 
 1. [ ] **Test admin@embracemovementclinic.com.au** by sending it an email from a personal account. It's the address on the website, so it must arrive in Google.
