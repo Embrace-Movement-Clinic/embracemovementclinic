@@ -42,6 +42,8 @@ Don't delete any of these mailboxes in cPanel. Letting the product lapse keeps t
 - [x] hello@embracemovementclinic.com.au bounced ("address not found"); not used on the old or new site. Follow-up recorded in the launch checklist (item 24)
 - [x] **Squarespace login moved off the old domain (13 Nov 2026).** The Squarespace account's login email was admin@embracemc.com.au; it's now admin@embracemovementclinic.com.au, and Nicole is the site owner under that address. Other accounts may still use the embracemc.com.au addresses: check the mailboxes (step 3) before letting that domain's email go
 
+- [x] **admin@embracemc.com.au already forwards to the main domain (found 13 Nov 2026).** The forwarding runs on the Unlimited Email product, so it stops when that ends on 7 Feb 2027. Plan: after launch and before 7 Feb 2027, add embracemc.com.au to Google Workspace as a user alias domain (and point its mail at Google), so mail keeps arriving without the old server; then let Unlimited Email lapse. Still to check: the full list under cPanel → Email → Forwarders (is nicole@embracemc.com.au forwarded too?)
+
 ## Next (pick up here)
 
 1. [ ] **Test admin@embracemovementclinic.com.au** by sending it an email from a personal account. It's the address on the website, so it must arrive in Google.
