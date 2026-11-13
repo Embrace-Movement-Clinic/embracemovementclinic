@@ -38,7 +38,7 @@ Empty fields like fees, what to bring or parking show a "TODO" note on the site 
 
 ## Trying it now (demo on the preview site)
 
-The editor is currently connected to the **preview** branch (`claude/tender-mayer-vvk5i5`), so changes only affect the preview site, not the live Squarespace site. Until the "Sign in with GitHub" login helper is set up (see below), sign in with an access token:
+The editor is currently connected to the **preview** branch (`claude/inspiring-curie-ccksq0`, since 13 Nov 2026), so changes only affect the preview site, not the live Squarespace site. Until the "Sign in with GitHub" login helper is set up (see below), sign in with an access token:
 
 1. **Make a token** (Adrian, once): on GitHub, go to *Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token*.
    - Name: `Embrace website editor demo`. Expiration: 30 days.

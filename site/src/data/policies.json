@@ -101,7 +101,7 @@
   "cancellation": {
     "paragraphs": [
       "Given there is a waitlist for many of our services, please provide as much notice as possible if you need to cancel or reschedule your booking so the time can be offered to another client.",
-      "Please give at least 8 hours’ notice if you need to cancel. Bookings cancelled with less than 8 hours’ notice are charged the full price."
+      "Please give at least 12 hours’ notice if you need to cancel. Bookings cancelled with less than 12 hours’ notice are charged the full price."
     ]
   },
   "classFacts": [

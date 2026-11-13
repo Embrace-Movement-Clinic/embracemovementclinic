@@ -7,7 +7,7 @@ backend:
   name: github
   repo: Embrace-Movement-Clinic/embracemovementclinic
   # Demo: the preview branch. Change to `main` at launch.
-  branch: claude/tender-mayer-vvk5i5
+  branch: claude/inspiring-curie-ccksq0
   # "Sign in with GitHub" needs a small login helper (a Cloudflare Worker). Until it's set up,
   # sign in with a GitHub access token instead. See docs/editing.md.
   # base_url: https://embrace-cms-auth.<your-account>.workers.dev

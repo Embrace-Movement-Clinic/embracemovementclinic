@@ -40,7 +40,7 @@ Use the screenshots for these. Where a screenshot is missing, leave a `TODO:` ra
 - Photography-led, with generous white space.
 
 **Brand to keep**
-- Logo: the plain "embrace / MOVEMENT CLINIC" wordmark (`assets/brand/logo-wordmark.svg`). The owner dropped the teal brush-stroke circle on 12 Oct 2026, so don't reintroduce it.
+- Logo: the plain "embrace / MOVEMENT CLINIC" wordmark: the designer's original vector (`assets/brand/logo-wordmark-colour-original.svg`; the site's copy is `site/src/assets/brand/wordmark.svg`). The owner dropped the teal brush-stroke circle on 12 Oct 2026, so don't reintroduce it.
 - Tagline: "Accept . Support . Challenge ."
 - Recurring brand detail: page headers end in a gentle curve (`.curve-bottom` in `site/src/styles/global.css`). Keep sections uncluttered: one card style, plain lists rather than pill tags, no boxes around simple lists, and no label above a heading that repeats it.
 

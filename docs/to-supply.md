@@ -21,12 +21,12 @@ Tick items off as they arrive. Brand files go in `assets/brand/`; screenshots go
 ## Brand assets
 
 - [x] Logo: colour circle (500px transparent PNG) and black wordmark (1500px PNG), received 12 Oct 2026 and saved in `assets/brand/`. Favicons and a white footer wordmark were made from them.
-- [x] Logo as SVG: traced from the black wordmark (`assets/brand/logo-wordmark.svg`). An original vector file from whoever designed it would still be ideal, if one exists.
+- [x] Logo as SVG: the designer's original vector files, in colour and black, supplied 13 Nov 2026 (`assets/brand/logo-wordmark-colour-original.svg`, `assets/brand/logo-wordmark-black-original.svg`). The site's wordmark is now built from them
 - [x] **Colour palette:** Petrol + Teal (petrol chosen 19 Oct 2026; accent changed from coral to teal on 20 Oct). `/palette` stays for trying other combinations later.
 - [x] Font choice: Red Hat Display + Red Hat Text (open licence, self-hosted)
 - [x] Clinic, team and treatment photos: 16 received on 19 Oct 2026. 13 are on the site (`site/src/assets/photos/`): headshots, the team photo with Jeff, the home page and every service page. More can be added on /admin.
 - [x] **Guardian consent for the two photos of children**: given (owner, 7 Nov 2026). The photos (`PXL_20220610_235914156`, `PXL_20220611_052505665`) can now be used
-- [ ] **Photo of the front of the clinic** (or the driveway and parking). Optional now: Home and Contact show a street map, but a photo of the entrance would still help on Contact
+- [ ] **Photo of the front of the clinic** (or the driveway and parking). Checking with Nicole (13 Nov 2026). Optional now: Home and Contact show a street map, but a photo of the entrance would still help on Contact
 - [x] ~~Two photos of baby Imogen~~: not needed, the July 2026 update was deleted (7 Nov 2026). (`DSC_6425.JPG` and `DSC_6872.JPG` on the old site), if you'd like them kept
 - [x] Photo permissions confirmed for everyone pictured, including children (owner, 7 Nov 2026)
 - [x] Check the alt text (the description read out by screen readers) for each photo (checked 7 Nov 2026). They're listed in `docs/changes.md` under "Photos".
@@ -49,19 +49,20 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] **Privacy contact**: the clinic's email and phone (no named person), as approved 7 Nov 2026
 - [x] Google Forms: no longer linked (the June 2025 update was deleted on 7 Nov 2026)
 - [x] ~~Pages not linked from the menu~~: not needed (old addresses redirect)
-- [x] Privacy policy (approved 7 Nov 2026) and cancellation policy (8 hours' notice or full price)
+- [x] Privacy policy (approved 7 Nov 2026) and cancellation policy (12 hours' notice or full price, for all appointments and classes: Nicole, 13 Nov 2026; was 8 hours)
 - [x] **Fees**: taken from the Nookal booking page on 6 Nov 2026 (15 prices, GST included where it applies). Keep the site and Nookal in step: on /admin, Pages → Patient information → Fees
 - [x] **Class packages:** 10-class pack $380, 20-class pack $700, bought in the clinic (Nicole, 7 Nov 2026). On Patient information
 - [x] **Funding:** Nookal's appointment descriptions say private health, Medicare, DVA, NDIS and WorkCover are welcome, and out-of-pocket costs vary by payer. Now on Patient information; Nicole to confirm the wording
 - [x] **What to bring**: comfortable clothing; relevant health information such as referrals or scans; private health insurance and Medicare cards (owner, 7 Nov 2026)
 - [x] **Accessibility**: not shown on the site (owner's call, 7 Nov 2026). The field stays on /admin if wanted later
-- [x] **Class facts:** 4–5 people and 45 minutes (Nookal); cancellation is at least 8 hours' notice or the full cost is charged (Nicole, 7 Nov 2026). Confirm it covers one-on-one appointments too
+- [x] **Class facts:** 4–5 people and 45 minutes (Nookal); cancellation is now at least 12 hours' notice or the full cost is charged, for all appointments and classes (Nicole, 13 Nov 2026)
 - [x] **Grip socks:** available to buy in the clinic; no price on the site (Nicole, 7 Nov 2026)
 - [x] A photo of Jeff, the clinic dog (the team photo with Laura and Nicole)
 - [x] **Privacy policy**: reviewed and approved by Nicole (7 Nov 2026). AI note-taking line added; OAIC paragraph removed at her request. All information is stored within Australia (owner, 7 Nov 2026)
 - [x] Wording changes approved by Nicole (7 Nov 2026)
 
-- [ ] **Nookal: exercise therapy with Nicole.** The site now says exercise therapy (claimable as physiotherapy) is available with Nicole as well as Laura, but Nicole's online booking only lists exercise physiology sessions (checked 8 Nov 2026). Add 30- and 45-minute exercise therapy sessions to Nicole in Nookal (GST-free, like Laura's), or tell Claude if her prices differ from $95 and $125
+- [x] **Nookal: exercise therapy with Nicole.** Leave Nookal as is (13 Nov 2026): separate sessions would confuse patients when booking. Nicole changes the billing code in Nookal per patient if needed
+- [ ] **Nookal cancellation policy:** change Nookal's own policy text and any SMS reminders from 8 to 12 hours, to match the website
 
 ## Access (confirm who has it; don't store it here)
 
