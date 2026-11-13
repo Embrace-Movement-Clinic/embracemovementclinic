@@ -1,9 +1,12 @@
 ---
-// The "On this page" bar on service and class pages: links to the page's sections, sticky under
-// the header. Anchors land below both bars (see `html:has(.onpage)` in global.css). As the page
-// scrolls, the link for the section being read is marked (aria-current) and kept in view.
+// The "On this page" bar on service, class and patient information pages: links to the page's
+// sections, each with the small icon its section heading uses, sticky under the header. Anchors
+// land below both bars (see `html:has(.onpage)` in global.css). As the page scrolls, the link for
+// the section being read is marked (aria-current) and kept in view.
+import Icon, { type IconName } from './Icon.astro';
+
 interface Props {
-  links: { href: string; label: string }[];
+  links: { href: string; label: string; icon?: IconName }[];
 }
 
 const { links } = Astro.props;
@@ -15,7 +18,10 @@ const { links } = Astro.props;
       {
         links.map((l) => (
           <li>
-            <a href={l.href}>{l.label}</a>
+            <a href={l.href}>
+              {l.icon && <Icon name={l.icon} size={18} />}
+              <span>{l.label}</span>
+            </a>
           </li>
         ))
       }
@@ -89,6 +95,7 @@ const { links } = Astro.props;
   .onpage a {
     display: inline-flex;
     align-items: center;
+    gap: 0.45em;
     min-height: 2.5rem;
     padding: 0 0.95em;
     border-radius: var(--radius-pill);
@@ -105,6 +112,15 @@ const { links } = Astro.props;
 
   .onpage a:hover {
     background: var(--color-bg-alt);
+  }
+
+  /* Icons in the icon colour, like the section headings; they take the link colour when current. */
+  .onpage a :global(.icon) {
+    color: var(--color-icon);
+  }
+
+  .onpage a[aria-current] :global(.icon) {
+    color: inherit;
   }
 
   .onpage a[aria-current] {

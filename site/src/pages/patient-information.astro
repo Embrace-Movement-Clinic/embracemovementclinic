@@ -2,7 +2,7 @@
 // Patient information: practical facts gathered from the old newsletters and pages,
 // in one evergreen place. Facts live in src/data/policies.json and src/data/clinic.json;
 // this page's own text in src/content/pages/patient-information.md (edited on /admin).
-// Layout: an icon grid to jump to each topic, then one band per topic (alternating white and
+// Layout: the sticky "On this page" bar (OnPageNav) to jump to each topic, then one band per topic (alternating white and
 // mist), each headed by its icon, so the page scans as a set of short, visual sections.
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -10,7 +10,7 @@ import PageHero from '../components/PageHero.astro';
 import Button from '../components/Button.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
 import IconBadge from '../components/IconBadge.astro';
-import IconTile from '../components/IconTile.astro';
+import OnPageNav from '../components/OnPageNav.astro';
 import SectionHead from '../components/SectionHead.astro';
 import BookingTip from '../components/BookingTip.astro';
 import EmailAddress from '../components/EmailAddress.astro';
@@ -59,22 +59,11 @@ const factIcon = (label: string): IconName =>
     lede={p.intro}
   />
 
+  <OnPageNav links={sections.map((s) => ({ href: `#${s.id}`, label: s.label, icon: s.icon }))} />
+
   <div class="band band--first">
-    <div class="wrap jump-wrap">
+    <div class="wrap">
       <ClosureNote />
-      <nav aria-label="On this page">
-        <ul class="jump" role="list">
-          {
-            sections.map((s) => (
-              <li>
-                <IconTile href={`#${s.id}`} icon={s.icon}>
-                  {s.label}
-                </IconTile>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
     </div>
   </div>
 
@@ -310,60 +299,14 @@ const factIcon = (label: string): IconName =>
     padding-block: var(--space-m) 0;
   }
 
+  /* The first band only holds the closure note: drop it once the note is off or has expired
+     (expired notes are removed from the page), so there's no empty gap above Booking. */
+  .band--first:not(:has(.closure)) {
+    display: none;
+  }
+
   .band--alt {
     background: var(--color-bg-alt);
-  }
-
-  .jump-wrap {
-    display: grid;
-    gap: var(--space-m);
-  }
-
-  /* Jump grid: one icon tile per topic. */
-  .jump {
-    display: grid;
-    gap: var(--space-2xs);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* An odd last tile spans the row while there are two columns, so there's no gap. */
-  @media (max-width: 55.99em) {
-    .jump li:last-child:nth-child(odd) {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Four across only once each tile is wide enough for the longest label ("Cancellations"). */
-  @media (min-width: 56em) {
-    .jump {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 75em) {
-    .jump {
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-    }
-
-    .jump :global(.icon-tile) {
-      flex-direction: column;
-      justify-content: center;
-      min-height: 7.5rem;
-      padding: var(--space-xs);
-      text-align: center;
-    }
-
-    .jump :global(.icon-tile__label) {
-      flex: none;
-    }
-  }
-
-  /* Very narrow screens (320px phones, or 400% zoom): one tile per row, so the longest labels
-     ("Cancellations") stay inside their tiles. */
-  @media (max-width: 21.99em) {
-    .jump {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 
   .panel > h3 {

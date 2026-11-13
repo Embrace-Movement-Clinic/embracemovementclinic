@@ -7,7 +7,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import Button from '../components/Button.astro';
-import Icon from '../components/Icon.astro';
+import Icon, { type IconName } from '../components/Icon.astro';
 import IconBadge from '../components/IconBadge.astro';
 import SectionHead from '../components/SectionHead.astro';
 import OnPageNav from '../components/OnPageNav.astro';
@@ -53,10 +53,10 @@ const jsonLd = serviceNode({
   image: d.image ? new URL(`/og/services/${service.id}.jpg`, site.url).href : undefined,
 });
 const sections = [
-  { id: 'for-you', label: d.forYou.heading === 'Is this for you?' ? 'Is this for you?' : 'Conditions' },
-  ...(hasExpect ? [{ id: 'expect', label: 'What to expect' }] : []),
-  ...(d.treatments ? [{ id: 'treatment', label: 'Treatment' }] : []),
-  { id: 'who', label: 'Who you’ll see' },
+  { id: 'for-you', label: d.forYou.heading === 'Is this for you?' ? 'Is this for you?' : 'Conditions', icon: 'heart' as IconName },
+  ...(hasExpect ? [{ id: 'expect', label: 'What to expect', icon: 'calendar' as IconName }] : []),
+  ...(d.treatments ? [{ id: 'treatment', label: 'Treatment', icon: 'activity' as IconName }] : []),
+  { id: 'who', label: 'Who you’ll see', icon: 'users' as IconName },
 ];
 ---
 
@@ -82,7 +82,7 @@ const sections = [
     <Photo slot="aside" src={d.image} alt={d.imageAlt ?? ''} note={d.imageNote} position={d.imagePosition} ratio="4 / 3" loading="eager" sizes="(min-width: 56em) 45vw, 100vw" />
   </PageHero>
 
-  <OnPageNav links={sections.map((s) => ({ href: `#${s.id}`, label: s.label }))} />
+  <OnPageNav links={sections.map((s) => ({ href: `#${s.id}`, label: s.label, icon: s.icon }))} />
 
   {
     hasBody && (
