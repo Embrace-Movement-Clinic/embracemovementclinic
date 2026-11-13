@@ -60,8 +60,9 @@ No passwords or secrets are in the project. The pieces, all owned by the clinic:
 ## Launch steps for the editor (one-off)
 
 1. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`. The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor still saves to another branch, so this step can't be missed.
-2. **Optional approval step:** set `publish_mode` to `preview` or `editorial_workflow`, so each change waits as a draft with a preview link until Adrian approves it.
-3. Delete the old demo access token on GitHub, if one was made (*Settings → Developer settings → Personal access tokens → Fine-grained tokens*).
+2. Delete the old demo access token on GitHub, if one was made (*Settings → Developer settings → Personal access tokens → Fine-grained tokens*). Done (13 Nov 2026).
+
+**No approval step (owner, 13 Nov 2026):** staff edits go live straight away. Nicole is the only staff editor. If more editors join, consider `publish_mode: editorial_workflow` in `config.yml`, so each change waits as a draft until approved.
 
 ## Technical notes (for Claude Code)
 
