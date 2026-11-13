@@ -20,9 +20,9 @@ if (editorBranch === productionBranch) {
 } else if (building === productionBranch) {
   console.error(
     `✗ This is a build of the live site ("${productionBranch}"), but the website editor saves to "${editorBranch}".\n` +
-      `  Staff edits on /admin would not reach the live site. Change "branch:" in public/admin/config.yml to "${productionBranch}" (docs/editing.md, "Setting it up for launch").`,
+      `  Staff edits on /admin would not reach the live site. Change "branch:" in public/admin/config.yml to "${productionBranch}" (docs/editing.md, "Launch steps for the editor").`,
   );
   process.exit(1);
 } else {
-  console.log(`• Website editor saves to "${editorBranch}" (preview). Switch it to "${productionBranch}" at launch (docs/editing.md, "Setting it up for launch").`);
+  console.log(`• Website editor saves to "${editorBranch}" (preview). Switch it to "${productionBranch}" at launch (docs/editing.md, "Launch steps for the editor").`);
 }

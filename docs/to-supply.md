@@ -70,8 +70,8 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] Domain registrar / DNS: Crazy Domains (Web Address Registration), Premium DNS. Nicole's account; clean-up notes in `docs/domain-and-email-cleanup.md`
 - [x] Google Workspace (the clinic's email) is billed directly by Google, not through Squarespace (checked 7 Nov 2026), so cancelling Squarespace doesn't affect email
 - [ ] Free GitHub accounts for anyone who'll use the admin page (e.g. Nicole)
-- [ ] For the admin demo: a GitHub fine-grained access token (Adrian makes it; never stored in the project). See `docs/editing.md`
-- [ ] At launch: a GitHub OAuth app and the free Cloudflare login helper for "Sign in with GitHub" (Adrian, with Claude's help)
+- [x] ~~Admin demo access token~~: not needed now that "Sign in with GitHub" works (13 Nov 2026). Delete any demo token that was made
+- [x] "Sign in with GitHub" for /admin: GitHub App "Embrace Movement Clinic CMS" in the clinic's organisation and the free Cloudflare login helper (`sveltia-cms-auth`), set up by Adrian on 13 Nov 2026. See `docs/editing.md`
 - [x] Nookal online booking URL (supplied 19 Oct 2026; test a booking from the preview site before launch)
 - [ ] Google Business Profile (to update the website link and check the details match)
 - [ ] Analytics / Search Console

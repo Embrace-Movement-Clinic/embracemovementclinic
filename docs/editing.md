@@ -36,33 +36,32 @@ Empty fields like fees, what to bring or parking show a "TODO" note on the site 
 - **If a change doesn't appear** after five minutes, the site check probably stopped it (for example a link to a page that no longer exists). The live site stays as it was. Ask Claude to look at the latest Cloudflare deployment.
 - Mistakes are fine: every save is kept in the project history, so anything can be put back. Ask Claude to "restore the version from before my last change".
 
-## Trying it now (demo on the preview site)
+## Signing in
 
-The editor is currently connected to the **preview** branch (`claude/inspiring-curie-ccksq0`, since 13 Nov 2026), so changes only affect the preview site, not the live Squarespace site. Until the "Sign in with GitHub" login helper is set up (see below), sign in with an access token:
+Open the site's address followed by `/admin/` (with the slash at the end) and click **Sign in with GitHub**. The first time, GitHub asks you to authorise "Embrace Movement Clinic CMS": click **Authorize**. Anyone with write access to the repository can sign in; nobody else can. A sign-in lasts 8 hours and renews by itself; after about 6 months without using the editor, just sign in again.
 
-1. **Make a token** (Adrian, once): on GitHub, go to *Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token*.
-   - Name: `Embrace website editor demo`. Expiration: 30 days.
-   - Resource owner: **Embrace-Movement-Clinic** (the clinic's GitHub organisation, where the code has lived since 8 Nov 2026). If the organisation isn't offered, allow fine-grained tokens first: organisation *Settings → Personal access tokens*.
-   - Repository access: *Only select repositories* → `Embrace-Movement-Clinic/embracemovementclinic`.
-   - Permissions: *Repository permissions → Contents → Read and write*.
-   - Generate it and copy it. Treat it like a password: don't email it, and don't save it in the project.
-2. **Open the editor:** the preview site's address followed by `/admin/` (with the slash at the end). The preview address for this branch is listed in Cloudflare under the project's deployments.
-3. Choose **Sign In Using Access Token** and paste the token.
-4. **Make a change**, e.g. *Clinic settings → Clinic details → Opening hours → Add row*, then **Save**.
-5. After a minute or two, refresh the preview site to see it.
+Until launch, the editor is connected to the **preview** branch (`claude/inspiring-curie-ccksq0`, since 13 Nov 2026), so changes only affect the preview site, not the live Squarespace site. The preview's address is listed in Cloudflare under the Pages project's deployments. Each save is a real change on the preview branch: ask Claude to undo test edits if you don't want to keep them.
 
-Each demo save is a real change on the preview branch. Ask Claude to undo demo edits afterwards if you don't want to keep them.
+## How sign-in is set up (done 13 Nov 2026)
 
-## Setting it up for launch (one-off)
+No passwords or secrets are in the project. The pieces, all owned by the clinic:
 
-1. **Accounts:** a free GitHub account for each editor (e.g. Nicole). Add them to the repository (*Settings → Collaborators*) with write access.
-2. **"Sign in with GitHub"** needs a small, free login helper:
-   - Create a GitHub OAuth app (*GitHub → Settings → Developer settings → OAuth Apps*).
-   - Deploy Sveltia's login helper (`sveltia-cms-auth`) as a free Cloudflare Worker, following its instructions. The OAuth app's client ID and secret are stored as secrets in Cloudflare, never in the project.
-   - Put the Worker's address in `base_url` in `site/public/admin/config.yml`.
-3. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`. The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor still saves to another branch, so this step can't be missed.
-4. **Optional approval step:** set `publish_mode` to `preview` or `editorial_workflow`, so each change waits as a draft with a preview link until Adrian approves it.
-5. Delete the demo token on GitHub.
+| Piece | Where | What it does |
+|---|---|---|
+| GitHub App "Embrace Movement Clinic CMS" | GitHub → `Embrace-Movement-Clinic` organisation → Settings → Developer settings → GitHub Apps | Lets the editor act for the person signed in. Installed on the `embracemovementclinic` repository only. Permissions: Contents and Pull requests read and write |
+| Login helper `sveltia-cms-auth` | Cloudflare → Workers & Pages → `sveltia-cms-auth`, at `https://sveltia-cms-auth.twilight-haze-b8a5.workers.dev` | Does the GitHub sign-in for `/admin`. Its settings: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (stored as a Cloudflare secret) and `ALLOWED_DOMAINS` (the sites allowed to use it: `www.embracemovementclinic.com.au`, `embracemovementclinic-7at.pages.dev`, `*.embracemovementclinic-7at.pages.dev`) |
+| `base_url` | `site/public/admin/config.yml` | Points the editor at the login helper |
+
+- **New editor:** a free GitHub account, added to the repository with write access. Nothing else to set up.
+- **Someone leaves:** remove their access to the repository. To sign everyone out at once: the GitHub App's General page → **Revoke all user tokens**.
+- **Client secret lost or leaked:** in the GitHub App, Credentials → make a new client secret, put it in the login helper's `GITHUB_CLIENT_SECRET` in Cloudflare, then delete the old one in GitHub.
+- **Site address changes** (a new domain or Pages project): add it to `ALLOWED_DOMAINS` in the login helper's settings, or sign-in from there is refused.
+
+## Launch steps for the editor (one-off)
+
+1. **Point the editor at the live site:** change `branch` in `config.yml` from the preview branch to `main`. The build checks this (`site/scripts/check-cms-branch.mjs`): a build of the live site stops with a clear message if the editor still saves to another branch, so this step can't be missed.
+2. **Optional approval step:** set `publish_mode` to `preview` or `editorial_workflow`, so each change waits as a draft with a preview link until Adrian approves it.
+3. Delete the old demo access token on GitHub, if one was made (*Settings → Developer settings → Personal access tokens → Fine-grained tokens*).
 
 ## Technical notes (for Claude Code)
 

@@ -8,9 +8,10 @@ backend:
   repo: Embrace-Movement-Clinic/embracemovementclinic
   # Demo: the preview branch. Change to `main` at launch.
   branch: claude/inspiring-curie-ccksq0
-  # "Sign in with GitHub" needs a small login helper (a Cloudflare Worker). Until it's set up,
-  # sign in with a GitHub access token instead. See docs/editing.md.
-  # base_url: https://embrace-cms-auth.<your-account>.workers.dev
+  # "Sign in with GitHub": Sveltia's login helper (sveltia-cms-auth), a Cloudflare Worker in the
+  # clinic's Cloudflare account, using the clinic's GitHub App "Embrace Movement Clinic CMS".
+  # Set up 13 Nov 2026. See docs/editing.md.
+  base_url: https://sveltia-cms-auth.twilight-haze-b8a5.workers.dev
 
 site_url: https://www.embracemovementclinic.com.au
 logo:
