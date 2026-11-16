@@ -115,7 +115,11 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
       <span>{`© ${site.name}`}</span>
       {abn ? <span>· ABN {abn}</span> : <Todo>ABN</Todo>}
     </p>
-    <a href="/privacy">Privacy policy</a>
+    <p>
+      {/* Shown by MotionBackdrop's script once a background loop is playing; stops them all (WCAG 2.2.2). */}
+      <button type="button" class="site-footer__motion" data-motion-pause hidden>Pause animation</button>
+      <a href="/privacy">Privacy policy</a>
+    </p>
   </div>
 </footer>
 
@@ -247,5 +251,31 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
     flex-wrap: wrap;
     align-items: center;
     gap: 0.4em;
+  }
+
+  .site-footer__base p:last-child {
+    gap: var(--space-2xs) var(--space-m);
+  }
+
+  /* A plain text control that reads as one of the footer's links. */
+  .site-footer__motion {
+    padding: 0.25em 0;
+    border: 0;
+    background: none;
+    color: var(--color-link);
+    font: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 0.07em;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  .site-footer__motion[hidden] {
+    display: none;
+  }
+
+  .site-footer__motion:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
   }
 </style>

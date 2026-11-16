@@ -19,8 +19,8 @@ const hasAside = Astro.slots.has('aside');
 ---
 
 <section class:list={['page-hero', `page-hero--${tone}`, { 'on-brand': tone === 'brand', 'curve-bottom': curve, 'has-motion': tone === 'light' }]} aria-labelledby="page-title">
-  {/* Light headers get the pale "mist" loop behind them. */}
-  {tone === 'light' && <MotionBackdrop loop="mist" />}
+  {/* Light headers get the pale Glow loop behind them. */}
+  {tone === 'light' && <MotionBackdrop loop="light" />}
   <div class:list={['wrap', 'page-hero__grid', { 'page-hero__grid--split': hasAside }]}>
     <div class="page-hero__text">
       {crumbs && <Breadcrumbs items={crumbs} onBrand={tone === 'brand'} />}
