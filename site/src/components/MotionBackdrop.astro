@@ -1,0 +1,173 @@
+---
+// Decorative looping video behind a section's content: the home hero, a page header or the
+// booking band. Files live in site/public/media/motion/.
+//
+// Usage: add the `has-motion` class to the section and put this first inside it.
+//   <section class="on-brand hero curve-bottom has-motion">
+//     <MotionBackdrop loop="silk" />
+//     …
+//
+// Behaviour, by design:
+// - Nothing is downloaded until the section is near the screen, so it doesn't slow the first paint.
+// - With "reduce motion" or data saver switched on, no video loads and the section looks as it does today.
+// - It plays only while on screen, and a small button lets anyone pause it (WCAG 2.2.2).
+// - The video is hidden from assistive technology: it carries no information.
+interface Props {
+  /** silk: petrol hero · mist: light page headers · tide: booking band */
+  loop: 'silk' | 'mist' | 'tide';
+  /** Which part of the video to keep when it's cropped (CSS object-position). */
+  position?: string;
+}
+
+const loops = {
+  silk: { wide: 'silk-1080', narrow: 'silk-portrait-720', position: '50% 50%' },
+  mist: { wide: 'mist-1080', narrow: 'mist-720', position: '100% 50%' },
+  tide: { wide: 'tide-1920', narrow: 'tide-1280', position: '50% 100%' },
+} as const;
+
+const { loop, position } = Astro.props;
+const set = loops[loop];
+const base = '/media/motion';
+// Matches the site's 56em breakpoint (one-column layouts below it).
+const narrow = '(max-width: 55.99em)';
+---
+
+<div class="motion" data-motion aria-hidden="true">
+  <video muted loop playsinline preload="none" tabindex="-1" disablepictureinpicture disableremoteplayback style={`object-position: ${position ?? set.position}`}>
+    <source data-src={`${base}/${set.narrow}.webm`} type="video/webm" media={narrow} />
+    <source data-src={`${base}/${set.narrow}.mp4`} type="video/mp4" media={narrow} />
+    <source data-src={`${base}/${set.wide}.webm`} type="video/webm" />
+    <source data-src={`${base}/${set.wide}.mp4`} type="video/mp4" />
+  </video>
+</div>
+<button type="button" class="motion-toggle" data-motion-toggle hidden aria-label="Pause background animation">
+  <svg class="motion-toggle__pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1"></rect><rect x="9.5" y="2" width="3.5" height="12" rx="1"></rect></svg>
+  <svg class="motion-toggle__play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11a.6.6 0 0 0 .9.5l9-5.5a.6.6 0 0 0 0-1l-9-5.5a.6.6 0 0 0-.9.5Z"></path></svg>
+</button>
+
+<style is:global>
+  /* The section that holds a MotionBackdrop. Its own background colour shows until the video starts. */
+  .has-motion {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .motion {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease);
+  }
+
+  .motion.is-playing {
+    opacity: 1;
+  }
+
+  .motion video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .motion-toggle {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--space-s);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, currentColor 10%, transparent);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .motion-toggle[hidden] {
+    display: none;
+  }
+
+  .motion-toggle:hover {
+    background: color-mix(in srgb, currentColor 20%, transparent);
+  }
+
+  .motion-toggle:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  /* Keep the button clear of the curve at the bottom of page headers. */
+  .curve-bottom > .motion-toggle {
+    bottom: calc(var(--curve) + var(--space-2xs));
+  }
+
+  .motion-toggle__play,
+  .motion-toggle[data-paused] .motion-toggle__pause {
+    display: none;
+  }
+
+  .motion-toggle[data-paused] .motion-toggle__play {
+    display: block;
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+
+  if (!reduce && !saveData && 'IntersectionObserver' in window) {
+    document.querySelectorAll<HTMLElement>('[data-motion]').forEach((root) => {
+      const video = root.querySelector('video');
+      const toggle = root.parentElement?.querySelector<HTMLButtonElement>(':scope > [data-motion-toggle]');
+      if (!video || !toggle) return;
+
+      let loaded = false;
+      let onScreen = false;
+      let userPaused = false;
+
+      const sync = () => {
+        if (onScreen && !userPaused) {
+          if (!loaded) {
+            // Hand the browser the real sources only now, so nothing downloads before it's needed.
+            video.querySelectorAll('source').forEach((s) => s.setAttribute('src', s.dataset.src ?? ''));
+            video.load();
+            loaded = true;
+          }
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      };
+
+      video.addEventListener(
+        'playing',
+        () => {
+          root.classList.add('is-playing');
+          toggle.hidden = false;
+        },
+        { once: true },
+      );
+
+      toggle.addEventListener('click', () => {
+        userPaused = !userPaused;
+        toggle.toggleAttribute('data-paused', userPaused);
+        toggle.setAttribute('aria-label', userPaused ? 'Play background animation' : 'Pause background animation');
+        sync();
+      });
+
+      new IntersectionObserver(
+        (entries) => {
+          onScreen = entries.some((e) => e.isIntersecting);
+          sync();
+        },
+        { rootMargin: '200px' },
+      ).observe(root);
+    });
+  }
+</script>
