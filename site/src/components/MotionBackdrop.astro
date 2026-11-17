@@ -20,8 +20,8 @@
 //   the heading and photo, decide the page's speed score. A canvas isn't counted.
 // - With "reduce motion" or data saver on, or on a 2g-class connection, nothing loads and the
 //   section keeps its plain background.
-// - Each loop plays by itself, only while it is on screen. There is no control on the section;
-//   the footer's "Pause animation" link stops them all (WCAG 2.2.2).
+// - Each loop plays by itself, only while it is on screen and the tab is visible. There is no
+//   control on the section; the footer's "Pause animation" link stops them all (WCAG 2.2.2).
 // - It is hidden from assistive technology: it carries no information.
 import heroWide from '../assets/motion/glow-hero.mp4?url';
 import heroTall from '../assets/motion/glow-hero-tall.mp4?url';
@@ -151,7 +151,8 @@ const set = loops[loop];
         });
 
         const sync = () => {
-          const want = onScreen && !userPaused;
+          // Also stop while the tab is in the background, so a hidden page doesn't keep decoding.
+          const want = onScreen && !userPaused && !document.hidden;
           if (want && !requested) {
             requested = true;
             fetch(url)
@@ -180,6 +181,8 @@ const set = loops[loop];
           { rootMargin: '200px' },
         ).observe(root);
       });
+
+      document.addEventListener('visibilitychange', () => syncs.forEach((sync) => sync()));
 
       pause?.addEventListener('click', () => {
         userPaused = !userPaused;
