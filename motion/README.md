@@ -1,7 +1,13 @@
-# Background motion ("Glow")
+# Background motion
 
-`glow.py` draws the site's background loops: soft pools of light that drift slowly, in the
-site palette. The finished files live in `site/src/assets/motion/` and are placed by
+Two looks, both drawn from the site palette:
+
+- **Glow** (`glow.py`): soft pools of light that drift slowly. Used on petrol: the home hero
+  and the booking band.
+- **Mist** (`mist/`): a fine teal ribbon that turns slowly over the pale mist background. Used
+  behind the light page headers. Chosen by the owner on 17 Nov 2026 over a pale Glow.
+
+The finished files live in `site/src/assets/motion/` and are placed by
 `site/src/components/MotionBackdrop.astro`. Because they sit in `src/assets`, the build gives
 each one a hashed name under `/_astro/`, which the site already caches for a year. Replace a
 file and its address changes, so visitors never see a stale copy.
@@ -9,12 +15,12 @@ file and its address changes, so visitors never see a stale copy.
 | File | Used for | Size |
 |---|---|---|
 | `glow-hero.mp4` / `glow-hero-tall.mp4` | Home hero (desktop / phone) | 2560×1440 / 1080×1920 |
-| `glow-light.mp4` / `glow-light-tall.mp4` | Light page headers | 2560×1080 / 1080×1350 |
+| `mist-header.mp4` / `mist-header-tall.mp4` | Light page headers | 2560×1080 / 1080×1350 |
 | `glow-band.mp4` / `glow-band-tall.mp4` | Booking band | 2560×640 / 1080×1080 |
 
-All are silent, 20 seconds, 30 frames a second, and loop without a join.
+All are silent, 30 frames a second, and loop without a join: Glow loops are 20 seconds, Mist 16.
 
-## Re-rendering
+## Re-rendering Glow
 
 Needs Python with `numpy` and `opencv-python`, and `ffmpeg`. Colours and the position of each
 pool are at the top of `glow.py`.
@@ -32,8 +38,26 @@ For the phone-sized (`-tall`) files add `-refs 4 -level 4.0`, so older phones ca
 The fine grain in the picture is deliberate: it keeps the gradients smooth. Compressing harder
 than `-crf 21`, or filtering the grain out, brings back visible bands.
 
-Keep text readable: white text needs 4.5:1 over the petrol loops and muted text 4.5:1 over the
-light one. The current files measure at least 4.6:1 everywhere, through the whole loop.
+Keep text readable: white text needs 4.5:1 over the petrol loops. The current files measure at
+least 4.6:1 everywhere, through the whole loop.
+
+## Re-rendering Mist
+
+`mist/scenes.html` draws the ribbon on a canvas; `mist/render.py` films it in headless Chrome
+(Python with Playwright, plus `ffmpeg`). The colours are at the top of `scenes.html`.
+
+```
+python3 mist/render.py stills 2560 1080 0 0,0.5           # two frames, to look at
+python3 mist/render.py video 2560 1080 0 16 master-mist.mp4
+python3 mist/render.py video 1080 1350 0 16 master-mist-tall.mp4
+```
+
+Encode as for Glow, but with `keyint=480:min-keyint=480` (the loop is 480 frames).
+
+The ribbon is too strong for grey body text to sit on, so the video has no fade baked in.
+Instead `PageHero.astro` lays a wash of the background colour over the text column: 72% behind
+the column on wider screens, fading out after it, and 65% over the whole header on phones. With
+that, muted text measures at least 4.7:1 over every frame. If you change the ribbon, re-measure.
 
 ## How the page plays them (and why)
 

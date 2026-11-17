@@ -51,6 +51,8 @@ VARIANTS = {
         (0.10, 0.98, 0.45, 0.30, 0.0, P["petrol950"], 0.75, 0.040, 0.020, 0.00, 0.05, 0.05, 5.1, 1),
         (0.90, 0.05, 0.40, 0.20, 0.3, P["petrol800"], 0.60, 0.060, 0.025, 0.10, 0.08, 0.08, 0.7, 1),
     ]),
+    # "light" and "light-tall" aren't used on the site: the owner chose Mist (motion/mist/) for the
+    # light page headers on 17 Nov 2026. Kept so the pale Glow can be rendered again if wanted.
     "light": dict(size=(2560, 1080), base="mist", grain=1.1, veil=None, pools=[
         (0.22, 0.20, 0.42, 0.26, 0.0, P["white"], 0.90, 0.040, 0.050, 0.00, 0.06, 0.05, 3.0, 1),
         (0.78, 0.36, 0.42, 0.24, -0.4, P["teal100"], 0.95, 0.050, 0.060, 0.10, 0.06, 0.05, 0.0, 1),
