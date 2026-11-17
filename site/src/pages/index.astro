@@ -15,6 +15,7 @@ import ServiceGrid from '../components/ServiceGrid.astro';
 import StepStrip from '../components/StepStrip.astro';
 import Icon from '../components/Icon.astro';
 import IconTile from '../components/IconTile.astro';
+import MotionBackdrop from '../components/MotionBackdrop.astro';
 import Todo from '../components/Todo.astro';
 import { site } from '../data/site';
 import { clinicId, clinicNode } from '../data/schema';
@@ -53,7 +54,8 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <!-- Hero: what, where, who for -->
-  <section class="on-brand hero curve-bottom" aria-labelledby="hero-h">
+  <section class="on-brand hero curve-bottom has-motion" aria-labelledby="hero-h">
+    <MotionBackdrop loop="hero" />
     <div class="wrap hero__grid">
       <div class="hero__text">
         <h1 id="hero-h">{home.heroTitle}</h1>

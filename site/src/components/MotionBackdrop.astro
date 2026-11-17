@@ -1,0 +1,197 @@
+---
+// A slow, silent loop behind a section's content: "Glow" (soft light on petrol) for the home hero
+// and booking band, "Mist" (a fine teal ribbon on the pale mist background) for the light page
+// headers. They're drawn from the site palette by motion/glow.py and motion/mist/, and live in
+// site/src/assets/motion/, so the build gives each file a hashed name it can cache for a year.
+//
+// Usage: add the `has-motion` class to the section and put this first inside it.
+//   <section class="on-brand hero curve-bottom has-motion">
+//     <MotionBackdrop loop="hero" />
+//     …
+//
+// How it works, and why:
+// - Nothing downloads until the page has finished loading and the section is near the screen,
+//   so the loops never compete with the page's own text, fonts and photos.
+// - The script picks ONE file (wide or tall), downloads it whole, and plays it from memory.
+//   Playing from memory means it doesn't depend on the host answering partial ("range")
+//   requests, which Safari and every iOS browser need before they will play a video.
+// - The video is painted onto a <canvas>, not shown as a <video>. Browsers count a large
+//   <video> as the page's "largest contentful paint", which would make this decoration, not
+//   the heading and photo, decide the page's speed score. A canvas isn't counted.
+// - With "reduce motion" or data saver on, or on a 2g-class connection, nothing loads and the
+//   section keeps its plain background.
+// - Each loop plays by itself, only while it is on screen and the tab is visible. There is no
+//   control on the section; the footer's "Pause animation" link stops them all (WCAG 2.2.2).
+// - It is hidden from assistive technology: it carries no information.
+import heroWide from '../assets/motion/glow-hero.mp4?url';
+import heroTall from '../assets/motion/glow-hero-tall.mp4?url';
+import lightWide from '../assets/motion/mist-header.mp4?url';
+import lightTall from '../assets/motion/mist-header-tall.mp4?url';
+import bandWide from '../assets/motion/glow-band.mp4?url';
+import bandTall from '../assets/motion/glow-band-tall.mp4?url';
+
+interface Props {
+  /** hero: petrol home hero (Glow) · light: pale page headers (Mist) · band: petrol booking band (Glow) */
+  loop: 'hero' | 'light' | 'band';
+  /** Which part of the picture to keep when it's cropped (CSS object-position). */
+  position?: string;
+}
+
+const loops = {
+  hero: { wide: heroWide, tall: heroTall, position: '50% 50%', fade: false },
+  light: { wide: lightWide, tall: lightTall, position: '50% 50%', fade: false },
+  // The band sits straight on top of the footer, so its loop fades out towards the bottom edge
+  // and the two petrol areas still read as one.
+  band: { wide: bandWide, tall: bandTall, position: '50% 50%', fade: true },
+} as const;
+
+const { loop, position } = Astro.props;
+const set = loops[loop];
+---
+
+<div class:list={['motion', { 'motion--fade': set.fade }]} data-motion data-wide={set.wide} data-tall={set.tall} aria-hidden="true">
+  <canvas style={`object-position: ${position ?? set.position}`}></canvas>
+</div>
+
+<style is:global>
+  /* The section that holds a MotionBackdrop. Its own background colour shows until the loop starts. */
+  .has-motion {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .motion {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.6s var(--ease);
+  }
+
+  .motion.is-playing {
+    opacity: 1;
+  }
+
+  .motion canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .motion--fade canvas {
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+  }
+</style>
+
+<script>
+  type Connection = { saveData?: boolean; effectiveType?: string };
+  const connection = (navigator as Navigator & { connection?: Connection }).connection;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Only the slowest class is skipped. Browsers also report "3g" for good connections with a slow
+  // first hop (a VPN or office proxy), so skipping that would hide the loops for no good reason.
+  const slow = connection?.saveData === true || /(^|-)2g$/.test(connection?.effectiveType ?? '');
+
+  if (!reduce && !slow && 'IntersectionObserver' in window) {
+    const start = () => {
+      const pause = document.querySelector<HTMLButtonElement>('[data-motion-pause]');
+      // Matches the site's 56em breakpoint (one-column layouts below it).
+      const tall = window.matchMedia('(max-width: 55.99em)').matches;
+      let userPaused = false;
+      const syncs: Array<() => void> = [];
+
+      document.querySelectorAll<HTMLElement>('[data-motion]').forEach((root) => {
+        const canvas = root.querySelector('canvas');
+        const ctx = canvas?.getContext('2d', { alpha: false });
+        const url = tall ? root.dataset.tall : root.dataset.wide;
+        if (!canvas || !ctx || !url) return;
+
+        // The video itself never joins the page: it only feeds the canvas.
+        const video = document.createElement('video');
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+
+        let requested = false;
+        let ready = false;
+        let onScreen = false;
+        let drawing = false;
+        let lastTime = -1;
+
+        const draw = () => {
+          if (video.paused || video.ended) {
+            drawing = false;
+            return;
+          }
+          if (video.currentTime !== lastTime && video.readyState >= 2 && video.videoWidth > 0) {
+            lastTime = video.currentTime;
+            if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+            }
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            if (!root.classList.contains('is-playing')) {
+              root.classList.add('is-playing');
+              if (pause) pause.hidden = false;
+            }
+          }
+          requestAnimationFrame(draw);
+        };
+
+        video.addEventListener('playing', () => {
+          if (!drawing) {
+            drawing = true;
+            requestAnimationFrame(draw);
+          }
+        });
+
+        const sync = () => {
+          // Also stop while the tab is in the background, so a hidden page doesn't keep decoding.
+          const want = onScreen && !userPaused && !document.hidden;
+          if (want && !requested) {
+            requested = true;
+            fetch(url)
+              .then((response) => (response.ok ? response.blob() : Promise.reject(new Error(String(response.status)))))
+              .then((blob) => {
+                // iOS loads nothing until play() is called, so don't wait for a "loaded" event.
+                video.src = URL.createObjectURL(blob);
+                ready = true;
+                sync();
+              })
+              .catch(() => {
+                // No loop is fine: the section keeps its plain background.
+              });
+          }
+          if (!ready) return;
+          if (want) video.play().catch(() => {});
+          else video.pause();
+        };
+        syncs.push(sync);
+
+        new IntersectionObserver(
+          (entries) => {
+            onScreen = entries.some((e) => e.isIntersecting);
+            sync();
+          },
+          { rootMargin: '200px' },
+        ).observe(root);
+      });
+
+      document.addEventListener('visibilitychange', () => syncs.forEach((sync) => sync()));
+
+      pause?.addEventListener('click', () => {
+        userPaused = !userPaused;
+        pause.textContent = userPaused ? 'Play animation' : 'Pause animation';
+        syncs.forEach((sync) => sync());
+      });
+    };
+
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  }
+</script>

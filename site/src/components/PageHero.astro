@@ -2,6 +2,7 @@
 // Inner-page hero: breadcrumbs, eyebrow, title, lede, actions (slot "actions"),
 // optional side content (slot "aside", e.g. a photo). Brand (dark) or light background.
 import Breadcrumbs from './Breadcrumbs.astro';
+import MotionBackdrop from './MotionBackdrop.astro';
 
 interface Props {
   title: string;
@@ -17,7 +18,9 @@ const { title, eyebrow, lede, crumbs, tone = 'light', curve = true } = Astro.pro
 const hasAside = Astro.slots.has('aside');
 ---
 
-<section class:list={['page-hero', `page-hero--${tone}`, { 'on-brand': tone === 'brand', 'curve-bottom': curve }]} aria-labelledby="page-title">
+<section class:list={['page-hero', `page-hero--${tone}`, { 'on-brand': tone === 'brand', 'curve-bottom': curve, 'has-motion': tone === 'light' }]} aria-labelledby="page-title">
+  {/* Light headers get the Mist loop behind them, with a scrim behind the text (styles below). */}
+  {tone === 'light' && <MotionBackdrop loop="light" />}
   <div class:list={['wrap', 'page-hero__grid', { 'page-hero__grid--split': hasAside }]}>
     <div class="page-hero__text">
       {crumbs && <Breadcrumbs items={crumbs} onBrand={tone === 'brand'} />}
@@ -74,6 +77,30 @@ const hasAside = Astro.slots.has('aside');
 
   .page-hero--light {
     background: var(--color-bg-alt);
+  }
+
+  /* The Mist loop's ribbon is too strong to sit behind grey body text, so a soft wash of the
+     background colour covers the text column and fades out after it. It follows the column, not
+     a fixed share of the video, so text stays readable at every width (at least 4.5:1 for muted
+     text, measured across the whole loop): 72% behind the column on wider screens, then a fade;
+     65% over the whole header on phones, where the text runs full width. */
+  .page-hero--light :global(.motion)::after {
+    --text-end: calc(max(var(--gutter), (100% - var(--wrap)) / 2) + 44rem);
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-bg-alt) 72%, transparent) 0,
+      color-mix(in srgb, var(--color-bg-alt) 72%, transparent) var(--text-end),
+      transparent calc(var(--text-end) + 22rem)
+    );
+  }
+
+  @media (max-width: 55.99em) {
+    .page-hero--light :global(.motion)::after {
+      background: color-mix(in srgb, var(--color-bg-alt) 65%, transparent);
+    }
   }
 
   .page-hero__grid {

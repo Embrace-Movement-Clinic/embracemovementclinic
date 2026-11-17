@@ -1,6 +1,7 @@
 ---
 // Closing call to action used at the end of most pages.
 import Button from './Button.astro';
+import MotionBackdrop from './MotionBackdrop.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -19,7 +20,8 @@ const {
 } = Astro.props;
 ---
 
-<section class="on-brand band" aria-labelledby="band-h">
+<section class="on-brand band has-motion" aria-labelledby="band-h">
+  <MotionBackdrop loop="band" />
   <div class="wrap band__inner">
     <div class="band__text">
       <h2 id="band-h">{title}</h2>
