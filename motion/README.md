@@ -49,3 +49,27 @@ light one. The current files measure at least 4.6:1 everywhere, through the whol
   the hero photo.
 - **Picks one file in script** (wide, or tall below the 56em breakpoint). With two `<source>`
   elements, Lighthouse's phone run downloaded both files (5.6 MB).
+
+## Checks on the preview, 17 Nov 2026
+
+Lighthouse (PageSpeed Insights) against the preview branch, with the live `main` build for comparison:
+
+| Page | Device | Performance | Accessibility | Best practices | LCP | Page weight |
+|---|---|---|---|---|---|---|
+| Home, with Glow | Phone | 99 | 100 | 96 | 2.0 s | 2.1 MB |
+| Home, with Glow | Desktop | 100 | 100 | 96 | 0.5 s | 3.8 MB |
+| Patient information, with Glow | Phone | 100 | 100 | 96 | 0.9 s | 1.5 MB |
+| Patient information, with Glow | Desktop | 100 | 100 | 96 | 0.5 s | 2.6 MB |
+| Home on `main`, no loops | Phone | 99 | 100 | 100 | 2.1 s | 0.2 MB |
+| Home on `main`, no loops | Desktop | 100 | 100 | 100 | 0.5 s | 0.3 MB |
+
+- Total blocking time 0 ms and layout shift 0 on every run. The LCP element is the hero photo
+  or the heading, never the loop.
+- Best practices is 96 on the preview because Cloudflare's own analytics beacon logs a console
+  error on the preview address. `main` doesn't log it. Check again after merging.
+- SEO reads 69 on every pages.dev address, `main` included, because those addresses are
+  deliberately kept out of search results (`site/public/_headers`).
+- In Chrome on a desktop: each loop downloads once, plays, pauses off screen, and stops and
+  restarts from the footer link. No console errors from the site.
+- Not tested: Safari and iPhone or iPad. Play-from-memory is there for them, but nobody has
+  looked at the preview on one yet.
