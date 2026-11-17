@@ -17,7 +17,7 @@
 // - The video is painted onto a <canvas>, not shown as a <video>. Browsers count a large
 //   <video> as the page's "largest contentful paint", which would make this decoration, not
 //   the heading and photo, decide the page's speed score. A canvas isn't counted.
-// - With "reduce motion" or data saver on, or on a very slow connection, nothing loads and the
+// - With "reduce motion" or data saver on, or on a 2g-class connection, nothing loads and the
 //   section keeps its plain background.
 // - Each loop plays by itself, only while it is on screen. There is no control on the section;
 //   the footer's "Pause animation" link stops them all (WCAG 2.2.2).
@@ -90,7 +90,9 @@ const set = loops[loop];
   type Connection = { saveData?: boolean; effectiveType?: string };
   const connection = (navigator as Navigator & { connection?: Connection }).connection;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const slow = connection?.saveData === true || /(^|-)(2g|3g)$/.test(connection?.effectiveType ?? '');
+  // Only the slowest class is skipped. Browsers also report "3g" for good connections with a slow
+  // first hop (a VPN or office proxy), so skipping that would hide the loops for no good reason.
+  const slow = connection?.saveData === true || /(^|-)2g$/.test(connection?.effectiveType ?? '');
 
   if (!reduce && !slow && 'IntersectionObserver' in window) {
     const start = () => {
