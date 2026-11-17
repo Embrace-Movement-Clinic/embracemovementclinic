@@ -87,6 +87,9 @@ Lighthouse (PageSpeed Insights) against the preview branch, with the live `main`
 | Home on `main`, no loops | Phone | 99 | 100 | 100 | 2.1 s | 0.2 MB |
 | Home on `main`, no loops | Desktop | 100 | 100 | 100 | 0.5 s | 0.3 MB |
 
+- The patient information rows were measured with the pale Glow header, before Mist replaced
+  it later on 17 Nov. The Mist header files are heavier (3.3 MB desktop, 2.0 MB phone, against
+  2.6 MB and 1.5 MB), so re-run Lighthouse on a light-header page before merging.
 - Total blocking time 0 ms and layout shift 0 on every run. The LCP element is the hero photo
   or the heading, never the loop.
 - Best practices is 96 on the preview because Cloudflare's own analytics beacon logs a console
