@@ -102,8 +102,6 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
     <Footer />
     {designTools && <PreviewBar />}
     <script>
-      // Closure notes repeat the notice banner; like the banner, they go once its end date has passed
-      // (Brisbane time), even before the site is next rebuilt.
       // Nookal links typed into posts or bios, and every page link inside a news post (e.g. the
       // timetable), open in a new tab, so readers keep their place. Phone, text and email links don't.
       document.querySelectorAll<HTMLAnchorElement>('a[href*=".nookal.com/"]:not([target]), .post-body a[href^="/"]:not([target])').forEach((a) => {
@@ -114,6 +112,8 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
         note.textContent = ' (opens in a new tab)';
         a.appendChild(note);
       });
+      // Anything shown until a date (closure notes, practitioner statuses, service availability notes)
+      // goes once that date has passed (Brisbane time), even before the site is next rebuilt.
       document.querySelectorAll('[data-hide-after]').forEach((el) => {
         const date = el.getAttribute('data-hide-after');
         if (date && new Date() > new Date(`${date}T23:59:59+10:00`)) el.remove();

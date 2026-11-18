@@ -90,7 +90,7 @@ const hasSocials = Boolean(socials.instagram || socials.facebook);
         hours ? (
           <HoursList hours={hours} />
         ) : (
-          <Todo>opening hours</Todo>
+          <Todo live="Call us for current opening hours.">opening hours</Todo>
         )
       }
       {site.notice.active && <p class="site-footer__note" data-hide-after={site.notice.until || undefined}>{site.notice.message}</p>}

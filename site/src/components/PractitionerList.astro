@@ -3,6 +3,7 @@
 import { getEntries, type CollectionEntry } from 'astro:content';
 import Photo from './Photo.astro';
 import Icon from './Icon.astro';
+import { isPast } from '../data/site';
 
 interface Props {
   refs: { collection: 'team'; id: string }[];
@@ -28,7 +29,11 @@ const people = (await getEntries(Astro.props.refs)) as CollectionEntry<'team'>[]
               </>
             ))}
           </p>
-          {p.data.status && <p class="status-pill person__status">{p.data.status}</p>}
+          {p.data.status && !isPast(p.data.statusUntil) && (
+            <p class="status-pill person__status" data-hide-after={p.data.statusUntil}>
+              {p.data.status}
+            </p>
+          )}
         </div>
         <Icon name="chevron-right" size={20} class="person__chev" />
       </li>

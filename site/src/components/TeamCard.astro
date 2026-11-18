@@ -2,6 +2,7 @@
 // Practitioner card: photo, name, titles, status, link to the profile.
 import type { CollectionEntry } from 'astro:content';
 import PhotoCard from './PhotoCard.astro';
+import { isPast } from '../data/site';
 
 interface Props {
   member: CollectionEntry<'team'>;
@@ -11,7 +12,9 @@ interface Props {
 }
 
 const { member, ratio = '1 / 1', sizes = '(min-width: 62em) 24rem, (min-width: 40em) 50vw, 100vw' } = Astro.props;
-const { name, titles, status, photo, photoPosition, photoNote } = member.data;
+const { name, titles, status, statusUntil, photo, photoPosition, photoNote } = member.data;
+// The status (e.g. leave dates) goes after its end date: at build time, and on the day in the browser.
+const showStatus = status && !isPast(statusUntil);
 ---
 
 <PhotoCard href={`/team/${member.id}`} image={photo} imageNote={photoNote} imagePosition={photoPosition} ratio={ratio} sizes={sizes} more="View profile">
@@ -24,7 +27,7 @@ const { name, titles, status, photo, photoPosition, photoNote } = member.data;
       </>
     ))}
   </p>
-  {status && <p class="status-pill">{status}</p>}
+  {showStatus && <p class="status-pill" data-hide-after={statusUntil}>{status}</p>}
 </PhotoCard>
 
 <style>

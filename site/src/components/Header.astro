@@ -132,18 +132,24 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-disclosure]');
 
   // Make the bar fit. With enlarged text or letter spacing its contents can outgrow it; rather than
-  // let the page scroll sideways, drop the least important items step by step (see .fit-1 to .fit-3).
+  // let the page scroll sideways, drop the least important items step by step (see .fit-1 to .fit-3),
+  // and as a last resort give Book now a row of its own under the logo and menu (.fit-4). The
+  // header is then taller than --header-h, so --header-h is set to its real height while that
+  // lasts, keeping the sticky "On this page" bar and anchor offsets below it.
   const bar = header?.querySelector<HTMLElement>('.site-header__bar');
   const actions = header?.querySelector<HTMLElement>('.site-header__actions');
   if (header && bar && actions) {
-    const steps = ['fit-1', 'fit-2', 'fit-3'];
+    const steps = ['fit-1', 'fit-2', 'fit-3', 'fit-4'];
+    const root = document.documentElement;
     const overflows = () => actions.getBoundingClientRect().right > bar.getBoundingClientRect().right + 0.5;
     const fit = () => {
       header.classList.remove(...steps);
+      root.style.removeProperty('--header-h');
       for (const step of steps) {
         if (!overflows()) break;
         header.classList.add(step);
       }
+      if (header.classList.contains('fit-4')) root.style.setProperty('--header-h', `${Math.ceil(header.getBoundingClientRect().height)}px`);
     };
     const watcher = new ResizeObserver(fit);
     for (const el of [bar, actions, header.querySelector('.desk-nav')]) if (el) watcher.observe(el);
@@ -296,6 +302,34 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
 
   .site-header.fit-3 .site-header__call {
     display: none;
+  }
+
+  /* Last resort (very large text on a narrow screen): logo and menu on the first row, Book now
+     across the second. The menu button keeps a fixed size so it fits beside the logo. */
+  .site-header.fit-4 .site-header__bar {
+    flex-wrap: wrap;
+    row-gap: var(--space-3xs);
+    padding-block: var(--space-3xs) var(--space-2xs);
+  }
+
+  .site-header.fit-4 .site-header__logo {
+    max-width: calc(100% - 3.5rem);
+  }
+
+  .site-header.fit-4 .site-header__actions {
+    display: contents;
+  }
+
+  .site-header.fit-4 .site-header__menu {
+    order: 1;
+    width: 48px;
+    height: 48px;
+  }
+
+  .site-header.fit-4 .site-header__actions :global(.site-header__book) {
+    order: 2;
+    flex-basis: 100%;
+    justify-content: center;
   }
 
   .site-header__call {

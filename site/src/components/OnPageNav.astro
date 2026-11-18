@@ -1,8 +1,10 @@
 ---
 // The "On this page" bar on service, class and patient information pages: links to the page's
 // sections, each with the small icon its section heading uses, sticky under the header. Anchors
-// land below both bars (see `html:has(.onpage)` in global.css). As the page scrolls, the link for
-// the section being read is marked (aria-current) and kept in view.
+// land below both bars (`html:has(.onpage)` in global.css: the one offset for both bars, so
+// sections mustn't add a scroll-margin of their own). As the page scrolls, the link for the section
+// being read is marked (aria-current) and kept in view. On phones the bar scrolls sideways, with a
+// fade and an arrow on the edge that has more links beyond it.
 import Icon, { type IconName } from './Icon.astro';
 
 interface Props {
@@ -13,7 +15,7 @@ const { links } = Astro.props;
 ---
 
 <nav class="onpage" aria-label="On this page">
-  <div class="wrap">
+  <div class="wrap onpage__inner">
     <ul role="list">
       {
         links.map((l) => (
@@ -26,6 +28,14 @@ const { links } = Astro.props;
         ))
       }
     </ul>
+    {/* Scroll cues for touch and mouse (keyboard users reach every link with Tab, which scrolls it
+        into view), so they're left out of the tab order and hidden from screen readers. */}
+    <button type="button" class="onpage__more onpage__more--start" data-scroll="-1" tabindex="-1" aria-hidden="true" hidden>
+      <Icon name="chevron-right" size={20} />
+    </button>
+    <button type="button" class="onpage__more onpage__more--end" data-scroll="1" tabindex="-1" aria-hidden="true" hidden>
+      <Icon name="chevron-right" size={20} />
+    </button>
   </div>
 </nav>
 
@@ -38,14 +48,23 @@ const { links } = Astro.props;
     const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
     let current = -1;
 
+    // The section a link or the address asked for. A short last section can't scroll up to the
+    // bars, so at the very bottom of the page this one is marked rather than the one above it.
+    let target = -1;
+    const fromHash = () => {
+      target = links.findIndex((a) => a.hash === location.hash);
+    };
+
     const update = () => {
-      // The section being read: the last one whose top has passed just below the sticky bars
-      // (where this bar sits once it's stuck under the header, not where it starts on the page).
-      const line = parseFloat(getComputedStyle(nav).top) + nav.offsetHeight + 32;
+      // The section being read: the last one whose top has reached the line where anchors land
+      // (the page's scroll-padding-top, i.e. just below both sticky bars), with a little leeway.
+      const line = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + 8;
       let now = -1;
       sections.forEach((s, i) => {
         if (s && s.getBoundingClientRect().top <= line) now = i;
       });
+      const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom && target > now) now = target;
       if (now === current) return;
       current = now;
       links.forEach((a, i) => {
@@ -60,6 +79,25 @@ const { links } = Astro.props;
       }
     };
 
+    // Show the fade and arrow on each edge that has more links beyond it.
+    const inner = list.parentElement!;
+    const cues = [...nav.querySelectorAll<HTMLButtonElement>('[data-scroll]')];
+    const updateCues = () => {
+      const max = list.scrollWidth - list.clientWidth;
+      inner.toggleAttribute('data-more-start', list.scrollLeft > 2);
+      inner.toggleAttribute('data-more-end', list.scrollLeft < max - 2);
+      cues[0].hidden = !inner.hasAttribute('data-more-start');
+      cues[1].hidden = !inner.hasAttribute('data-more-end');
+    };
+    cues.forEach((btn) =>
+      btn.addEventListener('click', () =>
+        list.scrollBy({ left: Number(btn.dataset.scroll) * list.clientWidth * 0.7, behavior: smooth ? 'smooth' : 'auto' }),
+      ),
+    );
+    list.addEventListener('scroll', updateCues, { passive: true });
+    new ResizeObserver(updateCues).observe(list);
+    updateCues();
+
     let queued = false;
     const onScroll = () => {
       if (queued) return;
@@ -71,6 +109,11 @@ const { links } = Astro.props;
     };
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll, { passive: true });
+    addEventListener('hashchange', () => {
+      fromHash();
+      onScroll();
+    });
+    fromHash();
     update();
   }
 </script>
@@ -82,6 +125,17 @@ const { links } = Astro.props;
     z-index: 20;
     background: var(--color-bg);
     border-bottom: 1px solid var(--color-line);
+  }
+
+  /* Very large text on a phone: not sticky (see the matching rule in global.css). */
+  @media (max-width: 17.99em) {
+    .onpage {
+      position: static;
+    }
+  }
+
+  .onpage__inner {
+    position: relative;
   }
 
   .onpage ul {
@@ -126,6 +180,72 @@ const { links } = Astro.props;
   .onpage a[aria-current] {
     background: var(--color-brand);
     color: var(--color-on-brand);
+  }
+
+  /* Scroll cues: a fade into the bar's background and a round arrow button on each edge that has
+     more links beyond it (set by the script). */
+  .onpage__inner::before,
+  .onpage__inner::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: 3.5rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease);
+  }
+
+  .onpage__inner::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg) 35%, transparent);
+  }
+
+  .onpage__inner::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg) 35%, transparent);
+  }
+
+  .onpage__inner[data-more-start]::before,
+  .onpage__inner[data-more-end]::after {
+    opacity: 1;
+  }
+
+  .onpage__more {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-s);
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  .onpage__more[hidden] {
+    display: none;
+  }
+
+  .onpage__more:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .onpage__more--start {
+    left: 0;
+  }
+
+  .onpage__more--start :global(svg) {
+    transform: scaleX(-1);
+  }
+
+  .onpage__more--end {
+    right: 0;
   }
 
   /* High-contrast mode (Windows) replaces background colours, so mark the current link with a

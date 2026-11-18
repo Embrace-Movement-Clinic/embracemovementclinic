@@ -16,7 +16,7 @@ import Steps from '../components/Steps.astro';
 import PractitionerList from '../components/PractitionerList.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import BookingBand from '../components/BookingBand.astro';
-import { site } from '../data/site';
+import { site, isPast } from '../data/site';
 import { serviceNode } from '../data/schema';
 
 export async function getStaticPaths() {
@@ -66,8 +66,8 @@ const sections = [
       <Icon name="user" size={18} /> You’ll see {seeLine}
     </p>
     {
-      d.notice && (
-        <p class="service-notice">
+      d.notice && !isPast(d.noticeUntil) && (
+        <p class="service-notice" data-hide-after={d.noticeUntil}>
           <Icon name="info" size={18} />
           <span>{d.notice}</span>
         </p>

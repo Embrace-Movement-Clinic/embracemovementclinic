@@ -10,6 +10,9 @@ import { readdirSync, readFileSync } from 'node:fs';
 const productionBranch = process.env.PRODUCTION_BRANCH || 'main';
 const isProductionBuild = process.env.CF_PAGES_BRANCH === productionBranch;
 const designTools = process.env.DESIGN_TOOLS === '1' || (process.env.DESIGN_TOOLS !== '0' && !isProductionBuild);
+// Live build: missing content shows a patient-friendly line (or nothing) instead of a visible TODO
+// (src/components/Todo.astro). LIVE_BUILD=1 or 0 forces it, e.g. to check the live look locally.
+const liveBuild = process.env.LIVE_BUILD === '1' || (process.env.LIVE_BUILD !== '0' && isProductionBuild);
 
 /** @type {import('astro').AstroIntegration} */
 const designToolPages = {
@@ -50,7 +53,7 @@ export default defineConfig({
     }),
   ],
   vite: {
-    define: { __DESIGN_TOOLS__: JSON.stringify(designTools) },
+    define: { __DESIGN_TOOLS__: JSON.stringify(designTools), __LIVE_BUILD__: JSON.stringify(liveBuild) },
   },
   security: {
     csp: {

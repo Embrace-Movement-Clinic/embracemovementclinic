@@ -179,4 +179,16 @@ const groups = [
       font-size: var(--step--1);
     }
   }
+
+  /* Very large text on a phone: the photo goes above the text, so the text has the full width. */
+  @media (max-width: 17.99em) {
+    .card :global(.photo-card) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .card :global(.photo) {
+      --photo-ratio-override: 16 / 9;
+      position: static;
+    }
+  }
 </style>

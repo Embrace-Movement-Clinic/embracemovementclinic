@@ -48,7 +48,7 @@ const { address, hours, notice } = site;
                 <IconBadge name="info" />
                 <div>
                   <h3 class="loc-card__title">Parking</h3>
-                  <p>{site.parking ?? <Todo>parking details</Todo>}</p>
+                  <p>{site.parking ?? <Todo live="Call us for parking details.">parking details</Todo>}</p>
                 </div>
               </li>
             </>
@@ -62,7 +62,7 @@ const { address, hours, notice } = site;
               hours ? (
                 <HoursList hours={hours} ruled />
               ) : (
-                <Todo>opening hours</Todo>
+                <Todo live="Call us for current opening hours.">opening hours</Todo>
               )
             }
             {notice.active && <p class="location__note" data-hide-after={notice.until || undefined}>{notice.message}</p>}

@@ -5,6 +5,7 @@ order: 1
 photo: /src/assets/photos/sam_1372.webp
 photoPosition: 50% 22%
 status: On maternity leave until January 2027
+statusUntil: '2027-01-03'
 bookingUrl: https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/practitioner/1
 titles:
   - Physiotherapist

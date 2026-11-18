@@ -2,7 +2,8 @@
 // "What can we help with?" Pick a need (left, or a 2-column grid on phones) to see the
 // conditions the clinic treats for it and the services that cover them (petrol panel).
 // Tabs follow the WAI-ARIA tabs pattern (arrow keys, Home/End). /services#<need id> opens that
-// need, which is how the home page tiles link here. Without JavaScript the tabs stay hidden
+// need, which is how the home page tiles link here; choosing a need updates the address to match
+// (without moving the page), so a refresh or a copied link opens the same one. Without JavaScript the tabs stay hidden
 // and every panel shows, one after another. Data: src/data/needs.ts.
 import { getCollection } from 'astro:content';
 import Icon from './Icon.astro';
@@ -93,6 +94,13 @@ const byId = new Map(services.map((s) => [s.id, s]));
       if (focus) tabs[i].focus();
     };
 
+    // A need chosen by the visitor goes into the address, replacing the current entry (so Back
+    // leaves the page rather than stepping through tabs). replaceState doesn't scroll the page.
+    const choose = (i: number, focus = false) => {
+      select(i, focus);
+      if (location.hash !== '#' + panels[i].id) history.replaceState(history.state, '', '#' + panels[i].id);
+    };
+
     // Enhance: show the tabs, make each panel a tab panel labelled by its tab, show one at a time.
     list.hidden = false;
     finder.classList.add('finder--tabs');
@@ -113,7 +121,7 @@ const byId = new Map(services.map((s) => [s.id, s]));
     addEventListener('hashchange', fromHash);
 
     tabs.forEach((t, i) => {
-      t.addEventListener('click', () => select(i));
+      t.addEventListener('click', () => choose(i));
       t.addEventListener('keydown', (e) => {
         const last = tabs.length - 1;
         const to =
@@ -124,7 +132,7 @@ const byId = new Map(services.map((s) => [s.id, s]));
           : -1;
         if (to < 0) return;
         e.preventDefault();
-        select(to, true);
+        choose(to, true);
       });
     });
   }

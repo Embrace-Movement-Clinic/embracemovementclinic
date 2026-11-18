@@ -1,14 +1,34 @@
 ---
-// Visible placeholder for content the owner still needs to supply.
-// Every TODO must be resolved before launch (see docs/to-supply.md).
+// Placeholder for content the owner still needs to supply (see docs/to-supply.md).
+// Previews and local builds show a visible "TODO:" box naming what's missing. The live site never
+// shows "TODO" to patients: it shows `live` instead, a patient-friendly line such as "Call us for
+// current class times", or nothing at all. Either way the element carries data-todo="<what's
+// missing>", and the build's checker lists them (scripts/check-links.mjs).
+import { liveBuild } from '../data/build';
+
 interface Props {
   as?: 'span' | 'div';
+  /** Shown on the live site in place of the TODO. Leave out to show nothing there. */
+  live?: string;
 }
 
-const { as: Tag = 'span' } = Astro.props;
+const { as: Tag = 'span', live } = Astro.props;
+const what = (await Astro.slots.render('default')).replace(/<[^>]*>/g, '').trim();
 ---
 
-<Tag class="todo" data-todo><strong>TODO:</strong> <slot /></Tag>
+{
+  liveBuild ? (
+    live ? (
+      <Tag data-todo={what}>{live}</Tag>
+    ) : (
+      <Tag data-todo={what} hidden />
+    )
+  ) : (
+    <Tag class="todo" data-todo={what}>
+      <strong>TODO:</strong> <slot />
+    </Tag>
+  )
+}
 
 <style>
   .todo {

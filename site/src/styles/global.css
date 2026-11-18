@@ -293,3 +293,26 @@ strong {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Very large text on a phone (e.g. 200% text on a 320px screen leaves about 16 characters a line):
+   long words and phrases wrap rather than push the page sideways (WCAG 1.4.4). 18em is narrower
+   than any phone at the normal text size, so this never changes the standard layout. */
+@media (max-width: 17.99em) {
+  /* !important: headings and components set their own overflow-wrap (break-word), which wraps a
+     long word but still lets it widen its box. */
+  * {
+    overflow-wrap: anywhere !important;
+  }
+
+  .nowrap,
+  .btn,
+  .arrow-link {
+    white-space: normal;
+  }
+
+  /* The "On this page" bar stays at the top of the page instead of sticking under the header,
+     which would leave little of the screen for reading; anchors then land just below the header. */
+  html:has(.onpage) {
+    scroll-padding-top: calc(var(--header-h) + var(--space-s));
+  }
+}

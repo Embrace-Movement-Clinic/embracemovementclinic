@@ -128,7 +128,7 @@ const factIcon = (label: string): IconName =>
                 ))}
               </ul>
             ) : (
-              <Todo as="div">what clients should bring to a first appointment (for example a referral, health fund card or comfortable clothing)</Todo>
+              <Todo as="div" live="Call us if you’re not sure what to bring.">what clients should bring to a first appointment (for example a referral, health fund card or comfortable clothing)</Todo>
             )
           }
         </div>
@@ -150,7 +150,7 @@ const factIcon = (label: string): IconName =>
         p.fees.length > 0 ? (
           <FeeGroups fees={p.fees} />
         ) : (
-          <Todo as="div">fees for initial and follow-up appointments, pre-class assessments and classes</Todo>
+          <Todo as="div" live="Call us for current fees.">fees for initial and follow-up appointments, pre-class assessments and classes</Todo>
         )
       }
 
@@ -182,7 +182,7 @@ const factIcon = (label: string): IconName =>
                 ))}
               </ul>
             ) : (
-              <Todo as="div">whether you accept Medicare (GP care plan) referrals, DVA, NDIS or WorkCover. Add here if so.</Todo>
+              <Todo as="div" live="Call us to check which rebates and funding apply to you.">whether you accept Medicare (GP care plan) referrals, DVA, NDIS or WorkCover. Add here if so.</Todo>
             )
           }
         </div>
@@ -246,7 +246,7 @@ const factIcon = (label: string): IconName =>
             <Icon name="info" size={24} />
             <div>
               <h3 class="h4">Parking</h3>
-              <p>{site.parking ?? <Todo>parking details</Todo>}</p>
+              <p>{site.parking ?? <Todo live="Call us for parking details.">parking details</Todo>}</p>
             </div>
           </div>
           {
@@ -292,7 +292,6 @@ const factIcon = (label: string): IconName =>
   /* One band per topic, alternating white and mist; tighter than a full .section. */
   .band {
     padding-block: var(--space-xl);
-    scroll-margin-top: var(--header-h);
   }
 
   .band--first {

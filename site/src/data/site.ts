@@ -22,9 +22,16 @@ const clinic = clinicJson as ClinicData;
 /** Blank or missing values mean "not supplied yet". */
 const orNull = (value?: string | null) => value?.trim() || null;
 
-// The notice banner's end date. Brisbane has no daylight saving, so +10:00 is always correct.
+/**
+ * Whether an end date (YYYY-MM-DD, as set on /admin) has passed, as of this build. Brisbane has
+ * no daylight saving, so +10:00 is always correct. Anything shown until a date also carries
+ * data-hide-after={date}, so it goes on the day, before the next rebuild (script in BaseLayout).
+ */
+export const isPast = (until?: string | null) => (until ? new Date() > new Date(`${until}T23:59:59+10:00`) : false);
+
+// The notice banner's end date.
 const noticeUntil = orNull(clinic.notice.until);
-const noticeExpired = noticeUntil ? new Date() > new Date(`${noticeUntil}T23:59:59+10:00`) : false;
+const noticeExpired = isPast(noticeUntil);
 
 /** "0434 686 261" → "tel:+61434686261" (Australian numbers). */
 const telHref = (display: string) => {

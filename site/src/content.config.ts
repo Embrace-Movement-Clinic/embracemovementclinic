@@ -50,6 +50,8 @@ const services = defineCollection({
       practitionersNote: z.string().optional(),
       /** Short availability note under the page title, e.g. while the practitioner is on leave. */
       notice: z.string().optional(),
+      /** Hide the availability note automatically after this date (YYYY-MM-DD). */
+      noticeUntil: z.string().optional(),
       related: z.array(reference('services')).default([]),
       /** Photo in src/assets/photos, used on the page, its card and when the page is shared. */
       image: image().optional(),
@@ -82,6 +84,8 @@ const team = defineCollection({
       experienceHeading: z.string().default('Experience'),
       /** Short status shown on cards, e.g. leave dates. */
       status: z.string().optional(),
+      /** Hide the status automatically after this date (YYYY-MM-DD), e.g. the day before they're back. */
+      statusUntil: z.string().optional(),
       /** AHPRA registration number, as on the public register (e.g. PHY0001234567). */
       registration: z.string().optional(),
       /** Direct Nookal booking link for this practitioner. */

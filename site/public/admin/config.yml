@@ -157,6 +157,7 @@ collections:
         multiple: true
       - { name: practitionersNote, label: Note about who you’ll see, widget: string, required: false }
       - { name: notice, label: Availability note, widget: string, required: false, hint: 'Shown under the page title, e.g. "Available again from March 2027, when Laura returns from leave." Leave blank when not needed.' }
+      - { name: noticeUntil, label: Hide the availability note automatically after, widget: datetime, time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Optional. The last day the note should show. Leave blank to keep it until you remove it.' }
       - name: related
         label: Related services
         widget: relation
@@ -209,6 +210,7 @@ collections:
           - { label: Service pages, ratio: 1 / 1 }
         hint: Click where to keep in view. For headshots, keep the whole head in every preview. Reset keeps the top of the photo.
       - { name: status, label: Status, widget: string, required: false, hint: 'Shown on the card, e.g. "On maternity leave until January 2027". Leave blank when not needed.' }
+      - { name: statusUntil, label: Hide the status automatically after, widget: datetime, time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Optional. The last day the status should show, e.g. the day before they return. Leave blank to keep it until you remove it.' }
       - { name: bookingUrl, label: Direct booking link, widget: string, required: false, pattern: ['^https://', 'Paste the full link, starting with https://'], hint: 'Their own Nookal booking page. Used by "Book with …" buttons.' }
       - { name: registration, label: AHPRA registration number, widget: string, required: false, pattern: ['^[A-Z]{3}[0-9]{10}$', 'Three capital letters and 10 digits, e.g. PHY0001234567'], hint: 'Optional. As on the public register (ahpra.gov.au), e.g. PHY0001234567. Shown on the profile page when filled in.' }
       - name: titles

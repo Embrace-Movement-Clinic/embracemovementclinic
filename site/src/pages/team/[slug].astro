@@ -10,7 +10,7 @@ import SectionHead from '../../components/SectionHead.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import BookingBand from '../../components/BookingBand.astro';
 import { getImage } from 'astro:assets';
-import { site } from '../../data/site';
+import { site, isPast } from '../../data/site';
 import { clinicRef } from '../../data/schema';
 
 export async function getStaticPaths() {
@@ -59,7 +59,7 @@ const jsonLd = {
         <ul class="roles" role="list">
           {d.titles.map((t) => <li>{t}</li>)}
         </ul>
-        {d.status && <p class="status-pill">{d.status}</p>}
+        {d.status && !isPast(d.statusUntil) && <p class="status-pill" data-hide-after={d.statusUntil}>{d.status}</p>}
         {
           d.registration && (
             <p class="ahpra">

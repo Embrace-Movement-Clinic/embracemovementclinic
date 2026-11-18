@@ -17,6 +17,7 @@ import Icon from '../components/Icon.astro';
 import IconTile from '../components/IconTile.astro';
 import MotionBackdrop from '../components/MotionBackdrop.astro';
 import Todo from '../components/Todo.astro';
+import { liveBuild } from '../data/build';
 import { site } from '../data/site';
 import { clinicId, clinicNode } from '../data/schema';
 import { booking } from '../data/policies';
@@ -168,17 +169,19 @@ const jsonLd = [
           <li>
             <a class="arrow-link" href="/pilates#studio">Our studio and equipment <Icon name="arrow-right" size={16} /></a>
           </li>
-          <li>
-            {
-              site.socials.instagram ? (
+          {
+            site.socials.instagram ? (
+              <li>
                 <a class="arrow-link" href={site.socials.instagram}>
                   <Icon name="instagram" size={18} /> Follow us on Instagram
                 </a>
-              ) : (
+              </li>
+            ) : (
+              <li hidden={liveBuild}>
                 <Todo>Instagram profile link</Todo>
-              )
-            }
-          </li>
+              </li>
+            )
+          }
         </ul>
       </div>
     </div>
