@@ -146,6 +146,20 @@ Mechanical edits across all pages (one entry): Australian spelling (customised, 
 - Fees: an "Exercise therapy" group with an initial consultation (45 minutes, $145) and reviews (30 minutes, $95; 45 minutes, $125), each with Nicole or Laura. Exercise physiology is no longer listed separately, and the separate "1 on 1 Exercise Therapy Session" ($125) is covered by the 45-minute review. The clinic will update Nookal to match.
 - Still "Exercise Physiology" by the owner's choice of words: the home page headline and facts (editable on /admin), and the privacy policy's description of the clinic's services.
 
+## Website review fixes (18 Nov 2026)
+
+From an external review of the preview site. Owner-approved wording:
+
+| Page | Original | New | Why | Approved |
+|---|---|---|---|---|
+| Pilates (timetable intro) and Patient information (classes) | "If your preferred class time isn’t showing, it’s at full capacity, but please get in touch if you’d like to be added to the waitlist." | "Can’t see your preferred time? Text us to check or join the waitlist." | A time can be missing from Nookal for other reasons (not on that week, not open for booking yet), so "full" could mislead | Yes (Nicole, 18 Nov 2026) |
+
+Site behaviour (no wording change):
+- **Timetable:** while one practitioner runs every class, the title says "Small group exercise classes, all with Nicole" once, with no name on each class and no colour key; names and the key come back automatically when a second practitioner is added. A "From Monday 4 January 2027" line shows the date the timetable applies from (editable on /admin). Days and times are put in order, repeated entries are shown once, and the editor only accepts times like "6.00am" or "4.45pm".
+- **Practitioner status and service availability notes** can hide themselves after a date. Nicole's maternity-leave status ends on 3 January 2027.
+- **Missing content** never shows "TODO" on the live site; see `docs/editing.md`.
+- Fixes to the service finder links, the "On this page" highlight and bar, and layouts with very large text.
+
 ## Privacy policy approved (7 Nov 2026)
 
 Nicole reviewed and approved /privacy. Changes at the same time: the DRAFT note removed; an AI tool line added ("We may use an AI tool to help with note-taking and administration. It can summarise your appointment and help draft notes and letters. Your practitioner always reviews what it produces. Please let us know if you would prefer us not to use AI tools."); the paragraph about contacting the OAIC if not satisfied removed at the owner's request; no named privacy contact (the clinic's email and phone); retention stated as "as long as the law requires"; "Last updated 7 November 2026". Overseas: "All of your information is stored within Australia." (owner, 7 Nov 2026).

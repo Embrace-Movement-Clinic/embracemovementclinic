@@ -3,15 +3,20 @@
 // On wider screens classes at the same time share a row across the days, like a wall timetable.
 // Each practitioner has a colour, in Team order (petrol, then light teal, then pale teal), with a
 // key underneath. Names are always written on the pills too, so colour is never the only cue.
-// Data: policies.json "timetable" (/admin: Clinic settings → Policies and timetable).
+// While one person runs every class, the title says so once ("…, all with Nicole") instead, with
+// no names on the pills and no key. The date it applies from, if set, goes under the title.
+// Data: policies.json "timetable" and "timetableFrom" (/admin: Clinic settings → Policies and
+// timetable), tidied in policies.ts (days in order, classes earliest first, no repeats).
 import { getCollection } from 'astro:content';
-import type { TimetableDay } from '../data/policies';
+import { classMinutes, type TimetableDay } from '../data/policies';
 
 interface Props {
   days: TimetableDay[];
+  /** E.g. "Monday 4 January 2027". */
+  from?: string | null;
 }
 
-const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const { from } = Astro.props;
 const defaultClass = 'Small group exercise';
 
 const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
@@ -21,16 +26,13 @@ const colourOf = (id?: string) => {
 };
 const nameOf = (id?: string) => team.find((m) => m.id === id)?.data.firstName;
 
-const days = Astro.props.days
-  .filter((d) => d.classes?.length)
-  .sort((a, b) => weekdays.indexOf(a.day) - weekdays.indexOf(b.day));
+const days = Astro.props.days.filter((d) => d.classes?.length);
 const people = team.filter((m) => days.some((d) => d.classes.some((c) => c.with === m.id)));
+// One person runs every class (each class names them): say so once, in the title.
+const only = people.length === 1 && days.every((d) => d.classes.every((c) => c.with === people[0].id)) ? people[0] : null;
+const showName = (id?: string) => (only ? undefined : nameOf(id));
 // Every distinct class time in the week, earliest first: one row each on wide screens.
-const minutes = (t: string) => {
-  const m = t.trim().toLowerCase().match(/^(\d{1,2})(?:[.:](\d{2}))?\s*(am|pm)$/);
-  if (!m) return 24 * 60;
-  return ((Number(m[1]) % 12) + (m[3] === 'pm' ? 12 : 0)) * 60 + Number(m[2] ?? 0);
-};
+const minutes = (t: string) => classMinutes(t) ?? 24 * 60;
 const slots = [...new Set(days.flatMap((d) => d.classes.map((c) => minutes(c.time))))].sort((a, b) => a - b);
 // A small gap row between the morning and afternoon classes.
 const noon = 12 * 60;
@@ -48,7 +50,19 @@ const otherClasses = days.some((d) => d.classes.some((c) => c.class?.trim() && c
 ---
 
 <div class="board-wrap">
-  {!otherClasses && <p class="board-title">{defaultClass} classes</p>}
+  {
+    (!otherClasses || only || from) && (
+      <div class="board-head">
+        {(!otherClasses || only) && (
+          <p class="board-title">
+            {otherClasses ? 'All classes' : `${defaultClass} classes`}
+            {only && (otherClasses ? ` with ${only.data.firstName}` : `, all with ${only.data.firstName}`)}
+          </p>
+        )}
+        {from && <p class="board-from">From {from}</p>}
+      </div>
+    )
+  }
   <ul class="board" role="list" style={`--days: ${days.length}; --rows: ${rows}`}>
     {
       days.map((d) => (
@@ -65,9 +79,9 @@ const otherClasses = days.some((d) => d.classes.some((c) => c.class?.trim() && c
               {isFirstPm(d.classes, i) && <li class="slots__break" aria-hidden="true" />}
               <li class="slot" data-colour={colourOf(c.with)} style={`--row: ${rowOf(c.time)}`}>
                 <span class="slot__time">{c.time}</span>{' '}
-                {(otherClasses || nameOf(c.with)) && (
+                {(otherClasses || showName(c.with)) && (
                   <span class="slot__detail">
-                    {[otherClasses ? c.class?.trim() || defaultClass : null, nameOf(c.with) && `with ${nameOf(c.with)}`]
+                    {[otherClasses ? c.class?.trim() || defaultClass : null, showName(c.with) && `with ${showName(c.with)}`]
                       .filter(Boolean)
                       .join(', ')}
                   </span>
@@ -81,7 +95,7 @@ const otherClasses = days.some((d) => d.classes.some((c) => c.class?.trim() && c
     }
   </ul>
   {
-    people.length > 0 && (
+    people.length > 0 && !only && (
       <ul class="key" role="list" aria-label="Who runs each class">
         {people.map((m) => (
           <li class="key__item" data-colour={colourOf(m.id)}>
@@ -94,10 +108,18 @@ const otherClasses = days.some((d) => d.classes.some((c) => c.class?.trim() && c
 </div>
 
 <style>
-  .board-title {
+  .board-head {
     margin-bottom: var(--space-xs);
+  }
+
+  .board-title {
     font-family: var(--font-display);
     font-weight: var(--weight-semibold);
+  }
+
+  .board-from {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
   }
 
   /* Phones: a block per day, the day's name above its classes, which wrap. */

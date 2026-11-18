@@ -476,12 +476,13 @@ collections:
             min: 1
             max: 4
             hint: Shown on the Pilates page.
+          - { name: timetableFrom, label: Timetable applies from, widget: datetime, time_format: false, format: 'YYYY-MM-DD', required: false, hint: 'Optional. The first day of this timetable, shown above it as e.g. "From Monday 4 January 2027". Update it when the timetable changes, or clear it.' }
           - name: timetable
             label: Class timetable
             label_singular: day
             widget: list
             required: false
-            hint: One entry per day, with that day’s classes earliest first. Leave out days with no classes. Keep it the same as Nookal.
+            hint: One entry per day. Leave out days with no classes. The website puts the days and times in order. Keep it the same as Nookal.
             summary: '{{fields.day}}'
             fields:
               - name: day
@@ -494,7 +495,7 @@ collections:
                 widget: list
                 summary: '{{fields.time}}'
                 fields:
-                  - { name: time, label: Time, widget: string, hint: 'E.g. "6.00am" or "4.45pm".' }
+                  - { name: time, label: Time, widget: string, pattern: ['^\s*(1[0-2]|0?[1-9])([.:][0-5][0-9])?\s*([aApP][mM])\s*$', 'Enter a time like 6.00am or 4.45pm (with am or pm).'], hint: 'E.g. "6.00am" or "4.45pm".' }
                   - name: with
                     label: With
                     widget: relation

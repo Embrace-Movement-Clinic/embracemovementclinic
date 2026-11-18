@@ -19,7 +19,7 @@ import ClosureNote from '../components/ClosureNote.astro';
 import Timetable from '../components/Timetable.astro';
 import { site } from '../data/site';
 import { serviceNode } from '../data/schema';
-import { classFacts, classSteps, equipment, booking, timetable } from '../data/policies';
+import { classFacts, classSteps, equipment, booking, timetable, timetableFrom } from '../data/policies';
 
 const service = (await getEntry('services', 'pilates')) as CollectionEntry<'services'>;
 const d = service.data;
@@ -110,7 +110,7 @@ const sections: { href: string; label: string; icon: IconName }[] = [
       <ClosureNote />
       {
         timetable ? (
-          <Timetable days={timetable} />
+          <Timetable days={timetable} from={timetableFrom} />
         ) : (
           <Todo as="div" live="Call or text us for current class times.">current class timetable as text (days and times, and who runs each class). The old timetable was an image from July 2025.</Todo>
         )

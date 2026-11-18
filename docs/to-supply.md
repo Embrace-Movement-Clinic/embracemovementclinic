@@ -44,7 +44,7 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 - [x] **ABN**: 57 627 072 057, entered on /admin
 - [x] **Parking**: entered on /admin (driveway, or free street parking on Brynner or Bassey Street)
 - [x] **Reopening date**: Monday 4 January 2027 (Nicole, 7 Nov 2026). The banner and closure notes hide after 3 January. Previously: so the closure banner can hide itself automatically (on /admin: Clinic settings → Clinic details → Notice banner → Hide automatically after)
-- [x] **Class timetable**: from Nookal's week of 4 January 2027 (Monday to Thursday, all with Nicole), added 7 Nov 2026. Keep it in step with Nookal on /admin: Clinic settings → Policies and timetable
+- [x] **Class timetable**: from Nookal's week of 4 January 2027 (Monday to Thursday, all with Nicole), added 7 Nov 2026. Keep it in step with Nookal on /admin: Clinic settings → Policies and timetable, and update "Timetable applies from" (set to 4 January 2027) when it changes
 - [x] **Which practitioner provides which service:** Nookal is right; Laura isn't seeing pelvic health clients for now (Nicole, 7 Nov 2026). Previously: Nookal (6 Nov 2026) matches the site except Pelvic Health: bookable online with Nicole only, while the site lists Nicole and Laura. Confirm which is right
 - [x] **Privacy contact**: the clinic's email and phone (no named person), as approved 7 Nov 2026
 - [x] Google Forms: no longer linked (the June 2025 update was deleted on 7 Nov 2026)
