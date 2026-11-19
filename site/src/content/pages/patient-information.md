@@ -53,12 +53,12 @@ fees:
     note: With Nicole, an Accredited Exercise Physiologist.
   - group: Exercise physiology / exercise therapy
     subgroup: Exercise therapy
-    item: One-on-one session (30 minutes)
+    item: Session (30 minutes)
     price: $95
     note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Exercise physiology / exercise therapy
     subgroup: Exercise therapy
-    item: One-on-one session (45 minutes)
+    item: Session (45 minutes)
     price: $125
     note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Pelvic health physiotherapy
