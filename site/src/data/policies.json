@@ -103,7 +103,9 @@
     "paragraphs": [
       "Given there is a waitlist for many of our services, please provide as much notice as possible if you need to cancel or reschedule your booking so the time can be offered to another client.",
       "Please give at least 12 hours’ notice if you need to cancel. Bookings cancelled with less than 12 hours’ notice are charged the full price."
-    ]
+    ],
+    "howTo": "To cancel or reschedule, text us on",
+    "howToNote": "Your notice counts from when you send the text, even outside opening hours."
   },
   "classFacts": [
     {

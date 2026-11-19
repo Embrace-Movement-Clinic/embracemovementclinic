@@ -42,11 +42,12 @@ treatments:
       detail: Personalised advice on how to fit exercise into your daily routine safely and effectively.
 goodToKnow:
   - name: Referrals and rebates
-    detail: If your referral or rebate is specifically for exercise physiology (for example a GP care plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and is claimable as physiotherapy.
+    detail: If your referral or rebate is specifically for exercise physiology (for example a GP chronic condition management plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and may be claimable as physiotherapy, depending on your fund.
+    bookWith: nicole-saxby
 practitioners:
   - nicole-saxby
   - laura-bradford
-practitionersNote: Nicole provides exercise physiology as an Accredited Exercise Physiologist (AEP), for referrals and rebates that are specifically for exercise physiology. Exercise therapy, claimable as physiotherapy, is available with both Nicole and Laura (Laura from March 2027) after an initial physiotherapy consultation.
+practitionersNote: Nicole provides exercise physiology as an Accredited Exercise Physiologist (AEP), for referrals and rebates that are specifically for exercise physiology. Exercise therapy, which may be claimable as physiotherapy depending on your fund, is available with both Nicole and Laura (Laura from March 2027) after an initial physiotherapy consultation.
 related:
   - pilates
   - physiotherapy

@@ -147,6 +147,7 @@ collections:
         fields:
           - { name: name, label: Title, widget: string }
           - { name: detail, label: Detail, widget: text }
+          - { name: bookWith, label: Book with, widget: relation, collection: team, value_field: '{{slug}}', search_fields: [name], display_fields: [name], required: false, hint: 'Optional. Adds a "Book with …" button under this note, linking to that practitioner’s own booking page.' }
       - name: practitioners
         label: Who you’ll see
         widget: relation
@@ -511,6 +512,8 @@ collections:
             widget: object
             fields:
               - { name: paragraphs, label: Paragraphs, label_singular: paragraph, widget: list, field: { name: paragraph, label: Paragraph, widget: text } }
+              - { name: howTo, label: How to cancel (before the phone number), widget: string, required: false, hint: 'Shown after the policy, followed by the clinic’s number as a text-message link, e.g. "To cancel or reschedule, text us on".' }
+              - { name: howToNote, label: How to cancel (after the phone number), widget: string, required: false, hint: 'Optional, e.g. "Your notice counts from when you send the text, even outside opening hours."' }
           - name: classFacts
             label: Class facts
             label_singular: fact

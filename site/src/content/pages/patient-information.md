@@ -73,8 +73,8 @@ fees:
     note: Buy in the clinic.
 feeNotes:
   - Exercise sessions may be claimable with private health, depending on your level of cover.
-  - If your referral or rebate is specifically for exercise physiology (for example a GP care plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and is claimable as physiotherapy.
-  - You can still claim on your health fund if you buy a class pack.
+  - If your referral or rebate is specifically for exercise physiology (for example a GP chronic condition management plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and may be claimable as physiotherapy, depending on your fund.
+  - Class packs may also be claimable with private health, depending on your level of cover. Check with your fund.
 funding:
   - Private health, Medicare, DVA, NDIS and WorkCover are all welcome.
   - What you pay out of pocket depends on who is paying. Some arrangements have a gap fee, and others may be fully covered. Call us to check yours.

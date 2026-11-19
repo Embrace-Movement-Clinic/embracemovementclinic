@@ -153,12 +153,20 @@ From an external review of the preview site. Owner-approved wording:
 | Page | Original | New | Why | Approved |
 |---|---|---|---|---|
 | Pilates (timetable intro) and Patient information (classes) | "If your preferred class time isn’t showing, it’s at full capacity, but please get in touch if you’d like to be added to the waitlist." | "Can’t see your preferred time? Text us to check or join the waitlist." | A time can be missing from Nookal for other reasons (not on that week, not open for booking yet), so "full" could mislead | Yes (Nicole, 18 Nov 2026) |
+| Notice banner (every page) | "The clinic is temporarily closed and reopens on Monday 4 January 2027." | "January bookings are open. The clinic reopens on Monday 4 January 2027." | Says that bookings are open, next to the closure | Yes (Nicole, 19 Nov 2026) |
+| Cancellation policy (Patient information and Pilates) | (no instructions) | Added: "To cancel or reschedule, text us on 0434 686 261. Your notice counts from when you send the text, even outside opening hours." | Tells patients how to cancel, beside the rule | Yes (Nicole, 19 Nov 2026) |
+| Exercise Therapy and Patient information (referrals) | "a GP care plan referral" | "a GP chronic condition management plan referral" | Medicare’s current name, from 1 July 2025 | Yes (Nicole, 19 Nov 2026) |
+| Exercise Therapy and Patient information (rebates) | "Exercise therapy… is claimable as physiotherapy" | "…may be claimable as physiotherapy, depending on your fund" | Not guaranteed for every fund | Yes (Nicole, 19 Nov 2026) |
+| Patient information (fees) | "You can still claim on your health fund if you buy a class pack." | "Class packs may also be claimable with private health, depending on your level of cover. Check with your fund." | Matches the "may be claimable" wording elsewhere | Yes (Nicole, 19 Nov 2026) |
+| Reopening news article | Heading "Coming soon: our patient portal"; summary "a patient portal is on its way" | "Our new patient portal"; "there’s a new patient portal" | Portal sign-up links are now being sent | Yes (Nicole, 19 Nov 2026) |
 
 Site behaviour (no wording change):
 - **Timetable:** while one practitioner runs every class, the title says "Small group exercise classes, all with Nicole" once, with no name on each class and no colour key; names and the key come back automatically when a second practitioner is added. A "From Monday 4 January 2027" line shows the date the timetable applies from (editable on /admin). Days and times are put in order, repeated entries are shown once, and the editor only accepts times like "6.00am" or "4.45pm".
 - **Practitioner status and service availability notes** can hide themselves after a date. Nicole's maternity-leave status ends on 3 January 2027.
 - **Missing content** never shows "TODO" on the live site; see `docs/editing.md`.
 - Fixes to the service finder links, the "On this page" highlight and bar, and layouts with very large text.
+- **Book with Nicole (19 Nov 2026):** on Pilates, the booking buttons go straight to Nicole’s Nookal page while she runs every class on the timetable (back to the general booking page automatically if another practitioner is added). Exercise Therapy’s "Referrals and rebates" note has a "Book with Nicole" button (set on /admin with the note’s new "Book with" field). No Nookal menu directions on the site (Nicole’s call: they’d break if Nookal changes).
+- **Phones (19 Nov 2026):** the Pilates header’s second button is "View timetable" on every screen size (it was a Call button on phones; the call icon stays in the site header). Home keeps its Call button. Practitioner profiles show the name, titles and status above the photo on phones; the photo stays on the left on wide screens.
 
 ## Privacy policy approved (7 Nov 2026)
 

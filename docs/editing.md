@@ -6,7 +6,7 @@ The website has an editing screen at **`/admin`** (Sveltia CMS: free and open so
 
 | Section in the editor | What's in it |
 |---|---|
-| **Services** | Each service page: photo and its description, an availability note under the title (e.g. while a practitioner is on leave), with an optional date to hide it automatically, home page card text, opening line, conditions treated, what to expect, treatments, "good to know" notes, who you'll see, related services, Google title and description |
+| **Services** | Each service page: photo and its description, an availability note under the title (e.g. while a practitioner is on leave), with an optional date to hide it automatically, home page card text, opening line, conditions treated, what to expect, treatments, "good to know" notes (each can have a "Book with …" button for one practitioner), who you'll see, related services, Google title and description |
 | **Team** | Each practitioner: direct booking link (for "Book with …" buttons), headshot, status (e.g. "On maternity leave until January 2027"), with an optional date to hide it automatically, titles, qualifications, training, experience, bio |
 | **News** | Add, edit or delete posts, with photos |
 | **Home page** | Headline, intro, main photo, the facts under the headline, "How it works" steps, team intro, the "Our approach" line and its two photos |
@@ -15,7 +15,7 @@ The website has an editing screen at **`/admin`** (Sveltia CMS: free and open so
 | **Pages → Contact page** | Intro and the note under each way to get in touch |
 | **Pages → Services page** | Intro and section intros |
 | **Clinic settings → Clinic details** | Phone, email, opening hours, the notice banner (on/off, message, link, an end date), Instagram and Facebook links, ABN, parking, accessibility |
-| **Clinic settings → Policies and timetable** | The patient portal link (used by the "Patient portal" buttons), how to start classes, class timetable (one entry per day; each class has a time such as "6.00am" and who runs it, which sets its colour; the website puts days and times in order and shows a class entered twice only once; while one person runs every class, their name appears once above the timetable), the date the timetable applies from, cancellation policy, class facts, studio equipment, "before you come to class" tips, booking notes |
+| **Clinic settings → Policies and timetable** | The patient portal link (used by the "Patient portal" buttons), how to start classes, class timetable (one entry per day; each class has a time such as "6.00am" and who runs it, which sets its colour; the website puts days and times in order and shows a class entered twice only once; while one person runs every class, their name appears once above the timetable), the date the timetable applies from, cancellation policy (with how to cancel, shown before and after the clinic's number), class facts, studio equipment, "before you come to class" tips, booking notes |
 | **Clinic settings → What can we help with?** | The groups on the home page and Services page: titles, icons, conditions and which services help |
 
 **Stays with Claude Code:** layout and design, new types of section, colours, the clinic name and address, the booking link (it's tied to a redirect), old-address redirects, the menu and footer links, headings that are part of the layout, the privacy policy (a legal document: owner approves changes), and anything technical.

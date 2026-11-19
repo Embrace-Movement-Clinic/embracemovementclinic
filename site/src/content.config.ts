@@ -45,7 +45,8 @@ const services = defineCollection({
           items: z.array(item),
         })
         .optional(),
-      goodToKnow: z.array(item).default([]),
+      /** Notes under the treatments; `bookWith` adds a "Book with …" button for that practitioner. */
+      goodToKnow: z.array(item.extend({ bookWith: reference('team').optional() })).default([]),
       practitioners: z.array(reference('team')),
       practitionersNote: z.string().optional(),
       /** Short availability note under the page title, e.g. while the practitioner is on leave. */
@@ -178,7 +179,7 @@ const patientInfo = page('patient-information', () => ({
     .array(z.object({ group: z.string().optional(), item: z.string(), price: z.string(), note: z.string().optional() }))
     .default([]),
   feeNotes: z.array(z.string()).default([]),
-  /** Medicare (GP care plan), DVA, NDIS, WorkCover: empty until confirmed. */
+  /** Medicare (GP chronic condition management plan), DVA, NDIS, WorkCover: empty until confirmed. */
   funding: z.array(z.string()).default([]),
   privacy: z.string(),
 }));

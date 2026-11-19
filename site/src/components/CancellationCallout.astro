@@ -1,15 +1,26 @@
 ---
 // The cancellation policy as a pale teal callout with a large faint clock; the last paragraph
-// (the rule itself) in bold. Text: policies.json "cancellation" (/admin: Clinic settings → Policies).
+// (the rule itself) in bold, then how to cancel ("…text us on" and the number as a text link).
+// Text: policies.json "cancellation" (/admin: Clinic settings → Policies).
 import Icon from './Icon.astro';
 import { cancellationPolicy } from '../data/policies';
+import { site } from '../data/site';
 
 const paras = cancellationPolicy.paragraphs;
+const howTo = cancellationPolicy.howTo?.trim();
+const howToNote = cancellationPolicy.howToNote?.trim();
 ---
 
 <div class="callout">
   <span class="callout__mark" aria-hidden="true"><Icon name="clock" size={170} /></span>
   {paras.map((para, i) => <p class:list={{ callout__rule: i === paras.length - 1 && i > 0 }}>{para}</p>)}
+  {
+    howTo && (
+      <p class="callout__how">
+        {howTo} <a href={site.phone.smsHref}>{site.phone.display}</a>.{howToNote && ` ${howToNote}`}
+      </p>
+    )
+  }
 </div>
 
 <style>
@@ -49,5 +60,10 @@ const paras = cancellationPolicy.paragraphs;
 
   .callout__rule {
     font-weight: var(--weight-semibold);
+  }
+
+  .callout__how a {
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
   }
 </style>

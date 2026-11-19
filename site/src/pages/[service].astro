@@ -2,7 +2,7 @@
 // One-on-one service pages (physiotherapy, pelvic health, vestibular, exercise therapy).
 // Same structure for every service: hero → is this for you → what to expect →
 // treatment → who you'll see → good to know → related → book. Pilates has its own page.
-import { getCollection, getEntries, render, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntries, getEntry, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
@@ -39,6 +39,10 @@ const names = team.map((t) => t.data.firstName);
 const solo = team.length === 1 && team[0].data.bookingUrl ? team[0] : undefined;
 const bookUrl = solo?.data.bookingUrl ?? site.booking.url;
 const bookLabel = solo ? `Book with ${solo.data.firstName}` : 'Book now';
+// "Good to know" notes, each with the practitioner to book with, if it names one.
+const goodToKnow = await Promise.all(
+  d.goodToKnow.map(async (g) => ({ g, person: g.bookWith ? ((await getEntry(g.bookWith)) as CollectionEntry<'team'> | undefined) : undefined })),
+);
 const seeLine = names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names.at(-1)}` : names[0];
 
 // Conditions as tiles: those with a description first, then the short ones.
@@ -146,9 +150,16 @@ const sections = [
           </ul>
           {d.goodToKnow.length > 0 && (
             <ul class="good" role="list">
-              {d.goodToKnow.map((g) => (
+              {goodToKnow.map(({ g, person }) => (
                 <Note as="li">
                   <strong>{g.name}.</strong> {g.detail}
+                  {person?.data.bookingUrl && (
+                    <span class="good__book">
+                      <Button href={person.data.bookingUrl} icon="calendar" size="s">
+                        Book with {person.data.firstName}
+                      </Button>
+                    </span>
+                  )}
                 </Note>
               ))}
             </ul>
@@ -382,6 +393,11 @@ const sections = [
     display: grid;
     gap: var(--space-xs);
     margin-top: var(--space-l);
+  }
+
+  .good__book {
+    display: block;
+    margin-top: var(--space-xs);
   }
 
   /* Practical links: supporting detail, so no boxes; an icon, a title and a line each. */

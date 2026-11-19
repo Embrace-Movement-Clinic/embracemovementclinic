@@ -1,5 +1,5 @@
 ---
-// Practitioner profile: photo and roles → status → experience → qualifications → bio → services → book.
+// Practitioner profile: name, roles and status (with the photo below on phones, beside on wide screens) → experience → qualifications → bio → services → book.
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -52,7 +52,6 @@ const jsonLd = {
 >
   <section class="profile-hero curve-bottom" aria-labelledby="page-title">
     <div class="wrap profile-hero__grid">
-      <Photo src={d.photo} alt={d.name} note={d.photoNote} position={d.photoPosition} ratio="4 / 5" loading="eager" class="profile-hero__photo" sizes="(min-width: 56em) 35vw, 100vw" />
       <div class="profile-hero__text">
         <Breadcrumbs items={[{ label: 'Team', href: '/team' }, { label: d.name }]} />
         <h1 id="page-title">{d.name}</h1>
@@ -75,6 +74,8 @@ const jsonLd = {
           </Button>
         </div>
       </div>
+      {/* After the text, so phones show the name, titles and status first; beside it, on the left, on wide screens. */}
+      <Photo src={d.photo} alt={d.name} note={d.photoNote} position={d.photoPosition} ratio="4 / 5" loading="eager" class="profile-hero__photo" sizes="(min-width: 56em) 35vw, 100vw" />
     </div>
   </section>
 
@@ -190,6 +191,12 @@ const jsonLd = {
   @media (min-width: 56em) {
     :global(.profile-hero__photo) {
       max-width: none;
+    }
+
+    /* The photo (or the <picture> around it) goes back on the left. */
+    .profile-hero__grid > :global(picture),
+    .profile-hero__grid > :global(.profile-hero__photo) {
+      order: -1;
     }
   }
 

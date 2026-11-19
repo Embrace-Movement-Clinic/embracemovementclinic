@@ -63,7 +63,7 @@ Many of these can now be filled in directly on the website editor (`/admin`): op
 
 - [x] **Nookal: exercise therapy with Nicole.** Leave Nookal as is (13 Nov 2026): separate sessions would confuse patients when booking. Nicole changes the billing code in Nookal per patient if needed
 - [ ] **Laura's return date:** her "On maternity leave until March 2027" status and the Vestibular page's availability note now hide themselves after a date, but neither has one yet (her exact return date isn't known). Set "Hide … automatically after" on /admin (Team → Laura, and Services → Vestibular Physiotherapy) once it is. Nicole's status hides itself after 3 January 2027. Also review the "Laura from March 2027" notes on Exercise Therapy and Patient information after she's back
-- [ ] **Nookal cancellation policy:** change Nookal's own policy text and any SMS reminders from 8 to 12 hours, to match the website
+- [ ] **Nookal cancellation policy:** change Nookal's own policy text and any SMS reminders from 8 to 12 hours, to match the website, and say to cancel by texting 0434 686 261 (the website now says this, and that notice counts from when the text is sent)
 
 ## Access (confirm who has it; don't store it here)
 

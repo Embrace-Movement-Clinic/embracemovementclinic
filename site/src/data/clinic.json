@@ -33,7 +33,7 @@
   ],
   "notice": {
     "enabled": true,
-    "message": "The clinic is temporarily closed and reopens on Monday 4 January 2027.",
+    "message": "January bookings are open. The clinic reopens on Monday 4 January 2027.",
     "linkLabel": "Read the latest update",
     "linkHref": "/news/reopening-january-2027",
     "until": "2027-01-03"

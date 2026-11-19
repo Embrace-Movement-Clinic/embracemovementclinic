@@ -24,6 +24,13 @@ import { classFacts, classSteps, equipment, booking, timetable, timetableFrom } 
 const service = (await getEntry('services', 'pilates')) as CollectionEntry<'services'>;
 const d = service.data;
 const related = (await getEntries(d.related)) as CollectionEntry<'services'>[];
+// While one practitioner runs every class on the timetable (and has their own booking page), the
+// booking buttons go straight to them: the pre-class assessment and classes are both booked there.
+const classIds = new Set(timetable?.flatMap((day) => day.classes.map((c) => c.with)) ?? []);
+const onlyId = classIds.size === 1 ? [...classIds][0] : undefined;
+const instructor = onlyId ? ((await getEntry('team', onlyId)) as CollectionEntry<'team'> | undefined) : undefined;
+const bookUrl = instructor?.data.bookingUrl ?? site.booking.url;
+const bookLabel = instructor?.data.bookingUrl ? `Book with ${instructor.data.firstName}` : 'Book now';
 
 const jsonLd = serviceNode({
   name: d.title,
@@ -51,9 +58,8 @@ const sections: { href: string; label: string; icon: IconName }[] = [
     lede={d.lede}
   >
     <Fragment slot="actions">
-      <Button href={site.booking.url} icon="calendar" size="l">Book now</Button>
-      <Button href="#timetable" variant="secondary" size="l" class="wide-only">Timetable</Button>
-      <Button href={site.phone.href} variant="secondary" size="l" icon="phone" class="phone-only">Call {site.phone.display}</Button>
+      <Button href={bookUrl} icon="calendar" size="l">{bookLabel}</Button>
+      <Button href="#timetable" variant="secondary" size="l">View timetable</Button>
     </Fragment>
     <Photo slot="aside" src={d.image} alt={d.imageAlt ?? ''} note={d.imageNote} position={d.imagePosition} ratio="4 / 3" tone="dark" loading="eager" sizes="(min-width: 56em) 45vw, 100vw" />
   </PageHero>
@@ -116,7 +122,7 @@ const sections: { href: string; label: string; icon: IconName }[] = [
         )
       }
       <div class="timetable__actions">
-        <Button href={site.booking.url} icon="external">Check live availability</Button>
+        <Button href={bookUrl} icon="external">Check live availability</Button>
         <Button href={site.phone.smsHref} variant="secondary" icon="message">
           Text us to join a waitlist
         </Button>
@@ -167,7 +173,7 @@ const sections: { href: string; label: string; icon: IconName }[] = [
     )
   }
 
-  <BookingBand title="Ready to start classes?" text="Book your once-off pre-class assessment online, or call us to talk it through." />
+  <BookingBand title="Ready to start classes?" text="Book your once-off pre-class assessment online, or call us to talk it through." bookLabel={bookLabel} bookUrl={bookUrl} />
 </BaseLayout>
 
 <style>
