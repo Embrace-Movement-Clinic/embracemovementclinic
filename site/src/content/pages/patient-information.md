@@ -20,41 +20,6 @@ fees:
   - group: Physiotherapy
     item: Extended review (60 minutes)
     price: $170
-  - group: Pelvic health physiotherapy
-    item: Initial consultation (60 minutes)
-    price: $210
-  - group: Pelvic health physiotherapy
-    item: Review (30 minutes)
-    price: $130
-  - group: Pelvic health physiotherapy
-    item: Extended review (60 minutes)
-    price: $200
-  - group: Vestibular physiotherapy
-    item: Initial consultation (45 minutes)
-    price: $150
-  - group: Vestibular physiotherapy
-    item: Review (30 minutes)
-    price: $110
-  - group: Exercise physiology
-    item: Initial consultation (45 minutes)
-    price: $145
-    note: With Nicole, an Accredited Exercise Physiologist.
-  - group: Exercise physiology
-    item: Review (30 minutes)
-    price: $95
-    note: With Nicole.
-  - group: Exercise physiology
-    item: Review (45 minutes)
-    price: $125
-    note: With Nicole.
-  - group: Exercise therapy
-    item: One-on-one session (30 minutes)
-    price: $95
-    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
-  - group: Exercise therapy
-    item: One-on-one session (45 minutes)
-    price: $125
-    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Classes
     item: Pre-class assessment (45 minutes)
     price: $125
@@ -71,6 +36,41 @@ fees:
     item: 20-class pack
     price: $700
     note: Buy in the clinic.
+  - group: Exercise physiology / exercise therapy
+    item: Initial consultation (45 minutes)
+    price: $145
+    note: With Nicole, an Accredited Exercise Physiologist.
+  - group: Exercise physiology / exercise therapy
+    item: Review (30 minutes)
+    price: $95
+    note: With Nicole.
+  - group: Exercise physiology / exercise therapy
+    item: Review (45 minutes)
+    price: $125
+    note: With Nicole.
+  - group: Exercise physiology / exercise therapy
+    item: One-on-one session (30 minutes)
+    price: $95
+    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
+  - group: Exercise physiology / exercise therapy
+    item: One-on-one session (45 minutes)
+    price: $125
+    note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
+  - group: Pelvic health physiotherapy
+    item: Initial consultation (60 minutes)
+    price: $210
+  - group: Pelvic health physiotherapy
+    item: Review (30 minutes)
+    price: $130
+  - group: Pelvic health physiotherapy
+    item: Extended review (60 minutes)
+    price: $200
+  - group: Vestibular physiotherapy
+    item: Initial consultation (45 minutes)
+    price: $150
+  - group: Vestibular physiotherapy
+    item: Review (30 minutes)
+    price: $110
 feeNotes:
   - Exercise sessions may be claimable with private health, depending on your level of cover.
   - If your referral or rebate is specifically for exercise physiology (for example a GP chronic condition management plan referral to an exercise physiologist), please book with Nicole, our Accredited Exercise Physiologist. Exercise therapy is also available with both Nicole and Laura, and may be claimable as physiotherapy, depending on your fund.

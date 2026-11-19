@@ -19,17 +19,21 @@ interface Props {
 const { fees } = Astro.props;
 
 // Each group heading links to its service page: matched on the service's title, short name or
-// address ("Physiotherapy" → /physiotherapy), and any "class" group → the classes page.
+// address ("Physiotherapy" → /physiotherapy), and any "class" group → the classes page. A heading
+// naming two things ("Exercise physiology / exercise therapy") links to the first part that matches.
 const services = await getCollection('services');
 const norm = (t: string) => t.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, ' ').trim();
-const serviceFor = (group?: string) => {
-  if (!group) return undefined;
+const matchService = (group: string) => {
   const g = norm(group);
   return (
     services.find((s) =>
       [s.data.title, s.data.shortTitle ?? '', s.id.replace(/-/g, ' '), (s.data.oldUrl ?? '').replace(/[/-]/g, ' ')].some((n) => norm(n) === g),
     ) ?? (/\bclass/.test(g) ? services.find((s) => s.data.kind === 'class') : undefined)
   );
+};
+const serviceFor = (group?: string) => {
+  if (!group) return undefined;
+  return matchService(group) ?? group.split('/').map(matchService).find(Boolean);
 };
 
 const groups = fees
