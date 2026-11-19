@@ -85,9 +85,27 @@ const groups = [
     }
   }
 
+  /* Tablets: the classes card spans the width, with its photo beside the text in a near-square
+     frame (a wide strip would crop the portrait photo's heads). */
   @media (min-width: 40em) and (max-width: 61.99em) {
-    .cards--classes {
-      --photo-ratio-override: 2 / 1;
+    .cards--classes .card :global(.photo-card) {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      grid-template-rows: none;
+      align-items: center;
+    }
+
+    .cards--classes :global(picture) {
+      display: block;
+      position: relative;
+      align-self: stretch;
+      min-height: 20rem;
+    }
+
+    .cards--classes :global(.photo) {
+      --photo-ratio-override: auto;
+      position: absolute;
+      inset: 0;
+      height: 100%;
     }
   }
 

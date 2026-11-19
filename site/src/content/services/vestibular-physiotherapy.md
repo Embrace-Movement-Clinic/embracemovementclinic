@@ -5,7 +5,7 @@ order: 4
 kind: appointment
 image: /src/assets/photos/1793833033316.webp
 imageAlt: A physiotherapist supporting a patient’s head as they lie on the treatment table
-imagePosition: 26% 54%
+imagePosition: 26% 45%
 blurb: Assessment and treatment for vertigo, dizziness and balance problems.
 summary: Assessment and treatment for vertigo, dizziness and decreased balance, including Benign Paroxysmal Positional Vertigo (BPPV).
 lede: Assessment and treatment for vertigo, dizziness and balance problems caused by disorders of the inner ear.

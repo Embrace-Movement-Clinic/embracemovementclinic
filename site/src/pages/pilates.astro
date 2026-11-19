@@ -283,9 +283,22 @@ const sections: { href: string; label: string; icon: IconName }[] = [
     margin-top: var(--space-m);
   }
 
+  /* Same columns as the service pages' related cards: one, then two on tablets, then three. */
   .related {
     display: grid;
     gap: var(--space-m);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 40em) {
+    .related {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 62em) {
+    .related {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 </style>

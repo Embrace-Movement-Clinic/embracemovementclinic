@@ -174,3 +174,32 @@
     background: var(--color-accent-soft);
   }
 }
+
+/* "You might also need" service cards (.related on service pages and Pilates): on tablets they
+   sit two to a row, so an odd one out at the end spans the row, with its photo beside the text,
+   rather than leaving half the row empty. */
+@media (min-width: 40em) and (max-width: 61.99em) {
+  .related > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .related > li:last-child:nth-child(odd) .photo-card {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-rows: none;
+    align-items: center;
+  }
+
+  .related > li:last-child:nth-child(odd) picture {
+    display: block;
+    position: relative;
+    align-self: stretch;
+    min-height: 12rem;
+  }
+
+  .related > li:last-child:nth-child(odd) .photo {
+    --photo-ratio-override: auto;
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+}

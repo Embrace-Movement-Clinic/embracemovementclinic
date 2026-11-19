@@ -5,7 +5,7 @@ order: 3
 kind: appointment
 image: ../../assets/photos/pxl-20220611-045341759-2.webp
 imageAlt: A physiotherapist guiding a pregnant client through a lunge
-imagePosition: 59% 85%
+imagePosition: 70% 85%
 blurb: Assessment and treatment for pelvic health concerns, including pregnancy, postnatal and menopause care.
 summary: Assessment and treatment for incontinence, prolapse, pelvic pain, diastasis recti, pre- and postnatal care, sexual dysfunction and menopause care.
 lede: Assessment and treatment for pelvic floor and pelvic health concerns, including pregnancy, postnatal and menopause care.
