@@ -387,10 +387,11 @@ collections:
             label_singular: fee
             widget: list
             required: false
-            summary: '{{fields.group}} · {{fields.item}}: {{fields.price}}'
+            summary: '{{fields.group}} · {{fields.subgroup}} {{fields.item}}: {{fields.price}}'
             hint: Keep these the same as the prices on the Nookal booking page (GST included). Fees with the same group are listed together, in this order.
             fields:
               - { name: group, label: Group, widget: string, required: false, hint: 'The service it belongs to, e.g. "Physiotherapy".' }
+              - { name: subgroup, label: Subheading, widget: string, required: false, hint: 'Optional, for a group that covers two kinds of appointment, e.g. "Exercise physiology" and "Exercise therapy". Fees with the same subheading are listed under it; a note they all share is shown once, under the subheading.' }
               - { name: item, label: Appointment or class, widget: string, hint: 'E.g. "Initial consultation (45 minutes)".' }
               - { name: price, label: Price, widget: string, hint: 'E.g. "$120".' }
               - { name: note, label: Note, widget: string, required: false }

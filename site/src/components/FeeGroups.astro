@@ -1,12 +1,15 @@
 ---
 // Fees, one panel per service, with each service's name as a pill linking to its page.
 // Fees are listed under their group in the order they were entered on /admin
-// (Pages → Patient information → Fees).
+// (Pages → Patient information → Fees). A group covering two kinds of appointment (e.g.
+// exercise physiology and exercise therapy) splits into subheadings; a note every fee under a
+// subheading shares (who it's with) is shown once, under the subheading, not on each fee.
 import { getCollection } from 'astro:content';
 import Icon from './Icon.astro';
 
 interface Fee {
   group?: string;
+  subgroup?: string;
   item: string;
   price: string;
   note?: string;
@@ -43,7 +46,24 @@ const groups = fees
     else all.push({ name: f.group, fees: [f] });
     return all;
   }, [])
-  .map((g) => ({ ...g, service: serviceFor(g.name) }));
+  .map((g) => ({
+    ...g,
+    service: serviceFor(g.name),
+    // Runs of fees under the same subheading (one run with no name when there are none).
+    parts: g.fees
+      .reduce<{ name?: string; fees: Fee[] }[]>((all, f) => {
+        const name = f.subgroup?.trim() || undefined;
+        const last = all.at(-1);
+        if (last && last.name === name) last.fees.push(f);
+        else all.push({ name, fees: [f] });
+        return all;
+      }, [])
+      .map((part) => {
+        const notes = new Set(part.fees.map((f) => f.note?.trim() || ''));
+        const shared = part.name && notes.size === 1 ? [...notes][0] || undefined : undefined;
+        return { ...part, shared };
+      }),
+  }));
 ---
 
 <div class="fee-groups">
@@ -54,30 +74,37 @@ const groups = fees
           <h3 class="h4 fee-group__title">
             {g.service ? (
               <a class="fee-pill" href={`/${g.service.id}`}>
-                {g.name}
+                {/* A no-break space keeps "/" with the word before it when the name wraps. */}
+                {g.name.replace(' / ', ' / ')}
                 <Icon name="arrow-right" size={18} />
               </a>
             ) : (
-              <span class="fee-pill">{g.name}</span>
+              <span class="fee-pill">{g.name.replace(' / ', ' / ')}</span>
             )}
           </h3>
         )}
-        <dl class="fees">
-          {g.fees.map((f) => (
-            <div>
-              <dt>
-                {f.item}
-                {f.note && (
-                  <>
-                    {' '}
-                    <span class="fee-note">{f.note}</span>
-                  </>
-                )}
-              </dt>
-              <dd>{f.price}</dd>
-            </div>
-          ))}
-        </dl>
+        {g.parts.map((part) => (
+          <div class:list={['fee-part', { 'fee-part--named': part.name }]}>
+            {part.name && <h4 class="fee-sub">{part.name}</h4>}
+            {part.shared && <p class="fee-note fee-sub__note">{part.shared}</p>}
+            <dl class="fees">
+              {part.fees.map((f) => (
+                <div>
+                  <dt>
+                    {f.item}
+                    {f.note && !part.shared && (
+                      <>
+                        {' '}
+                        <span class="fee-note">{f.note}</span>
+                      </>
+                    )}
+                  </dt>
+                  <dd>{f.price}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
       </div>
     ))
   }
@@ -122,6 +149,27 @@ const groups = fees
   a.fee-pill:hover {
     background: color-mix(in srgb, var(--color-brand) var(--hover-keep), #000);
     color: var(--color-on-brand);
+  }
+
+  /* Subheadings inside a group: a rule between them, the shared note under the name. */
+  .fee-part--named + .fee-part--named {
+    margin-top: var(--space-s);
+    padding-top: var(--space-s);
+    border-top: 2px solid var(--color-line);
+  }
+
+  .fee-group__title + .fee-part--named {
+    margin-top: var(--space-s);
+  }
+
+  .fee-sub {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-weight: var(--weight-bold);
+  }
+
+  .fee-sub__note {
+    margin-bottom: var(--space-3xs);
   }
 
   .fees div {

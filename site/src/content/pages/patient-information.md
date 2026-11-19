@@ -37,22 +37,27 @@ fees:
     price: $700
     note: Buy in the clinic.
   - group: Exercise physiology / exercise therapy
+    subgroup: Exercise physiology
     item: Initial consultation (45 minutes)
     price: $145
     note: With Nicole, an Accredited Exercise Physiologist.
   - group: Exercise physiology / exercise therapy
+    subgroup: Exercise physiology
     item: Review (30 minutes)
     price: $95
-    note: With Nicole.
+    note: With Nicole, an Accredited Exercise Physiologist.
   - group: Exercise physiology / exercise therapy
+    subgroup: Exercise physiology
     item: Review (45 minutes)
     price: $125
-    note: With Nicole.
+    note: With Nicole, an Accredited Exercise Physiologist.
   - group: Exercise physiology / exercise therapy
+    subgroup: Exercise therapy
     item: One-on-one session (30 minutes)
     price: $95
     note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.
   - group: Exercise physiology / exercise therapy
+    subgroup: Exercise therapy
     item: One-on-one session (45 minutes)
     price: $125
     note: With Nicole, or with Laura from March 2027, after an initial physiotherapy consultation.

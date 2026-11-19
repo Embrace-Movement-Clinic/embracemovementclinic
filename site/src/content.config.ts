@@ -176,7 +176,7 @@ const patientInfo = page('patient-information', () => ({
   whatToBring: z.array(z.string()).default([]),
   /** Prices as shown on the clinic's Nookal booking page (GST included). `group` = the service heading it sits under. */
   fees: z
-    .array(z.object({ group: z.string().optional(), item: z.string(), price: z.string(), note: z.string().optional() }))
+    .array(z.object({ group: z.string().optional(), subgroup: z.string().optional(), item: z.string(), price: z.string(), note: z.string().optional() }))
     .default([]),
   feeNotes: z.array(z.string()).default([]),
   /** Medicare (GP chronic condition management plan), DVA, NDIS, WorkCover: empty until confirmed. */
