@@ -128,6 +128,8 @@ const news = defineCollection({
             images: z.array(z.object({ src: image(), alt: z.string(), position: z.string().optional() })).default([]),
             buttons: z.array(z.object({ label: z.string(), link: z.string(), style: z.enum(['primary', 'secondary']).default('primary') })).default([]),
             highlight: z.boolean().default(false),
+            /** Something from elsewhere on the site, shown under the text: the class timetable. */
+            show: z.enum(['timetable']).optional(),
           }),
         )
         .default([]),

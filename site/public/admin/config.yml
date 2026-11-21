@@ -289,6 +289,7 @@ collections:
               - { name: link, label: Link, widget: string, pattern: ['^(/|https://|sms:|tel:|mailto:)', 'Start with / for a page on this site, or https://, sms:, tel: or mailto:'], hint: 'E.g. /pilates#timetable, or https://… for another site.' }
               - { name: style, label: Style, widget: select, default: primary, options: [{ label: Filled (main action), value: primary }, { label: Outline, value: secondary }] }
           - { name: highlight, label: Highlight, widget: boolean, default: false, required: false, hint: 'Shows the section as a petrol card, for the main call to action (e.g. booking). Use for one section at most.' }
+          - { name: show, label: Also show, widget: select, required: false, options: [{ label: Class timetable, value: timetable }], hint: 'Optional. Shows the current class timetable (from Policies and timetable) under the text, so it always matches the Pilates page.' }
       - name: images
         label: Photos beside the post text
         label_singular: photo

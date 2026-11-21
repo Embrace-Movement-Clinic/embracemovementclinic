@@ -6,6 +6,8 @@
 // petrol card, for the main call to action. A simple post (text only, in the Markdown body) is
 // shown as one band, with its photos beside it. When a post is shared (e.g. the link in a text
 // message), its preview shows the clinic's logo card (public/og-default.png), not one of its photos.
+// A section set to "Also show: Class timetable" spans the full width, with the same timetable as
+// the Pilates page under its text (from policies.json), so the two never disagree.
 // Data: src/content/news (edited on /admin, News). Section text: basic formatting, src/data/markdown.ts.
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -16,6 +18,9 @@ import Icon, { type IconName } from '../../components/Icon.astro';
 import Button from '../../components/Button.astro';
 import Note from '../../components/Note.astro';
 import BookingBand from '../../components/BookingBand.astro';
+import Timetable from '../../components/Timetable.astro';
+import Todo from '../../components/Todo.astro';
+import { timetable, timetableFrom } from '../../data/policies';
 import { site } from '../../data/site';
 import { clinicRef } from '../../data/schema';
 import { renderText } from '../../data/markdown';
@@ -47,6 +52,7 @@ const sections = d.sections.map((s, i) => ({
   asideHtml: renderText(s.aside?.text),
   hasSide: Boolean(s.aside?.text?.trim()) || s.images.length > 0,
 }));
+const layout = (s: (typeof sections)[number]) => (s.show ? 'sec--wide' : s.hasSide ? 'sec--side' : 'sec--plain');
 // Bands alternate white and mist; the simple-post body takes the next one.
 const alt = (i: number) => i % 2 === 1;
 
@@ -131,10 +137,18 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
               )}
             </div>
           ) : (
-            <div class:list={['sec', s.hasSide ? 'sec--side' : 'sec--plain']}>
+            <div class:list={['sec', layout(s)]}>
               <SectionHead id={`${s.id}-h`} icon={s.icon} title={s.heading} size="s" class="sec__head" />
               <div class="sec__body">
                 {s.html && <div class="rich" set:html={s.html} />}
+                {s.show === 'timetable' &&
+                  (timetable ? (
+                    <Timetable days={timetable} from={timetableFrom} />
+                  ) : (
+                    <Todo as="div" live="Call or text us for current class times.">
+                      class timetable (Policies and timetable on /admin)
+                    </Todo>
+                  ))}
                 {s.buttons.length > 0 && (
                   <div class="sec__actions">
                     {s.buttons.map((b) => (
@@ -218,6 +232,24 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
     display: grid;
     gap: var(--space-m);
     max-width: 46rem;
+  }
+
+  /* A section showing the timetable: heading above, then text and timetable across the full width. */
+  .sec--wide .sec__body {
+    max-width: none;
+  }
+
+  .sec--wide .sec__body > .rich {
+    max-width: 46rem;
+  }
+
+  /* On a mist band the timetable's own mist panel would vanish: white panel, mist day labels. */
+  .band--alt :global(.board) {
+    background: var(--color-bg);
+  }
+
+  .band--alt :global(.day__name) {
+    background: var(--color-bg-alt);
   }
 
   .sec__actions {

@@ -16,11 +16,10 @@ sections:
       - **Saturday:** Closed (occasional appointments on request)
       - **Sunday:** Closed
 
-      Small group classes are back, all with Nicole. See the [new class timetable](/pilates#timetable) for all the times.
-    buttons:
-      - label: See the class timetable
-        link: /pilates#timetable
-        style: secondary
+      Small group classes are back, all with Nicole. See the new class timetable below for all the times.
+  - heading: Class timetable
+    icon: clock
+    show: timetable
   - heading: Book in now
     icon: calendar
     highlight: true
