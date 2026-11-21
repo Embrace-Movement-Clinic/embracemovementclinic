@@ -55,6 +55,7 @@ No passwords or secrets are in the project. The pieces, all owned by the clinic:
 - **New editor:** a free GitHub account, added to the repository with write access. Nothing else to set up.
 - **Someone leaves:** remove their access to the repository. To sign everyone out at once: the GitHub App's General page → **Revoke all user tokens**.
 - **Client secret lost or leaked:** in the GitHub App, Credentials → make a new client secret, put it in the login helper's `GITHUB_CLIENT_SECRET` in Cloudflare, then delete the old one in GitHub.
+- **Short links for texts:** `embracemovementclinic.com.au/portal` (the Nookal patient portal) and `/update` (the reopening update), set in `site/public/_redirects`. If the patient portal address changes on /admin, `/portal` must change to match in the same go: the build checks they agree and won't publish until they do (ask Claude).
 - **Site address changes** (a new domain or Pages project): add it to `ALLOWED_DOMAINS` in `wrangler.toml` in the `sveltia-cms-auth` repository (committing redeploys the helper), or sign-in from there is refused.
 
 ## Launch steps for the editor (one-off)

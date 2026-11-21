@@ -19,3 +19,9 @@
 # Online booking (Nookal). 302 rather than 301, so browsers don't cache it if the booking
 # link changes. Keep in step with booking.url in src/data/site.ts.
 /book-now                     https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/location    302
+
+# Short links for text messages to patients (21 Nov 2026), e.g. embracemovementclinic.com.au/portal.
+# 302, so they can be repointed later without browsers remembering the old destination.
+# /portal: keep in step with booking.portalUrl in src/data/policies.json.
+/portal                       https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce    302
+/update                       /news/reopening-january-2027         302
