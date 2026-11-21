@@ -4,7 +4,8 @@
 // photos or side panel sit beside its text on wide screens; without them the heading sits on the
 // left and the text on the right, so the page uses its full width. A highlighted section is a
 // petrol card, for the main call to action. A simple post (text only, in the Markdown body) is
-// shown as one band, with its photos beside it.
+// shown as one band, with its photos beside it. When a post is shared (e.g. the link in a text
+// message), its preview shows the clinic's logo card (public/og-default.png), not one of its photos.
 // Data: src/content/news (edited on /admin, News). Section text: basic formatting, src/data/markdown.ts.
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -35,9 +36,6 @@ const hasBody = Boolean(post.body?.trim());
 
 // "…see Patient information." → link that phrase rather than repeating it after the note.
 const noteParts = d.archivedNote ? d.archivedNote.split('Patient information') : [];
-
-// The post's first photo is its picture when shared (and on the news list).
-const firstImage = d.sections.flatMap((s) => s.images)[0] ?? d.images[0];
 
 // Anchor for each section (e.g. /news/…#book-in-now), so a text message can link straight to it.
 const slug = (t: string) => t.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -71,9 +69,6 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
   noindex
   title={d.title}
   description={d.summary}
-  image={firstImage?.src}
-  imageAlt={firstImage?.alt}
-  imagePosition={firstImage?.position}
   ogType="article"
   jsonLd={jsonLd}
 >
