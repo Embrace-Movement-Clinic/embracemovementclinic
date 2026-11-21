@@ -66,6 +66,10 @@ sections:
 
       See you soon,\
       Nicole and Laura
+    buttons:
+      - label: Explore our services
+        link: /services
+        style: secondary
     images:
       - src: ../../assets/photos/nicole-imogen.webp
         alt: Nicole holding baby Imogen over her shoulder, under festoon lights
