@@ -104,8 +104,7 @@
       "Given there is a waitlist for many of our services, please provide as much notice as possible if you need to cancel or reschedule your booking so the time can be offered to another client.",
       "Please give at least 12 hours’ notice if you need to cancel. Bookings cancelled with less than 12 hours’ notice are charged the full price."
     ],
-    "howTo": "To cancel or reschedule, call us on",
-    "howToNote": "If we can’t answer, leave a voicemail: your notice counts from when you leave it, even outside opening hours."
+    "howTo": "To cancel or reschedule, please use the [patient portal](https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce). If you can’t, text us on [0434 686 261](sms:+61434686261): your notice counts from when you send it, even outside opening hours."
   },
   "classFacts": [
     {

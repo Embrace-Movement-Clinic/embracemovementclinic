@@ -641,8 +641,7 @@ collections:
             widget: object
             fields:
               - { name: paragraphs, label: Paragraphs, label_singular: paragraph, widget: list, field: { name: paragraph, label: Paragraph, widget: text } }
-              - { name: howTo, label: How to cancel (before the phone number), widget: string, required: false, hint: 'Shown after the policy, followed by the clinic’s number as a phone link, e.g. "To cancel or reschedule, call us on".' }
-              - { name: howToNote, label: How to cancel (after the phone number), widget: string, required: false, hint: 'Optional, e.g. "If we can’t answer, leave a voicemail: your notice counts from when you leave it, even outside opening hours."' }
+              - { name: howTo, label: How to cancel, widget: markdown, required: false, buttons: [bold, link], editor_components: [], hint: 'Shown after the policy on Patient information and Pilates. Links can go to the patient portal (https://…) or a text message (sms:+61434686261).' }
           - name: classFacts
             label: Class facts
             label_singular: fact

@@ -22,8 +22,8 @@ export interface TimetableDay {
 
 // The editor leaves out optional fields that are blank, so lists may be missing.
 interface PoliciesData {
-  /** howTo goes before the clinic's number (a phone link), howToNote after it. */
-  cancellation: { paragraphs: string[]; howTo?: string; howToNote?: string };
+  /** howTo: how to cancel, shown after the policy (basic formatting, so it can link the patient portal and a text-message link). */
+  cancellation: { paragraphs: string[]; howTo?: string };
   classFacts: { label: string; value: string }[];
   equipment: string[];
   studioEtiquette: { name: string; detail: string }[];

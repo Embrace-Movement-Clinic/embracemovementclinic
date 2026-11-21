@@ -1,26 +1,20 @@
 ---
 // The cancellation policy as a pale teal callout with a large faint clock; the last paragraph
-// (the rule itself) in bold, then how to cancel ("…call us on" and the number as a phone link).
-// Text: policies.json "cancellation" (/admin: Clinic settings → Policies).
+// (the rule itself) in bold, then how to cancel: the patient portal first, a text second (links
+// written into the text, so it can say exactly that). Text: policies.json "cancellation"
+// (/admin: Clinic settings → Policies and timetable); basic formatting (src/data/markdown.ts).
 import Icon from './Icon.astro';
 import { cancellationPolicy } from '../data/policies';
-import { site } from '../data/site';
+import { renderText } from '../data/markdown';
 
 const paras = cancellationPolicy.paragraphs;
-const howTo = cancellationPolicy.howTo?.trim();
-const howToNote = cancellationPolicy.howToNote?.trim();
+const howTo = renderText(cancellationPolicy.howTo);
 ---
 
 <div class="callout">
   <span class="callout__mark" aria-hidden="true"><Icon name="clock" size={170} /></span>
   {paras.map((para, i) => <p class:list={{ callout__rule: i === paras.length - 1 && i > 0 }}>{para}</p>)}
-  {
-    howTo && (
-      <p class="callout__how">
-        {howTo} <a href={site.phone.href}>{site.phone.display}</a>.{howToNote && ` ${howToNote}`}
-      </p>
-    )
-  }
+  {howTo && <div class="callout__how" set:html={howTo} />}
 </div>
 
 <style>
@@ -62,7 +56,7 @@ const howToNote = cancellationPolicy.howToNote?.trim();
     font-weight: var(--weight-semibold);
   }
 
-  .callout__how a {
+  .callout__how :global(a) {
     font-weight: var(--weight-semibold);
     white-space: nowrap;
   }
