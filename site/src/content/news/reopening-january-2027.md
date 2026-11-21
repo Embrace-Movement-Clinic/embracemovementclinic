@@ -37,7 +37,7 @@ sections:
   - heading: Our new patient portal
     icon: user
     text: |-
-      We're excited to launch our new Patient Portal, where you can easily book appointments, pay invoices, message clinic staff and update your details online! Keep an eye out for your unique sign-up link in your next appointment reminder to get started. If you’d like to know more about the portal, ask Nicole at your first appointment back.
+      We're excited to launch our new Patient Portal, where you can easily book appointments, pay invoices, message clinic staff and update your details online! Keep an eye out for your unique sign-up link in a text message soon.
     buttons:
       - label: Patient portal
         link: https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce
