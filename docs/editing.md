@@ -49,13 +49,13 @@ No passwords or secrets are in the project. The pieces, all owned by the clinic:
 | Piece | Where | What it does |
 |---|---|---|
 | GitHub App "Embrace Movement Clinic CMS" | GitHub → `Embrace-Movement-Clinic` organisation → Settings → Developer settings → GitHub Apps | Lets the editor act for the person signed in. Installed on the `embracemovementclinic` repository only. Permissions: Contents and Pull requests read and write |
-| Login helper `sveltia-cms-auth` | Cloudflare → Workers & Pages → `sveltia-cms-auth`, at `https://sveltia-cms-auth.twilight-haze-b8a5.workers.dev` | Does the GitHub sign-in for `/admin`. Its settings: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (stored as a Cloudflare secret) and `ALLOWED_DOMAINS` (the sites allowed to use it: `www.embracemovementclinic.com.au`, `embracemovementclinic-7at.pages.dev`, `*.embracemovementclinic-7at.pages.dev`) |
+| Login helper `sveltia-cms-auth` | Cloudflare → Workers & Pages → `sveltia-cms-auth`, at `https://sveltia-cms-auth.twilight-haze-b8a5.workers.dev` | Does the GitHub sign-in for `/admin`. Its settings: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (stored as a Cloudflare secret) and `ALLOWED_DOMAINS` (the sites allowed to use it: `www.embracemovementclinic.com.au`, `embracemovementclinic-7at.pages.dev`, `*.embracemovementclinic-7at.pages.dev`). It is deployed from the clinic's `sveltia-cms-auth` repository, and since 21 Nov 2026 `GITHUB_CLIENT_ID` and `ALLOWED_DOMAINS` are kept in that repository's `wrangler.toml`: change them there, not in the Cloudflare dashboard, or the next deploy undoes the change. The secret stays in Cloudflare only |
 | `base_url` | `site/public/admin/config.yml` | Points the editor at the login helper |
 
 - **New editor:** a free GitHub account, added to the repository with write access. Nothing else to set up.
 - **Someone leaves:** remove their access to the repository. To sign everyone out at once: the GitHub App's General page → **Revoke all user tokens**.
 - **Client secret lost or leaked:** in the GitHub App, Credentials → make a new client secret, put it in the login helper's `GITHUB_CLIENT_SECRET` in Cloudflare, then delete the old one in GitHub.
-- **Site address changes** (a new domain or Pages project): add it to `ALLOWED_DOMAINS` in the login helper's settings, or sign-in from there is refused.
+- **Site address changes** (a new domain or Pages project): add it to `ALLOWED_DOMAINS` in `wrangler.toml` in the `sveltia-cms-auth` repository (committing redeploys the helper), or sign-in from there is refused.
 
 ## Launch steps for the editor (one-off)
 
