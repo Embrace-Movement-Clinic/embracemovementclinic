@@ -145,7 +145,7 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
                   (timetable ? (
                     <Timetable days={timetable} from={timetableFrom} />
                   ) : (
-                    <Todo as="div" live="Call or text us for current class times.">
+                    <Todo as="div" live="Call us for current class times.">
                       class timetable (Policies and timetable on /admin)
                     </Todo>
                   ))}
@@ -437,7 +437,7 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
     }
   }
 
-  /* Phones: a slightly smaller button label, so "Text Nicole on 0434 686 261" fits on one line. */
+  /* Phones: a slightly smaller button label, so a longer one (e.g. "Call Nicole on 0434 686 261") fits on one line. */
   @media (max-width: 39.99em) {
     .feature__actions :global(.btn) {
       font-size: var(--step-0);

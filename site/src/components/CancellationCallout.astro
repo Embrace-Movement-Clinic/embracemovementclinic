@@ -1,6 +1,6 @@
 ---
 // The cancellation policy as a pale teal callout with a large faint clock; the last paragraph
-// (the rule itself) in bold, then how to cancel ("…text us on" and the number as a text link).
+// (the rule itself) in bold, then how to cancel ("…call us on" and the number as a phone link).
 // Text: policies.json "cancellation" (/admin: Clinic settings → Policies).
 import Icon from './Icon.astro';
 import { cancellationPolicy } from '../data/policies';
@@ -17,7 +17,7 @@ const howToNote = cancellationPolicy.howToNote?.trim();
   {
     howTo && (
       <p class="callout__how">
-        {howTo} <a href={site.phone.smsHref}>{site.phone.display}</a>.{howToNote && ` ${howToNote}`}
+        {howTo} <a href={site.phone.href}>{site.phone.display}</a>.{howToNote && ` ${howToNote}`}
       </p>
     )
   }

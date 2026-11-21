@@ -1,7 +1,7 @@
 {
   "classSteps": [
     "Book a once-off pre-class assessment",
-    "Choose your class times online, selecting the relevant practitioner",
+    "Choose your class times online",
     "Class full? Get in touch to join the waitlist"
   ],
   "timetableFrom": "2027-01-04",
@@ -104,8 +104,8 @@
       "Given there is a waitlist for many of our services, please provide as much notice as possible if you need to cancel or reschedule your booking so the time can be offered to another client.",
       "Please give at least 12 hours’ notice if you need to cancel. Bookings cancelled with less than 12 hours’ notice are charged the full price."
     ],
-    "howTo": "To cancel or reschedule, text us on",
-    "howToNote": "Your notice counts from when you send the text, even outside opening hours."
+    "howTo": "To cancel or reschedule, call us on",
+    "howToNote": "If we can’t answer, leave a voicemail: your notice counts from when you leave it, even outside opening hours."
   },
   "classFacts": [
     {
@@ -141,7 +141,7 @@
       "detail": "Grip socks are preferred on the equipment for hygiene and to help it last. They’re available to buy in the clinic, or bring your hospital or trampoline socks."
     },
     {
-      "name": "No sneakers on the equipment",
+      "name": "Shoes off, please",
       "detail": "Preferably no sneakers on the equipment. There’s a shoe rack outside to keep the dirt out."
     },
     {
@@ -150,7 +150,7 @@
     }
   ],
   "booking": {
-    "classes": "Check availability and book classes online. When booking, select the relevant practitioner. Can’t see your preferred time? Text us to check or join the waitlist.",
+    "classes": "Check availability and book classes online. Can’t see your preferred time? Call us to check or join the waitlist.",
     "bookingCode": "Want to save time and avoid creating a new profile every time you book? Ask Nicole or Laura for your unique online booking code. Existing patients will also get a text with their patient portal sign-up link.",
     "portalUrl": "https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce",
     "portalNote": "New to Embrace? Use **Book now**. The **Patient portal** is for existing patients who have a sign-up link.",

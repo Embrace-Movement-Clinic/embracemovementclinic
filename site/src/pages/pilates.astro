@@ -118,14 +118,11 @@ const sections: { href: string; label: string; icon: IconName }[] = [
         timetable ? (
           <Timetable days={timetable} from={timetableFrom} />
         ) : (
-          <Todo as="div" live="Call or text us for current class times.">current class timetable as text (days and times, and who runs each class). The old timetable was an image from July 2025.</Todo>
+          <Todo as="div" live="Call us for current class times.">current class timetable as text (days and times, and who runs each class). The old timetable was an image from July 2025.</Todo>
         )
       }
       <div class="timetable__actions">
         <Button href={bookUrl} icon="external">Check live availability</Button>
-        <Button href={site.phone.smsHref} variant="secondary" icon="message">
-          Text us to join a waitlist
-        </Button>
       </div>
     </div>
   </section>

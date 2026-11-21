@@ -286,7 +286,7 @@ collections:
             hint: Optional, shown under the text.
             fields:
               - { name: label, label: Button text, widget: string, hint: 'E.g. "Book online".' }
-              - { name: link, label: Link, widget: string, pattern: ['^(/|https://|sms:|tel:|mailto:)', 'Start with / for a page on this site, or https://, sms:, tel: or mailto:'], hint: 'E.g. /pilates#timetable, or https://… for another site.' }
+              - { name: link, label: Link, widget: string, pattern: ['^(/|https://|tel:|mailto:)', 'Start with / for a page on this site, or https://, tel: or mailto:'], hint: 'E.g. /pilates#timetable, or https://… for another site.' }
               - { name: style, label: Style, widget: select, default: primary, options: [{ label: Filled (main action), value: primary }, { label: Outline, value: secondary }] }
           - { name: highlight, label: Highlight, widget: boolean, default: false, required: false, hint: 'Shows the section as a petrol card, for the main call to action (e.g. booking). Use for one section at most.' }
           - { name: show, label: Also show, widget: select, required: false, options: [{ label: Class timetable, value: timetable }], hint: 'Optional. Shows the current class timetable (from Policies and timetable) under the text, so it always matches the Pilates page.' }
@@ -546,7 +546,6 @@ collections:
         fields:
           - { name: intro, label: Intro, widget: text, hint: Press Enter to start a new line on the page. }
           - { name: callNote, label: Note under Call, widget: string }
-          - { name: textNote, label: Note under Text, widget: string }
           - { name: emailNote, label: Note under Email, widget: string }
           - { name: bookNote, label: Note under Book online, widget: string }
       - name: services
@@ -642,8 +641,8 @@ collections:
             widget: object
             fields:
               - { name: paragraphs, label: Paragraphs, label_singular: paragraph, widget: list, field: { name: paragraph, label: Paragraph, widget: text } }
-              - { name: howTo, label: How to cancel (before the phone number), widget: string, required: false, hint: 'Shown after the policy, followed by the clinic’s number as a text-message link, e.g. "To cancel or reschedule, text us on".' }
-              - { name: howToNote, label: How to cancel (after the phone number), widget: string, required: false, hint: 'Optional, e.g. "Your notice counts from when you send the text, even outside opening hours."' }
+              - { name: howTo, label: How to cancel (before the phone number), widget: string, required: false, hint: 'Shown after the policy, followed by the clinic’s number as a phone link, e.g. "To cancel or reschedule, call us on".' }
+              - { name: howToNote, label: How to cancel (after the phone number), widget: string, required: false, hint: 'Optional, e.g. "If we can’t answer, leave a voicemail: your notice counts from when you leave it, even outside opening hours."' }
           - name: classFacts
             label: Class facts
             label_singular: fact

@@ -22,7 +22,7 @@ export interface TimetableDay {
 
 // The editor leaves out optional fields that are blank, so lists may be missing.
 interface PoliciesData {
-  /** howTo goes before the clinic's number (a text link), howToNote after it. */
+  /** howTo goes before the clinic's number (a phone link), howToNote after it. */
   cancellation: { paragraphs: string[]; howTo?: string; howToNote?: string };
   classFacts: { label: string; value: string }[];
   equipment: string[];

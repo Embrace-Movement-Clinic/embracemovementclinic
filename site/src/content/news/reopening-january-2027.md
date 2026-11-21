@@ -24,15 +24,15 @@ sections:
     icon: calendar
     highlight: true
     text: |-
-      Bookings for January are open now for both one-on-one appointments and classes so you can [book online](https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/location). We expect many of our classes to have a waitlist, so recommend booking early! If you want to lock in a regular booking time, text Nicole on [0434 686 261](sms:+61434686261).
+      Bookings for January are open now for both one-on-one appointments and classes so you can [book online](https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/location). We expect many of our classes to have a waitlist, so recommend booking early! If you want to lock in a regular booking time, call Nicole on [0434 686 261](tel:+61434686261).
 
       Vestibular physiotherapy will be available again from March, when Laura returns.
     buttons:
       - label: Book online
         link: https://book.nookal.com/bookings/book/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E/location
         style: primary
-      - label: Text Nicole on 0434 686 261
-        link: sms:+61434686261
+      - label: Call Nicole on 0434 686 261
+        link: tel:+61434686261
         style: secondary
   - heading: Our new patient portal
     icon: user

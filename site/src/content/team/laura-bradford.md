@@ -31,4 +31,4 @@ Her path into physiotherapy began with a back injury of her own, through which s
 
 Laura’s background in exercise prescription shapes her approach to physiotherapy and helps her tailor treatment to each person. She has worked with a diverse range of clients, including perinatal women, people facing cancer, people managing chronic back pain, athletes recovering from sporting injuries, people in pre- and post-surgery rehabilitation, and people with vestibular dysfunction (dizziness, vertigo and balance problems). Her own experience of the perinatal journey gives her valuable insight that helps her connect with and support clients, and she brings empathy and care to understanding each person’s needs.
 
-Beyond work, Laura loves spending time with her husband Zac and caring for their son Theodore. She also enjoys running and baking delicious cookies.
+Beyond work, Laura loves spending time with her husband Zac and caring for their son Theodore and daughter Charlotte. She also enjoys running and baking delicious cookies.

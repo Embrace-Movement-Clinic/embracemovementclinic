@@ -9,7 +9,7 @@ blurb: Exercise programs built around your medical history, fitness and goals.
 summary: Tailored exercise for injury rehabilitation and prevention, chronic pain and disease management, osteoporosis and healthy ageing, and athletic performance.
 lede: Exercise programs built around your medical history, fitness and goals, for rehabilitation, chronic conditions, healthy ageing and performance.
 forYou:
-  heading: Conditions we commonly treat
+  heading: What we commonly help with
   items:
     - name: Injury rehabilitation
     - name: Injury prevention
@@ -47,7 +47,7 @@ goodToKnow:
 practitioners:
   - nicole-saxby
   - laura-bradford
-practitionersNote: Nicole provides exercise physiology as an Accredited Exercise Physiologist (AEP), for referrals and rebates that are specifically for exercise physiology. Exercise therapy, which may be claimable as physiotherapy depending on your fund, is available with both Nicole and Laura (Laura from March 2027) after an initial physiotherapy consultation.
+practitionersNote: Nicole and Laura both provide exercise therapy (Laura from March 2027), after an initial physiotherapy consultation. Nicole is also an Accredited Exercise Physiologist (AEP).
 related:
   - pilates
   - physiotherapy

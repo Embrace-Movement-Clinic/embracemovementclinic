@@ -204,7 +204,6 @@ const patientInfo = page('patient-information', () => ({
 const contactPage = page('contact', () => ({
   intro: z.string(),
   callNote: z.string(),
-  textNote: z.string(),
   emailNote: z.string(),
   bookNote: z.string(),
 }));

@@ -19,7 +19,6 @@ const page = pageEntry.data;
 const ways = [
   { icon: 'calendar', title: 'Book online', text: 'Book now', href: site.booking.url, note: page.bookNote, primary: true },
   { icon: 'phone', title: 'Call', text: site.phone.display, href: site.phone.href, note: page.callNote, primary: false },
-  { icon: 'message', title: 'Text', text: site.phone.display, href: site.phone.smsHref, note: page.textNote, primary: false },
   { icon: 'mail', title: 'Email', text: site.email.address, href: site.email.href, note: page.emailNote, primary: false },
 ] as const;
 
@@ -34,7 +33,7 @@ const jsonLd = {
 
 <BaseLayout
   title={`Contact us in ${site.address.suburb}`}
-  description={`Call, text or email ${site.name}, or find us at ${fullAddress}. Directions, parking and hours.`}
+  description={`Call or email ${site.name}, book online, or find us at ${fullAddress}. Directions, parking and hours.`}
   jsonLd={jsonLd}
 >
   <PageHero

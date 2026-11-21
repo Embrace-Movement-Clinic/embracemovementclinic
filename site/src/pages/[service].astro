@@ -57,7 +57,8 @@ const jsonLd = serviceNode({
   image: d.image ? new URL(`/og/services/${service.id}.jpg`, site.url).href : undefined,
 });
 const sections = [
-  { id: 'for-you', label: d.forYou.heading === 'Is this for you?' ? 'Is this for you?' : 'Conditions', icon: 'heart' as IconName },
+  // The bar's label follows the section's heading: "Conditions we commonly treat" → "Conditions"; any other heading → "Who it’s for".
+  { id: 'for-you', label: d.forYou.heading === 'Is this for you?' ? 'Is this for you?' : /^conditions/i.test(d.forYou.heading) ? 'Conditions' : 'Who it’s for', icon: 'heart' as IconName },
   ...(hasExpect ? [{ id: 'expect', label: 'What to expect', icon: 'calendar' as IconName }] : []),
   ...(d.treatments ? [{ id: 'treatment', label: 'Treatment', icon: 'activity' as IconName }] : []),
   { id: 'who', label: 'Who you’ll see', icon: 'users' as IconName },

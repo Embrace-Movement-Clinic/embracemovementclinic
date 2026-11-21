@@ -51,8 +51,6 @@ export const site = {
     href: telHref(clinic.phone),
     /** "+61434686261", for structured data. */
     international: telHref(clinic.phone).replace('tel:', ''),
-    /** For "Text us" links. */
-    smsHref: telHref(clinic.phone).replace('tel:', 'sms:'),
   },
 
   email: {

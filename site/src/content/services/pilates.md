@@ -7,7 +7,7 @@ image: ../../assets/photos/file_00000000ba90820bbe84445a78962894.webp
 imageAlt: A client exercising on the reformer while a practitioner watches
 imagePosition: 37% 42%
 blurb: Clinical pilates and small group classes for all ages and abilities.
-summary: Clinical pilates and small group classes for all ages and exercise abilities.
+summary: Clinical pilates and small group classes for all ages and abilities.
 lede: Clinical pilates and small group exercise classes for all ages and abilities.
 forYou:
   heading: Our classes are perfect for
