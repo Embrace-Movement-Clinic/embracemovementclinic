@@ -104,7 +104,7 @@ const ogAlt = shareImage || image ? imageAlt : `${site.name}: Accept . Support .
     <script>
       // Nookal links typed into posts or bios, and every page link inside a news post (e.g. the
       // timetable), open in a new tab, so readers keep their place. Phone, text and email links don't.
-      document.querySelectorAll<HTMLAnchorElement>('a[href*=".nookal.com/"]:not([target]), .post-body a[href^="/"]:not([target])').forEach((a) => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href*=".nookal.com/"]:not([target]), .rich a[href^="/"]:not([target])').forEach((a) => {
         a.target = '_blank';
         a.rel = 'noopener';
         const note = document.createElement('span');

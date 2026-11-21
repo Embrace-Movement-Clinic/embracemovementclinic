@@ -1,12 +1,23 @@
 ---
+// A news post, laid out like the rest of the site: the page header, then one band per section
+// (alternating white and mist, like Patient information), each headed by its icon. A section's
+// photos or side panel sit beside its text on wide screens; without them the heading sits on the
+// left and the text on the right, so the page uses its full width. A highlighted section is a
+// petrol card, for the main call to action. A simple post (text only, in the Markdown body) is
+// shown as one band, with its photos beside it.
+// Data: src/content/news (edited on /admin, News). Section text: basic formatting, src/data/markdown.ts.
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHead from '../../components/SectionHead.astro';
 import Photo from '../../components/Photo.astro';
-import Icon from '../../components/Icon.astro';
+import Icon, { type IconName } from '../../components/Icon.astro';
+import Button from '../../components/Button.astro';
+import Note from '../../components/Note.astro';
 import BookingBand from '../../components/BookingBand.astro';
 import { site } from '../../data/site';
 import { clinicRef } from '../../data/schema';
+import { renderText } from '../../data/markdown';
 
 export async function getStaticPaths() {
   const posts = await getCollection('news');
@@ -20,10 +31,30 @@ interface Props {
 const { post } = Astro.props;
 const d = post.data;
 const { Content } = await render(post);
+const hasBody = Boolean(post.body?.trim());
+
 // "…see Patient information." → link that phrase rather than repeating it after the note.
 const noteParts = d.archivedNote ? d.archivedNote.split('Patient information') : [];
-// One photo fills the column; two or three share it (the grid fits up to three across).
-const imageSizes = `(min-width: 40rem) 16.5rem, ${Math.round(100 / Math.min(Math.max(d.images.length, 1), 3))}vw`;
+
+// The post's first photo is its picture when shared (and on the news list).
+const firstImage = d.sections.flatMap((s) => s.images)[0] ?? d.images[0];
+
+// Anchor for each section (e.g. /news/…#book-in-now), so a text message can link straight to it.
+const slug = (t: string) => t.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const sections = d.sections.map((s, i) => ({
+  ...s,
+  id: slug(s.heading) || `section-${i + 1}`,
+  icon: (s.icon ?? 'info') as IconName,
+  html: renderText(s.text),
+  asideHtml: renderText(s.aside?.text),
+  hasSide: Boolean(s.aside?.text?.trim()) || s.images.length > 0,
+}));
+// Bands alternate white and mist; the simple-post body takes the next one.
+const alt = (i: number) => i % 2 === 1;
+
+const ratio = (img: { src: { width: number; height: number } }) => (img.src.height > img.src.width ? '4 / 5' : '4 / 3');
+const photoSizes = (n: number) => `(min-width: 56em) ${n > 1 ? 20 : 34}vw, ${n > 1 ? 50 : 100}vw`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -40,157 +71,357 @@ const month = d.date.toLocaleDateString('en-AU', { month: 'long', year: 'numeric
   noindex
   title={d.title}
   description={d.summary}
-  image={d.images[0]?.src}
-  imageAlt={d.images[0]?.alt}
-  imagePosition={d.images[0]?.position}
+  image={firstImage?.src}
+  imageAlt={firstImage?.alt}
+  imagePosition={firstImage?.position}
   ogType="article"
   jsonLd={jsonLd}
 >
-  <article class="section" aria-labelledby="page-title">
-    <div class="wrap-narrow article">
-      <Breadcrumbs items={[{ label: d.title }]} />
-      <header class="article__head">
-        <time datetime={d.date.toISOString().slice(0, 10)}>{month}</time>
-        <h1 id="page-title">{d.title}</h1>
-      </header>
-      {
-        d.archivedNote && (
-          <p class="archived">
-            <Icon name="info" size={20} />
-            <span>
-              {noteParts.length > 1 ? (
-                noteParts.map((part, i) => (
-                  <>
-                    {part}
-                    {i < noteParts.length - 1 && <a href="/patient-information">Patient information</a>}
-                  </>
-                ))
-              ) : (
+  <PageHero crumbs={[{ label: 'News', href: '/news' }, { label: d.title }]} eyebrow={`Clinic news · ${month}`} title={d.title} lede={d.summary}>
+    <Fragment slot="actions">
+      <Button href={site.booking.url} icon="calendar" size="l">Book now</Button>
+      <Button href={site.phone.href} variant="secondary" size="l" icon="phone">
+        <span class="visually-hidden">Call </span>{site.phone.display}
+      </Button>
+    </Fragment>
+  </PageHero>
+
+  {
+    d.archivedNote && (
+      <div class="band band--first">
+        <div class="wrap">
+          <Note as="div">
+            {noteParts.length > 1 ? (
+              noteParts.map((part, i) => (
                 <>
-                  {d.archivedNote} <a href="/patient-information">Patient information</a>
+                  {part}
+                  {i < noteParts.length - 1 && <a href="/patient-information">Patient information</a>}
                 </>
-              )}
-            </span>
-          </p>
-        )
-      }
-      {
-        (d.introHeading || d.intro) && (
-          <div class="prose post-body post-intro">
-            {d.introHeading && <h2>{d.introHeading}</h2>}
-            {d.intro?.split(/\n\s*\n/).map((para) => <p>{para.trim()}</p>)}
-          </div>
-        )
-      }
-      {
-        d.images.length > 0 && (
-          <div class="images" style={`--n: ${Math.min(d.images.length, 3)}`}>
-            {d.images.map((img) => (
-              <Photo src={img.src} alt={img.alt} position={img.position} ratio={img.src.height > img.src.width ? '4 / 5' : '4 / 3'} sizes={imageSizes} />
-            ))}
-          </div>
-        )
-      }
-      <div class="prose post-body">
-        <Content />
+              ))
+            ) : (
+              <>
+                {d.archivedNote} <a href="/patient-information">Patient information</a>
+              </>
+            )}
+          </Note>
+        </div>
       </div>
-      {
-        d.closingImage && (
-          <Photo
-            src={d.closingImage.src}
-            alt={d.closingImage.alt}
-            position={d.closingImage.position}
-            ratio={d.closingImage.src.height > d.closingImage.src.width ? '4 / 5' : '4 / 3'}
-            sizes="(min-width: 40rem) 16.5rem, 70vw"
-            class="closing-photo"
-          />
-        )
-      }
-      {
-        d.imageNotes.length > 0 && (
-          <div class="images">
-            {d.imageNotes.map((n) => (
-              <Photo alt="" note={n} ratio="4 / 3" />
-            ))}
+    )
+  }
+
+  {
+    sections.map((s, i) => (
+      <section id={s.id} class:list={['band', { 'band--alt': alt(i) }]} aria-labelledby={`${s.id}-h`}>
+        <div class="wrap">
+          {s.highlight ? (
+            <div class="feature on-brand">
+              <span class="feature__mark" aria-hidden="true">
+                <Icon name={s.icon} size={170} />
+              </span>
+              <div class="feature__text">
+                <h2 id={`${s.id}-h`} class="h3 feature__title">
+                  <Icon name={s.icon} size={26} />
+                  <span>{s.heading}</span>
+                </h2>
+                {s.html && <div class="rich" set:html={s.html} />}
+              </div>
+              {s.buttons.length > 0 && (
+                <div class="feature__actions">
+                  {s.buttons.map((b) => (
+                    <Button href={b.link} variant={b.style === 'secondary' ? 'secondary' : undefined} size="l">
+                      {b.label}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div class:list={['sec', s.hasSide ? 'sec--side' : 'sec--plain']}>
+              <SectionHead id={`${s.id}-h`} icon={s.icon} title={s.heading} size="s" class="sec__head" />
+              <div class="sec__body">
+                {s.html && <div class="rich" set:html={s.html} />}
+                {s.buttons.length > 0 && (
+                  <div class="sec__actions">
+                    {s.buttons.map((b) => (
+                      <Button href={b.link} variant={b.style === 'secondary' ? 'secondary' : undefined}>
+                        {b.label}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {s.hasSide && (
+                <div class="sec__side">
+                  {s.asideHtml && (
+                    <div class="panel side-panel">
+                      {s.aside?.heading && <h3 class="h4">{s.aside.heading}</h3>}
+                      <div class="rich" set:html={s.asideHtml} />
+                    </div>
+                  )}
+                  {s.images.length > 0 && (
+                    <div class="photos" style={`--n: ${Math.min(s.images.length, 2)}`}>
+                      {s.images.map((img) => (
+                        <Photo src={img.src} alt={img.alt} position={img.position} ratio={ratio(img)} sizes={photoSizes(s.images.length)} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    hasBody && (
+      <section class:list={['band', { 'band--alt': alt(sections.length) }]} aria-label="Post">
+        <div class:list={['wrap', 'sec', d.images.length ? 'sec--side' : 'sec--text']}>
+          <div class="sec__body rich">
+            <Content />
           </div>
-        )
-      }
-    </div>
-  </article>
+          {d.images.length > 0 && (
+            <div class="sec__side">
+              <div class="photos" style={`--n: ${Math.min(d.images.length, 2)}`}>
+                {d.images.map((img) => (
+                  <Photo src={img.src} alt={img.alt} position={img.position} ratio={ratio(img)} sizes={photoSizes(d.images.length)} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
   <BookingBand />
 </BaseLayout>
 
 <style>
-  .article {
+  .band {
+    padding-block: var(--space-xl);
+  }
+
+  .band--first {
+    padding-block: var(--space-m) 0;
+  }
+
+  .band--alt {
+    background: var(--color-bg-alt);
+  }
+
+  /* A section: heading, text (with its buttons) and, on wide screens, its side panel or photos. */
+  .sec {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-m);
+    align-items: start;
   }
 
-  .article__head {
+  .sec__body {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--space-m);
+    max-width: 46rem;
   }
 
-  .article__head time {
-    font-weight: var(--weight-semibold);
-    color: var(--color-ink-muted);
-  }
-
-  .article h1 {
-    font-size: var(--step-4);
-  }
-
-  .archived {
+  .sec__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-xs);
-    align-items: flex-start;
-    padding: var(--space-m);
-    border-radius: var(--radius-l);
-    background: var(--color-accent-soft);
   }
 
-  .archived :global(svg) {
-    margin-top: 0.15em;
-    flex-shrink: 0;
-    color: var(--color-icon);
+  @media (min-width: 56em) {
+    /* With photos or a side panel: heading and text on the left, the photos beside them. */
+    /* The second row takes any extra height a tall photo brings, so the text stays under its heading. */
+    .sec--side {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      column-gap: var(--space-xl);
+    }
+
+    .sec--side :global(.sec__head) {
+      grid-column: 1;
+    }
+
+    .sec--side .sec__body {
+      grid-column: 1;
+    }
+
+    .sec--side .sec__side {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    /* Text only: the heading on the left, the text across the rest of the page. */
+    .sec--plain {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      column-gap: var(--space-xl);
+    }
+
+    .sec--plain :global(.section-head) {
+      margin-bottom: 0;
+    }
   }
 
-  .post-intro {
-    margin-top: var(--space-s);
-  }
-
-  .post-intro :global(h2) {
-    margin-top: 0;
-  }
-
-  :global(.closing-photo) {
-    max-width: 16.5rem;
-    border-radius: var(--radius);
-  }
-
-  /* Post photos at a modest size (about 265px wide each), side by side, even on phones. */
-  .images {
+  /* Text from /admin: paragraphs, and lists as a ruled panel (e.g. opening hours). */
+  .rich {
     display: grid;
     gap: var(--space-s);
-    grid-template-columns: repeat(var(--n, 2), minmax(0, 16.5rem));
-  }
-
-  .images :global(.photo) {
-    border-radius: var(--radius);
-  }
-
-  .post-body {
     font-size: var(--step-1);
-    line-height: 1.65;
+    line-height: 1.6;
   }
 
-  .post-body :global(h2) {
-    font-size: var(--step-3);
+  .rich :global(ul),
+  .rich :global(ol) {
+    margin: 0;
+    padding: var(--space-2xs) var(--space-m);
+    list-style: none;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-l);
+    background: var(--color-bg);
+    font-size: var(--step-0);
   }
 
-  .post-body :global(h3) {
-    font-size: var(--step-2);
+  .band:not(.band--alt) .sec .rich :global(ul),
+  .band:not(.band--alt) .sec .rich :global(ol) {
+    background: var(--color-bg-alt);
+    border-color: transparent;
   }
 
+  .rich :global(li) {
+    padding-block: 0.6em;
+  }
+
+  .rich :global(li + li) {
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* "Monday: 6am – 1pm": a list item starting with a bold label lines up like a timetable, its
+     value wrapping in its own column. */
+  .rich :global(li:has(> strong:first-child)) {
+    display: grid;
+    grid-template-columns: minmax(0, 7.5em) minmax(0, 1fr);
+    column-gap: 0.5em;
+  }
+
+  .side-panel {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  /* Photos: one fills the side column; two sit side by side. */
+  .sec__side {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .photos {
+    display: grid;
+    gap: var(--space-s);
+    grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr));
+  }
+
+  .photos :global(.photo) {
+    border-radius: var(--radius-l);
+  }
+
+  /* A single photo stays a sensible size beside the text, rather than filling the whole column. */
+  .photos[style*='--n: 1'] {
+    max-width: 24rem;
+  }
+
+  @media (max-width: 55.99em) {
+    .photos {
+      max-width: 34rem;
+    }
+  }
+
+  /* The highlighted section: a petrol card, its text on the left and buttons on the right. */
+  .feature {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-m);
+    padding: var(--space-l) var(--space-m);
+    border-radius: var(--radius-l);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+  }
+
+  @media (min-width: 40em) {
+    .feature {
+      padding: var(--space-xl) var(--space-l);
+    }
+  }
+
+  /* Wide screens: the buttons take the width their labels need, on one line each. */
+  @media (min-width: 56em) {
+    .feature {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: var(--space-xl);
+    }
+
+  }
+
+  .feature__mark {
+    position: absolute;
+    right: -1.75rem;
+    bottom: -1.75rem;
+    color: var(--color-accent-on-brand);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .feature__text {
+    position: relative;
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .feature__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: inherit;
+  }
+
+  .feature__title :global(svg) {
+    color: var(--color-accent-on-brand);
+  }
+
+  .feature .rich :global(a) {
+    color: inherit;
+  }
+
+  .feature__actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  /* One line each, except with very large text (global.css lets buttons wrap there). */
+  @media (min-width: 18em) {
+    .feature__actions :global(.btn) {
+      white-space: nowrap;
+    }
+  }
+
+  /* Phones: a slightly smaller button label, so "Text Nicole on 0434 686 261" fits on one line. */
+  @media (max-width: 39.99em) {
+    .feature__actions :global(.btn) {
+      font-size: var(--step-0);
+      padding-inline: 1.1em;
+    }
+  }
+
+  @media (min-width: 56em) {
+    .feature__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
 </style>

@@ -6,9 +6,9 @@ import Icon from '../../components/Icon.astro';
 import Photo from '../../components/Photo.astro';
 
 const posts = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-// The first photo in a post (or its closing photo) as the card's picture. Decorative here: the
-// post title says what the card is, and the photos are described on the post itself.
-const cover = (p: (typeof posts)[number]) => p.data.images[0] ?? p.data.closingImage;
+// The first photo in a post (in its sections, or beside a simple post's text) as the card's picture.
+// Decorative here: the post title says what the card is, and the photos are described on the post itself.
+const cover = (p: (typeof posts)[number]) => p.data.sections.flatMap((s) => s.images)[0] ?? p.data.images[0];
 const month = (d: Date) => d.toLocaleDateString('en-AU', { month: 'long', year: 'numeric', timeZone: 'Australia/Brisbane' });
 ---
 

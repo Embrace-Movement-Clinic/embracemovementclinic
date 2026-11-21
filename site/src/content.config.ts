@@ -99,6 +99,9 @@ const team = defineCollection({
     }),
 });
 
+// Icons a news section can have beside its heading (the same list is offered on /admin).
+const newsIcons = ['calendar', 'clock', 'users', 'user', 'heart', 'baby', 'info', 'check', 'message', 'card', 'shield', 'activity', 'dumbbell', 'sprout', 'map-pin', 'phone', 'mail'] as const;
+
 // Clinic news. Dated posts; older ones carry an "archived" note.
 const news = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/news' }),
@@ -109,15 +112,27 @@ const news = defineCollection({
       date: z.coerce.date(),
       summary: z.string(),
       archivedNote: z.string().optional(),
-      /** Photos in src/assets/photos, each with a description and an optional crop position. */
+      /**
+       * The post, one band per section in this order (alternating white and mist, like Patient
+       * information). Each has its heading and icon, its text (basic formatting: src/data/markdown.ts)
+       * and, beside it on wide screens, a side panel or photos. `highlight` puts the section in a
+       * petrol card, for the main call to action. Buttons go under the text.
+       */
+      sections: z
+        .array(
+          z.object({
+            heading: z.string(),
+            icon: z.enum(newsIcons).optional(),
+            text: z.string().optional(),
+            aside: z.object({ heading: z.string().optional(), text: z.string() }).optional(),
+            images: z.array(z.object({ src: image(), alt: z.string(), position: z.string().optional() })).default([]),
+            buttons: z.array(z.object({ label: z.string(), link: z.string(), style: z.enum(['primary', 'secondary']).default('primary') })).default([]),
+            highlight: z.boolean().default(false),
+          }),
+        )
+        .default([]),
+      /** Photos for a simple post written as one piece of text (the Markdown body), shown beside it. */
       images: z.array(z.object({ src: image(), alt: z.string(), position: z.string().optional() })).default([]),
-      /** Photos still to be supplied (shown as placeholders). */
-      /** Optional text above the photos: a heading and paragraphs (blank line between paragraphs). */
-      introHeading: z.string().optional(),
-      intro: z.string().optional(),
-      imageNotes: z.array(z.string()).default([]),
-      /** Optional photo after the text, e.g. with the sign-off. */
-      closingImage: z.object({ src: image(), alt: z.string(), position: z.string().optional() }).optional(),
       oldUrl: z.string().optional(),
     }),
 });
