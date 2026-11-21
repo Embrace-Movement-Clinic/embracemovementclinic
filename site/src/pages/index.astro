@@ -6,6 +6,7 @@ import { getCollection, getEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
+import PortalNote from '../components/PortalNote.astro';
 import Photo from '../components/Photo.astro';
 import TeamCard from '../components/TeamCard.astro';
 import LocationSection from '../components/LocationSection.astro';
@@ -69,6 +70,7 @@ const jsonLd = [
             </Button>
           )}
         </div>
+        <PortalNote class="hero__note" />
         <a class="hero__link arrow-link wide-only" href="#help">What can we help with? <Icon name="arrow-right" size={18} /></a>
       </div>
       <Photo

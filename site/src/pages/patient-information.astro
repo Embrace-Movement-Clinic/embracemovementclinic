@@ -20,6 +20,7 @@ import Todo from '../components/Todo.astro';
 import ClosureNote from '../components/ClosureNote.astro';
 import CancellationCallout from '../components/CancellationCallout.astro';
 import BookingBand from '../components/BookingBand.astro';
+import PortalNote from '../components/PortalNote.astro';
 import { site, fullAddress } from '../data/site';
 import { classFacts, studioEtiquette, booking } from '../data/policies';
 
@@ -75,7 +76,7 @@ const factIcon = (label: string): IconName =>
           <span class="way__mark" aria-hidden="true"><Icon name="calendar" size={150} /></span>
           <Icon name="calendar" size={26} />
           <h3 class="h4">Book online</h3>
-          <p>Book appointments, pre-class assessments and classes through our online booking portal.</p>
+          <p>Book appointments, pre-class assessments and classes online.</p>
           <div class="way__actions">
             <Button href={site.booking.url} size="s">Book now</Button>
             {booking.portalUrl && (
@@ -84,13 +85,13 @@ const factIcon = (label: string): IconName =>
               </Button>
             )}
           </div>
+          <PortalNote class="way__note" />
         </div>
         <div class="way">
           <Icon name="phone" size={26} />
-          <h3 class="h4">Call or text</h3>
+          <h3 class="h4">Call</h3>
           <p>
-            Call <a href={site.phone.href}>{site.phone.display}</a>. {booking.waitlistText}{' '}
-            <a href={site.phone.smsHref}>{site.phone.display}</a>.
+            {booking.callText} <a href={site.phone.href}>{site.phone.display}</a>.
           </p>
         </div>
         <div class="way">

@@ -668,7 +668,9 @@ collections:
               - { name: classes, label: Booking classes, widget: text }
               - { name: bookingCode, label: Booking code tip, widget: text, hint: 'The words "patient portal" link to the portal address below.' }
               - { name: portalUrl, label: Patient portal address, widget: string, required: false, pattern: ['^https://', 'Paste the full link, starting with https://'], hint: 'The Nookal patient portal link.' }
-              - { name: waitlistText, label: Waitlist text, widget: string }
+              - { name: portalNote, label: Patient portal note, widget: markdown, required: false, buttons: [bold], editor_components: [], hint: 'Shown under each Book now and Patient portal pair (Home, Patient information, footer), so new patients know which to use.' }
+              - { name: portalHint, label: Patient portal hint (short), widget: string, required: false, hint: 'Shown when someone points at the Patient portal button in the header, and under it in the phone menu. E.g. "For existing patients with a sign-up link".' }
+              - { name: callText, label: Call tile text, widget: string, hint: 'On Patient information, before the clinic’s number, e.g. "For more information or to speak to a member of our clinic team, call".' }
       - name: needs
         label: What can we help with?
         file: site/src/data/needs.json

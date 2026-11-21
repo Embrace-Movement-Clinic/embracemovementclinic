@@ -81,7 +81,14 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       </a>
       <Button href={site.booking.url} size="s" class="site-header__book">Book now</Button>
       {booking.portalUrl && (
-        <Button href={booking.portalUrl} variant="secondary" size="s" class="site-header__portal">Patient portal</Button>
+        <span class="site-header__portal-wrap" data-portal-hint>
+          <Button href={booking.portalUrl} variant="secondary" size="s" class="site-header__portal" aria-describedby={booking.portalHint ? 'portal-hint' : undefined}>Patient portal</Button>
+          {booking.portalHint && (
+            <span id="portal-hint" role="tooltip" class="site-header__hint">
+              {booking.portalHint}
+            </span>
+          )}
+        </span>
       )}
       <button type="button" class="site-header__menu" aria-expanded="false" aria-controls="mobile-nav" data-disclosure>
         <Icon name="menu" size={24} class="icon-open" />
@@ -119,7 +126,12 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
       }
       {booking.portalUrl && (
         <li class="mobile-nav__portal">
-          <Link href={booking.portalUrl}>Patient portal</Link>
+          <Link href={booking.portalUrl}>
+            <span>
+              Patient portal
+              {booking.portalHint && <span class="mobile-nav__hint">{booking.portalHint}</span>}
+            </span>
+          </Link>
         </li>
       )}
     </ul>
@@ -154,6 +166,18 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     const watcher = new ResizeObserver(fit);
     for (const el of [bar, actions, header.querySelector('.desk-nav')]) if (el) watcher.observe(el);
     document.fonts.ready.then(fit);
+  }
+
+  // Patient portal hint: shows on hover and keyboard focus (CSS); Escape hides it until the pointer
+  // or focus leaves, so it never has to be moved away to read what's under it (WCAG 1.4.13).
+  const hintWrap = header?.querySelector<HTMLElement>('[data-portal-hint]');
+  if (hintWrap) {
+    const reset = () => hintWrap.classList.remove('hint-dismissed');
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hintWrap.classList.add('hint-dismissed');
+    });
+    hintWrap.addEventListener('mouseleave', reset);
+    hintWrap.addEventListener('focusout', reset);
   }
 
   buttons.forEach((btn) => {
@@ -296,7 +320,7 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
     clip-path: inset(50%);
   }
 
-  .site-header.fit-2 .site-header__actions :global(.site-header__portal) {
+  .site-header.fit-2 .site-header__actions .site-header__portal-wrap {
     display: none;
   }
 
@@ -488,12 +512,71 @@ const inServices = path === '/services' || serviceLinks.some((l) => l.kind === '
 
   /* Patient portal: a second header button from tablet width up; in the menu on phones, where
      there's no room beside Book now. */
-  .site-header__actions :global(.site-header__portal) {
+  .site-header__actions .site-header__portal-wrap {
     display: none;
   }
 
+  /* The hint under the header's Patient portal button: on hover or keyboard focus only (the phone
+     menu shows the same words under its link). It hangs from the button with no gap, so the pointer
+     can move onto it without it disappearing. */
+  .site-header__portal-wrap {
+    position: relative;
+  }
+
+  .site-header__hint {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 60;
+    width: max-content;
+    max-width: 16rem;
+    margin-top: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--radius-s);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    font-size: var(--step--1);
+    line-height: 1.35;
+    box-shadow: var(--shadow-m);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.15s var(--ease),
+      visibility 0.15s;
+  }
+
+  /* A strip above the hint bridges the gap to the button. */
+  .site-header__hint::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem 0 100% 0;
+  }
+
+  .site-header__portal-wrap:hover .site-header__hint,
+  .site-header__portal-wrap:has(:focus-visible) .site-header__hint {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .site-header__portal-wrap.hint-dismissed .site-header__hint {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .mobile-nav__portal a {
+    padding-block: 0.5rem;
+  }
+
+  .mobile-nav__hint {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    font-weight: 400;
+    color: color-mix(in srgb, var(--header-ink) 72%, var(--header-bg));
+  }
+
   @media (min-width: 40em) {
-    .site-header__actions :global(.site-header__portal) {
+    .site-header__actions .site-header__portal-wrap {
       display: inline-flex;
     }
 

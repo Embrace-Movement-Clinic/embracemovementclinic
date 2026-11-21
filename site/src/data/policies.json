@@ -150,9 +150,11 @@
     }
   ],
   "booking": {
-    "classes": "Check availability and book classes in the online booking portal. When booking, select the relevant practitioner. Can’t see your preferred time? Text us to check or join the waitlist.",
-    "bookingCode": "Want to save time and avoid creating a new profile every time you book? Ask Nicole or Laura for your unique online booking code, or for access to the patient portal.",
+    "classes": "Check availability and book classes online. When booking, select the relevant practitioner. Can’t see your preferred time? Text us to check or join the waitlist.",
+    "bookingCode": "Want to save time and avoid creating a new profile every time you book? Ask Nicole or Laura for your unique online booking code. Existing patients will also get a text with their patient portal sign-up link.",
     "portalUrl": "https://portal.nookal.com/EE4e4bFE-aEC6-E51D-2cda-aE95ddcBeb3E?portal=ce3D36A4-00a7-7aFa-829d-eD5478Cc37ce",
-    "waitlistText": "To join the cancellation waitlist, text us on"
+    "portalNote": "New to Embrace? Use **Book now**. The **Patient portal** is for existing patients who have a sign-up link.",
+    "portalHint": "For existing patients with a sign-up link",
+    "callText": "For more information or to speak to a member of our clinic team, call"
   }
 }

@@ -1,0 +1,29 @@
+---
+// One line under a "Book now" + "Patient portal" pair (Home, Patient information, footer), so a new
+// visitor knows to use Book now and that the portal is for existing patients with a sign-up link.
+// Text: policies.json booking.portalNote (/admin: Clinic settings → Policies and timetable); bold allowed.
+// Takes the colour of its surroundings, so it reads on petrol and on white.
+import { booking } from '../data/policies';
+import { renderText } from '../data/markdown';
+
+interface Props {
+  class?: string;
+}
+
+const html = booking.portalUrl ? renderText(booking.portalNote) : '';
+---
+
+{html && <div class:list={['portal-note', Astro.props.class]} set:html={html} />}
+
+<style>
+  .portal-note {
+    max-width: 34rem;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: inherit;
+  }
+
+  .portal-note :global(p) {
+    margin: 0;
+  }
+</style>

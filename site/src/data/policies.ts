@@ -27,7 +27,17 @@ interface PoliciesData {
   classFacts: { label: string; value: string }[];
   equipment: string[];
   studioEtiquette: { name: string; detail: string }[];
-  booking: { classes: string; bookingCode: string; waitlistText: string; portalUrl?: string };
+  booking: {
+    classes: string;
+    bookingCode: string;
+    /** Before the clinic's number on Patient information's Call tile. */
+    callText: string;
+    portalUrl?: string;
+    /** Under each Book now + Patient portal pair: who the portal is for (basic formatting). */
+    portalNote?: string;
+    /** The short version, shown when the header's Patient portal button is hovered or focused, and in the phone menu. */
+    portalHint?: string;
+  };
   timetable?: TimetableDay[];
   /** The first day the timetable applies (YYYY-MM-DD), shown above it. */
   timetableFrom?: string;
